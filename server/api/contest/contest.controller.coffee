@@ -264,28 +264,16 @@ getFefund = (user_id, refund) ->
 getQuestions = (tem_id) ->
   query = Question.find({'templates': tem_id})
   query.exec (err, templates) ->
-      # console.log templates
-      # console.log "99999999999999999999999999999999999999999"
     return templates
 
 checkScore = (player, questions) ->
   score = 0
   num = 0
-    # console.log player
-    # console.log "questions----------------------------"
   for uAnswer in player.answers
-      # console.log "ans"
-      # console.log "num:"+num
-      # console.log questions[num]
-      # console.log "player"
-      # console.log uAnswer
     if questions[num].answers[uAnswer].is_correct
-        # console.log score
       score = score + 1
     num = num + 1
   player.score = score
-    # console.log score
-    # console.log "score================================================================="
   score
 
 myContest =
@@ -320,6 +308,40 @@ myContest =
             for user in contest.participant
               User.findById user._id, (err, user) ->
                 user.coins = user.coins + contest.fee
+
+                Ledger.create {
+                  status: 'completed'
+                  format: 'contest'
+                  user: {
+                    id:       user._id,
+                    username: user.username
+                    name:     "#{user.first_name} #{user.last_name}",
+                    email:    user.email
+                  }
+                  balance: {
+                    coins:      user.coins
+                    diamonds:   user.diamonds
+                    emeralds:   user.emeralds
+                    sapphires:  user.sapphires
+                    rubies:     user.rubies
+                  }
+                  transaction: [
+                    {
+                      action:       'plus'
+                      description:  'Refund'
+                      from:         'system'
+                      to:           'refund'
+                      unit:         'coins'
+                      amount:       contest.fee
+                      tax:          0
+                      ref: {
+                        format: null
+                        id: null
+                      }
+                    }
+                  ]
+                }
+
                 user.save()
             contest.status = "cancel"
             contest.stage = "cancel"
@@ -470,7 +492,7 @@ exports.joinContest = (req, res) ->
       }
 
       contest.participant.push(req.body)
-      contest.player.push({ uid: req.body._id, name: req.body.email, score: 10 })
+      contest.player.push({ uid: req.body._id, name: user.username, score: 10 })
 
       contest.save (err) ->
         return handleError(res, err)  if err
@@ -596,6 +618,41 @@ exports.findByTemplates = (req, res) ->
                 s_contest = contest
                 s_contest.loot.prize = c.fee
                 user.wonContest.push s_contest
+
+
+                Ledger.create {
+                  status: 'completed'
+                  format: 'contest'
+                  user: {
+                    id:       user._id,
+                    username: user.username
+                    name:     "#{user.first_name} #{user.last_name}",
+                    email:    user.email
+                  }
+                  balance: {
+                    coins:      user.coins
+                    diamonds:   user.diamonds
+                    emeralds:   user.emeralds
+                    sapphires:  user.sapphires
+                    rubies:     user.rubies
+                  }
+                  transaction: [
+                    {
+                      action:       'plus'
+                      description:  'Refund'
+                      from:         'system'
+                      to:           'refund'
+                      unit:         'coins'
+                      amount:       s_contest.loot.prize
+                      tax:          0
+                      ref: {
+                        format: null
+                        id: null
+                      }
+                    }
+                  ]
+                }
+
                 user.save()
           else if winner.length > 1
             refund_index = c.loot.prize
@@ -789,34 +846,38 @@ exports.findByTemplates = (req, res) ->
 
 exports.findProgramActive = (req, res) ->
   bucket = []
-  program = Program.find({}).select('name -_id')
   current_time = new Date().getTime()
-
   temp = 0
+
+  program = Program.find({}).select('name -_id')
   program.exec (err, programs) ->
     if err
       return next(err)
 
     for program in programs
       # contest = Contest.findOne({program: program.name})
-      contest = Contest.find program: program.name, (err, contests) ->
-        if contests
-          for contest, i in contests
-            continue if contest.end_time == undefined
-            e_time = contest.end_time.getTime()
+      contest = Contest.where('program').equals(program.name)
+        .where('end_time').gt(current_time)
+        .exec (err, contests) ->
+          if contests
+            for contest, i in contests
+              continue if contest.end_time == undefined
+              e_time = contest.end_time.getTime()
 
-            # console.log contest.end_time
-            # console.log e_time
+              console.log e_time
+              console.log current_time
+              console.log current_time < e_time
+              console.log contest
+              if current_time < e_time
+                if i == 0
+                  temp = e_time
+                  c = contest
+                else if temp > e_time
+                  temp = e_time
+                  c = contest
 
-            # console.log current_time < e_time
-            if current_time < e_time
-              if i == 0
-                temp = e_time
-              else if temp > e_time
-                temp = e_time
-
-              if i == contests.length - 1
-                bucket.push(contest)
+                if i == contests.length - 1
+                  bucket.push(c)
 
     setTimeout (->
       # console.log bucket

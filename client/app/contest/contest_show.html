@@ -163,7 +163,7 @@
               <div class="place-no" ng-if="!checkSameScore(player.score) || $index == 0" style="position: absolute;">
                 <span class="score-{{$index}}" ng-if="$index < 10">0</span>{{ $index + 1 }}
               </div>
-              <div style="display: inline; margin-left: 45px;">{{ username(player.name) }}</div>
+              <div style="display: inline; margin-left: 45px;">{{ player.name }}</div>
               <span class="pull-right">
                 <span ng-hide="player.isWin">{{ checkScore(player, $index) || 0 }}</span>
                 <span ng-show="player.isWin">
@@ -181,9 +181,7 @@
       </table>
     </div>
   </div>
-  <!-- </div> -->
 </section>
-
 
 <div class="compair-modal" ng-show="selectedCompair">
   <div class="bg"></div>
@@ -223,13 +221,15 @@
               Q{{$index}}
             </td>
             <td class="text-blue" style="text-align:left;width: 25%">
-
-              {{selectedCompair.user[$index].ans}} <i class="check-ans fa {{checkAns(selectedCompair.user[$index].p, $index)}}" ></i>
-
+              {{selectedCompair.user[$index].ans}}
+              <span ng-hide="contestSelection.stage=='upcoming'">
+                <i class="check-ans fa {{checkAns(selectedCompair.user[$index].p, $index)}}" ></i>
+              </span>
             </td>
             <td class="text-blue" style="text-align:left;width: 25%">
               <span ng-hide="contestSelection.stage=='upcoming'">
-              {{selectedCompair.vs[$index].ans}} <i class="check-ans fa {{checkAns(ans.p, $index)}}" ></i>
+                {{selectedCompair.vs[$index].ans}}
+                <i class="check-ans fa {{checkAns(ans.p, $index)}}" ></i>
               </span>
             </td>
           </tr>

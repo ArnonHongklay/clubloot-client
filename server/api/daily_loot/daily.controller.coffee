@@ -26,8 +26,6 @@ DateDiff =
     d2.getFullYear() - d1.getFullYear()
 
 Daily.find (err, daily) ->
-  # console.log "---------------"
-  # console.log daily.length
   if daily.length < 1
     Daily.create {
       base: 2000,
@@ -35,8 +33,7 @@ Daily.find (err, daily) ->
       maxConsecutive: 10,
       moreCoin: 100
     }, (err, daily) ->
-      # console.log daily
-
+      console.log daily
 
 exports.index = (req, res) ->
   Daily.find (err, contests) ->

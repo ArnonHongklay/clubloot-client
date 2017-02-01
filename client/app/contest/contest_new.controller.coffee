@@ -70,7 +70,7 @@ angular.module 'clublootApp'
     return now < end
 
   $scope.landingContest = ->
-    $scope.contests.owner = Auth.getCurrentUser().email
+    $scope.contests.owner = Auth.getCurrentUser().username
     $scope.contests.loot.category = "gem-red"
     $scope.contests.participant = []
     $scope.contests.participant.push(Auth.getCurrentUser())
@@ -85,7 +85,6 @@ angular.module 'clublootApp'
         for template in $scope.templates
           if template.program == data.program #&& template.active == true
             $scope.template_ids.push(template._id)
-            # console.log template._id
 
         $scope.template_id = $scope.template_ids[$scope.template_ids.length-1]
         $scope.template_id = $scope.contests.template_id
@@ -324,7 +323,7 @@ angular.module 'clublootApp'
       # console.log counter
       $scope.contest.player = [{
         uid: Auth.getCurrentUser()._id,
-        name: Auth.getCurrentUser().email,
+        name: Auth.getCurrentUser().username,
         score: counter,
         answers: $scope.qaSelection
       }]

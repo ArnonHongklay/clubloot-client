@@ -2,26 +2,16 @@ User = require '../api/user/user.model'
 Conomy = require '../api/conomy_log/conomy_log.model'
 Template = require '../api/template/template.model'
 Contest  = require '../api/contest/contest.model'
+Ledger = require '../api/ledger/ledger.model'
 schedule = require('node-schedule')
 rule = new schedule.RecurrenceRule()
-# rule.minute = new (schedule.Range)(0, 59, 1)
-# rule.hour = 23
 
-
-# j = schedule.scheduleJob(rule, ->
-#   # console.log "Can get more free coins"
-#   User.find (err, users) ->
-#     users.forEach (user) ->
-#       user.free_loot = true
-#       user.save()
-#       return
-#     return
-
-# )
 rule.second = 59
 rule.hour = 23
 rule.minute = 59
 k = schedule.scheduleJob(rule, ->
+  console.log "======================="
+  console.log "Jobs Daily Loot"
   console.log rule
   economy = 0
   User.find {}, (err, players) ->
@@ -32,15 +22,22 @@ k = schedule.scheduleJob(rule, ->
       e = p.emeralds * 2500
       d = p.diamonds * 12500
       all = c+r+s+e+d
-      console.log "ALL #{all}"
+
+      console.log 'ALL'
+      console.log all
+
       economy = economy + all
+
+    console.log 'Economy'
     console.log economy
-    console.log "============-------"
+
     Conomy.create {
       coins: economy
       created_at: new Date()
       }, (err, winnerlog) ->
-        # console.log "callback"
+        console.log 'Winner Log'
+        console.log winnerlog
+        console.log "======================="
   return
 )
 
@@ -79,6 +76,40 @@ myContest =
               for user in contest.participant
                 User.findById user._id, (err, user) ->
                   user.coins = user.coins + contest.fee
+
+                  Ledger.create {
+                    status: 'completed'
+                    format: 'contest'
+                    user: {
+                      id:       user._id,
+                      username: user.username
+                      name:     "#{user.first_name} #{user.last_name}",
+                      email:    user.email
+                    }
+                    balance: {
+                      coins:      user.coins
+                      diamonds:   user.diamonds
+                      emeralds:   user.emeralds
+                      sapphires:  user.sapphires
+                      rubies:     user.rubies
+                    }
+                    transaction: [
+                      {
+                        action:       'plus'
+                        description:  'Refund'
+                        from:         'system'
+                        to:           'refund'
+                        unit:         'coins'
+                        amount:       contest.fee
+                        tax:          0
+                        ref: {
+                          format: null
+                          id: null
+                        }
+                      }
+                    ]
+                  }
+
                   user.save()
               contest.status = "cancel"
               contest.stage = "cancel"

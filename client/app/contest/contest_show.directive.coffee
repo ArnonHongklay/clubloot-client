@@ -15,7 +15,7 @@ angular.module 'clublootApp'
 
     element.countdown cc, (event) ->
       # $(this).text event.strftime('%H:%M:%S')
-      $(this).text event.strftime('%H:%M')
+      $(this).text event.strftime('%H:%M:%S')
 
       if date > 72.hours().from_now()
         $(this).css('color', 'green')

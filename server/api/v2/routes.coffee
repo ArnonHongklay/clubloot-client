@@ -63,12 +63,12 @@ router.delete '/template/:id/question/:question/answer/:answer',
               answerController.destroy
 
 
-router.get    '/template/:id/contest',       contestController.index
-router.get    '/template/:id/contest/:id',   contestController.show
-router.post   '/template/:id/contest',       contestController.create
-router.put    '/template/:id/contest/:id',   contestController.update
-router.patch  '/template/:id/contest/:id',   contestController.update
-router.delete '/template/:id/contest/:id',   contestController.destroy
+# router.get    '/template/:id/contest',       contestController.index
+# router.get    '/template/:id/contest/:id',   contestController.show
+# router.post   '/template/:id/contest',       contestController.create
+# router.put    '/template/:id/contest/:id',   contestController.update
+# router.patch  '/template/:id/contest/:id',   contestController.update
+# router.delete '/template/:id/contest/:id',   contestController.destroy
 
 # router.get    '/',      controller.index
 # router.get    '/:id',   controller.show

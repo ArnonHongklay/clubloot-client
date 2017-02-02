@@ -6,7 +6,7 @@ module.exports =
 
   # MongoDB connection options
   mongo:
-    uri: 'mongodb://localhost/clubloot-dev'
+    uri: 'mongodb://localhost/clubloot'
 
   # seedDB: true
 

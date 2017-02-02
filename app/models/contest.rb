@@ -1,23 +1,12 @@
 class Contest
   include Mongoid::Document
+  srore_in collection: 'templates', database: 'clubloot-development'
 
-  field :_id,           type: BSON::ObjectId
-  field :template_id,   type: BSON::ObjectId
-  field :program_id,    type: BSON::ObjectId
-  field :program_name,  type: String
-  field :user_id,       type: BSON::ObjectId
-  field :owner,         type: String
-  field :name,          type: String
-  field :max_player,    type: Integer
+  field :name,  type: String
+  field :stage, type: String
+  field :owner, type: Hash
+  field :max_player, type: Integer
 
-  field :status,        type: String
-  field :stage,         type: String
-  field :challenge,     type: Integer
-
-  field :player,        type: Array
-  field :participant,   type: Array
-  field :loot,          type: Array
-
-  field :start_time,    type: DateTime
-  field :end_time,      type: DateTime
+  embeds_many :players
+  embedded_in :template
 end

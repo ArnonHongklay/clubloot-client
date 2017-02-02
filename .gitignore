@@ -30,6 +30,8 @@ npm-debug.log
 logs
 grunt.log
 
+config/application.yml
+
 /client/assets/uploads/prizes/*
 !/client/assets/uploads/prizes/.keep
 /client/assets/uploads/program/*

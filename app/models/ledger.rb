@@ -1,6 +1,8 @@
-class ledger
+class Ledger
   include Mongoid::Document
 
-  field :_id,         type: BSON::ObjectId
-  field :user_id,     type: BSON::ObjectId
+  field :status,      type: String
+  field :format,      type: String
+
+
 end

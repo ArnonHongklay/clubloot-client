@@ -3,7 +3,6 @@
 angular.module 'clublootApp'
 .controller 'ContestShowCtrl', ($scope, $filter, $http, socket, $state, Auth, $stateParams, contest, program, templates, $timeout) ->
   $scope.programs = program.data
-  # console.log $scope.programs
   $scope.contest = contest.data
   $scope.menu = $stateParams.contest
   $scope.$apend
@@ -15,8 +14,6 @@ angular.module 'clublootApp'
   $scope.currentTemplate = ''
   $scope.selectedContestStatus = ''
   $scope.oldScore = 0
-
-  console.log $scope.templates
 
   $http.get("/api/users").success (data) ->
     $scope.users = data
@@ -128,7 +125,6 @@ angular.module 'clublootApp'
   $scope.checkstatus = (status) ->
     return status
 
-
   $scope.compairPlayer = (player) ->
     console.log $scope.contestSelection
     console.log "-=-=--=="
@@ -202,18 +198,16 @@ angular.module 'clublootApp'
 
   $scope.orderContest = (contest) ->
     $scope.students = $filter('orderBy')(contest, ->
-        # console.log contest
+
     )
     return
 
   $scope.showContestDetail = false
   $scope.showContestDetails = (contest) ->
-      # console.log contest
     $scope.alreadyJoin = false
     $scope.contestSelection = contest
     for p in $scope.contestSelection.player
       if Auth.getCurrentUser()._id == p.uid
-          # console.log "alreadyJoin"
         $scope.alreadyJoin = true
     cd_time = ''
     $http.get("/api/templates/#{contest.template_id}/questions",
@@ -242,7 +236,6 @@ angular.module 'clublootApp'
         $scope.currentPlayer = i
 
   $scope.getNumber = (num) ->
-      # console.log num
     if (typeof(num) != "undefined")
       num = num / 500
       new Array(parseInt(num))
@@ -250,9 +243,7 @@ angular.module 'clublootApp'
       new Array()
 
   $scope.calGem = (fee, player) ->
-      # console.log player
     prize = parseInt(fee) * parseInt(player)
-      # console.log prize
     gemIndex = $scope.gemMatrix.list[parseInt(player)-2].fee.indexOf(fee)
     return $scope.gemMatrix.gem[gemIndex] || $scope.gemMatrix.gem[0]
 
@@ -290,13 +281,11 @@ angular.module 'clublootApp'
 
     $scope.joinedDisabled = true
 
-      # console.log "1"
     if Auth.getCurrentUser().coins < con.fee
       swal("you need more coin to join")
       return false
 
     for play, i in con.player
-        # console.log con.player
       if Auth.getCurrentUser()._id == play.uid
         return false
 

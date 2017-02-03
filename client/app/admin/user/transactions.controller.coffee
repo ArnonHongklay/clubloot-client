@@ -18,6 +18,3 @@ angular.module 'clublootApp'
 .controller 'ModalTransactionsCtrl', ($scope, $http, socket, ledgers, transaction) ->
   $scope.ledgers      = ledgers
   $scope.transaction  = transaction
-
-  console.log $scope.ledgers
-  console.log $scope.transaction

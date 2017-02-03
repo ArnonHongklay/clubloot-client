@@ -18,7 +18,6 @@ angular.module 'clublootApp'
     $http.put("/api/program/#{list._id}",
       active: !list.active
     ).success((data, status, headers, config) ->
-      # console.log data.active
       $.each $scope.programList, (key, value) ->
         if value._id == list._id
           $scope.programList[key].active = data.active

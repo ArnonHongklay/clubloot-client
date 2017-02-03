@@ -16,20 +16,14 @@ angular.module 'clublootApp'
     'values': [
     ]
   } ]
-# console.log $scope.data
   $scope.data[0].values = []
   for claimed in $scope.allClaimed
     $scope.data[0].values.push [new Date(claimed.created_at).getTime(), claimed.prize]
-# console.log $scope.data
-  # for winner in winnerLogs.data
-    # $scope.lootClaimed = $scope.lootClaimed + winner.prize
-
 
   f = new Date()
   t = new Date()
 
   $http.post("/api/v2/dashboard/allloot_by_date", {fr: f, to: t }).success (data, status, headers, config) ->
-    console.log data
     allClaimed = 0
     for ca in data
       if ca.format == "loot"
@@ -90,9 +84,3 @@ angular.module 'clublootApp'
       horizontalOff: false
       verticalOff: true
       unzoomEventType: 'dblclick.zoom'
-
-
-
-
-
-

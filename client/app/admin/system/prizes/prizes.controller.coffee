@@ -29,7 +29,6 @@ angular.module 'clublootApp'
           if response.status > 0
             $scope.errorMsg = response.status + ': ' + response.data
         ), (evt) ->
-          # Math.min is to fix IE which reports 200% sometimes
           file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total))
 
   $scope.edit = (id) ->
@@ -44,10 +43,10 @@ angular.module 'clublootApp'
         prizes: ($http, $stateParams) ->
           return $scope.prizeEdit
     ).result.then (->
-      # alert 'OK'
+
       return
     ), ->
-      # alert 'Cancel'
+
       return
     return
 
@@ -98,7 +97,6 @@ angular.module 'clublootApp'
       file.upload.then (response) ->
         $timeout ->
           file.result = response.data
-          console.log file.result
 
         $modalInstance.close()
     else

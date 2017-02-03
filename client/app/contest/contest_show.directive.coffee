@@ -2,7 +2,6 @@
 angular.module 'clublootApp'
 .directive 'countDown', ->
   link: (scope, element, attributes, ctrl) ->
-    # console.log "directive ======"
     current = new Date()
     date = new Date(attributes.countDown)
 
@@ -14,7 +13,6 @@ angular.module 'clublootApp'
          date.getSeconds()
 
     element.countdown cc, (event) ->
-      # $(this).text event.strftime('%H:%M:%S')
       $(this).text event.strftime('%H:%M:%S')
 
       if date > 72.hours().from_now()

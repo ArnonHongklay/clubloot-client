@@ -15,7 +15,6 @@ angular.module 'clublootApp'
   $scope.broadcasts = broadcasts.data
   $scope.contests = contests.data
 
-  console.log $scope.contests
   $scope.id_logs = []
 
   $scope.gemMatrix = {
@@ -68,13 +67,11 @@ angular.module 'clublootApp'
     return
 
   $scope.deleteMessage = (index) ->
-  # console.log index
     $rootScope.currentUser.messages.splice(index, 1)
-  # console.log $rootScope.currentUser.messages
     $http.put("/api/users/#{$rootScope.currentUser._id}/deletemessage",
       $rootScope.currentUser.messages
     ).success((ok) ->
-    # console.log ok
+
     ).error((data, status, headers, config) ->
       swal("Not Active")
     )
@@ -83,7 +80,6 @@ angular.module 'clublootApp'
 
 
   $scope.openMessage = (index) ->
-  # console.log index
     return $rootScope.openMessage = "k" if $rootScope.openMessage == index
     $rootScope.openMessage = index
 
@@ -108,9 +104,6 @@ angular.module 'clublootApp'
     index_score = score.sort().reverse()
     user_score = contest.player[cur_user].score
     rank = index_score.indexOf(user_score) + 1
-  # console.log index_score
-  # console.log "user_score:"+user_score
-  # console.log rank + 1
     return $scope.ordinal_suffix_of(rank)
 
 
@@ -123,10 +116,6 @@ angular.module 'clublootApp'
     $rootScope.currentUser = data
 
   $scope.awesomeThings = []
-
-  # $http.get('/api/templates').success (awesomeThings) ->
-  #   $scope.awesomeTemplates = awesomeTemplates
-  #   # socket.syncUpdates 'thing', $scope.awesomeThings
 
   $http.get('/api/things').success (awesomeThings) ->
     $scope.awesomeThings = awesomeThings
@@ -171,9 +160,7 @@ angular.module 'clublootApp'
   $scope.setFilter('live')
 
   $scope.calGem = (fee, player) ->
-    # console.log player
     prize = parseInt(fee) * parseInt(player)
-    # console.log prize
     gemIndex = $scope.gemMatrix.list[parseInt(player)-2].fee.indexOf(fee)
     return $scope.gemMatrix.gem[gemIndex] || $scope.gemMatrix.gem[0]
 

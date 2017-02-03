@@ -21,8 +21,6 @@ angular.module 'clublootApp'
     $scope.prize_select = selected: { prize_id: false }
 
   $scope.$watch 'prize_select.selected.length', ->
-    # console.log $scope.prize_select.selected
-
     $('[class*="defaultItem"]').removeClass('hide-display')
     $('[class*="hoverItem"]').removeClass('show-display')
     for s in $scope.prize_select.selected
@@ -31,9 +29,7 @@ angular.module 'clublootApp'
 
 
   $scope.clickPrize = (prize) ->
-    # this.selectedItem = !this.selectedItem
-    # selected = $("##{prize._id}")
-    # selected.prop('checked', !selected.prop('checked'))
+
 
   $scope.defaultItem = true
   $scope.hoverIn = () ->
@@ -85,7 +81,6 @@ angular.module 'clublootApp'
         ).success((data, status, headers, config) ->
           for prize, i in $scope.prize_select.selected
             $http.put("/api/prize/#{prize._id}/count").success (data) ->
-              console.log data
 
           $scope.getPrice = true
         ).error((data, status, headers, config) ->
@@ -106,4 +101,3 @@ angular.module 'clublootApp'
 
 .controller 'ModalUserPrizes', ($scope, prize) ->
   $scope.prize = prize
-  console.log prize

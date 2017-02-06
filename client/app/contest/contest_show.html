@@ -158,7 +158,7 @@
       </h4>
       <table id="tablePlayers" class="table" style="border-radius: 0px;">
         <tbody>
-          <tr ng-repeat="player in contestSelection.player | orderBy:'-score'" ng-click="compairPlayer(player)">
+          <tr ng-repeat="player in contestSelection.player | orderBy:'-score'" ng-click="compairPlayer(player, $index)">
             <td class="text-blue" style="text-align:left;">
               <div class="place-no" ng-if="!checkSameScore(player.score) || $index == 0" style="position: absolute;">
                 <span class="score-{{$index}}" ng-if="$index < 10">0</span>{{ $index + 1 }}

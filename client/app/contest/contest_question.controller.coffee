@@ -24,7 +24,6 @@ angular.module 'clublootApp'
   for template in $scope.templates
     if template.program == $scope.contests.program
       $scope.template_ids.push(template._id)
-      # console.log template._id
 
   $scope.template_id = $scope.template_ids[$scope.template_ids.length-2]
 
@@ -36,9 +35,7 @@ angular.module 'clublootApp'
   $http.get("/api/templates/#{$scope.template_id}/questions",
       null
     ).success((ques) ->
-
       $scope.contest.ques = ques
-      console.log $scope.contest.ques
       for q, i in $scope.contest.ques
         $scope.qaSelection[i] = "#{$scope.currentPlayer.answers[i]}"
     ).error((data, status, headers, config) ->
@@ -46,8 +43,6 @@ angular.module 'clublootApp'
     )
 
   $scope.joinNewContest = () ->
-    # console.log $scope.contest.ques
-    # console.log $scope.qaSelection
     if $scope.qaSelection.length == 0
       swal 'You must answer at less 1 question'
       return
@@ -110,7 +105,6 @@ angular.module 'clublootApp'
           counter += 1
 
     $timeout ->
-      # console.log counter
       $scope.contest.player = {
         uid: Auth.getCurrentUser()._id,
         name: Auth.getCurrentUser().email,
@@ -121,7 +115,6 @@ angular.module 'clublootApp'
       $http.put("/api/contest/#{$scope.contest._id}/player",
         $scope.contest
       ).success (data) ->
-        # console.log data
         window.location.href = "/contest"
       $scope.createNewStep = '3'
     , 300
@@ -131,15 +124,11 @@ angular.module 'clublootApp'
     return false if $scope.contest == undefined
     return false if $scope.contest.ques == undefined
 
-    # console.log $scope.contest.ques
-    # console.log $scope.qaSelection
     if $scope.contest.ques.length == $scope.qaSelection.length
-      # console.log "xxxxx"
       return true
 
   $scope.qaShowAns = []
   $scope.openAns = (index) ->
-    # console.log index
     $scope.qaShowAns[index] = true
 
 

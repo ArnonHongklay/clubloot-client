@@ -2,7 +2,6 @@
 
 angular.module 'clublootApp'
 .controller 'ExpiredTemplateCtrl', ($scope, $http, Auth, User, moment) ->
-  # console.log 'ExpiredTemplateCtrl'
 
   $scope.loadList = ->
     $http.get("/api/templates",
@@ -17,9 +16,6 @@ angular.module 'clublootApp'
     now = new Date().getTime()
     start = new Date(start).getTime()
     end = new Date(end).getTime()
-    # console.log moment(now).format('LLL')
-    # console.log moment(end).format('LLL')
-    # console.log "=============="
     return now > end
 
   $scope.loadList()

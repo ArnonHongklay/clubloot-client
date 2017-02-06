@@ -2,7 +2,6 @@
 
 angular.module 'clublootApp'
 .controller 'AddNewProgramCtrl', ($scope, $http, Upload, Auth, User, $timeout) ->
-  # upload later on form submit or something similar
 
   $scope.categories = [
     { title: 'Talent', name: 'talent' },
@@ -22,17 +21,8 @@ angular.module 'clublootApp'
     file.upload.then ((response) ->
       $timeout ->
         file.result = response.data
-
-      console.log response
-      #
-      # $http.get('/api/prize').success((data) ->
-      #   swal("added!")
-      #   $scope.prizes = data
-      #   $scope.prize = ""
-      # )
     ), ((response) ->
       if response.status > 0
         $scope.errorMsg = response.status + ': ' + response.data
     ), (evt) ->
-      # Math.min is to fix IE which reports 200% sometimes
       file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total))

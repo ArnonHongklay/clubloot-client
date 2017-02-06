@@ -2,17 +2,12 @@
 
 angular.module 'clublootApp'
 .controller 'QuestionCtrl', ($scope, $stateParams, $http, $timeout, $window, Auth, User, id, socket) ->
-  # $scope.data      = id.data
   $scope.questions = id.data
 
-  # console.log $scope.questions
-  # console.log $stateParams
   $scope.check = ->
     $(".check-true").checked = true
 
   $scope.setAns = (q_id, a_id) ->
-    # console.log q_id
-    # console.log a_id
     for que in $scope.questions
       if que._id == q_id
         for ans in que.answers
@@ -20,10 +15,6 @@ angular.module 'clublootApp'
             ans.is_correct = true
           else
             ans.is_correct = false
-          # console.log ans
-
-  # console.log socket
-  # console.log socket.syncUpdates
 
 
   socket.syncUpdates 'question', $scope.questions
@@ -40,7 +31,7 @@ angular.module 'clublootApp'
       $http.put("/api/templates/#{$stateParams.id}/questions/#{que._id}",
           que
         ).success((data, status, headers, config) ->
-          # console.log que = data
+
           swal("updated")
         ).error((data, status, headers, config) ->
           swal("Not found!!")
@@ -62,10 +53,9 @@ angular.module 'clublootApp'
       }, (isConfirm) ->
         if isConfirm
           $http.get("/api/contest/template/#{$stateParams.id}").success((data, status, headers, config) ->
-            # console.log data
             swal("Update successfully")
           ).error((data) ->
-            # console.log data
+
           )
         else
           swal 'Cancelled', 'Your imaginary file is safe :)', 'error'

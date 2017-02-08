@@ -303,7 +303,6 @@ angular.module 'clublootApp'
 
   if $stateParams.liveDashboard
     $scope.showContestDetails($scope.contest)
-
     if $stateParams.viewPlayer
       setTimeout (->
         $('#tablePlayers tr:first-child').click()

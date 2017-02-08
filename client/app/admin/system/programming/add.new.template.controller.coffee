@@ -4,10 +4,14 @@ angular.module 'clublootApp'
 .controller 'AddNewTemplateCtrl', ($scope, $http, Auth, User) ->
   $scope.template = {}
   $scope.items = []
-
+  $scope.answer_items = []
   i = 1
   while i <= 20
     $scope.items.push({number: i})
+    i++
+  i = 2
+  while i <= 20
+    $scope.answer_items.push({number: i})
     i++
 
   $('.datetimepicker').datetimepicker()

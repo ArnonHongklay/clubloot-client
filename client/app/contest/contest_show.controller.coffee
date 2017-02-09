@@ -125,17 +125,18 @@ angular.module 'clublootApp'
   $scope.checkstatus = (status) ->
     return status
 
-  $scope.compairPlayer = (player) ->
-    console.log $scope.contestSelection
-    console.log "-=-=--=="
+  $scope.compairPlayer = (player, index) ->
+    if $scope.currentPlayer._id == player._id
+      index = parseInt(index)+1
     $scope.selectedCompair = {
       user: [],
       vs: [],
-      player: player,
+      player: $scope.contestSelection.player[index],
       me: $scope.currentPlayer
     }
 
-    $scope.selectedCompair.name = player.name || "enemy"
+
+    $scope.selectedCompair.name = $scope.contestSelection.player[index].name || "enemy"
     return unless $scope.currentPlayer.answers
     for ans, i in $scope.questions
         # console.log ans
@@ -144,8 +145,8 @@ angular.module 'clublootApp'
         p: $scope.currentPlayer.answers[i]
       }
       $scope.selectedCompair.vs.push {
-        ans: $scope.ansChoice[player.answers[i]],
-        p: player.answers[i]
+        ans: $scope.ansChoice[$scope.contestSelection.player[index].answers[i]],
+        p: $scope.contestSelection.player[index].answers[i]
       }
 
   $scope.checkAns = (ans, index) ->
@@ -302,7 +303,6 @@ angular.module 'clublootApp'
 
   if $stateParams.liveDashboard
     $scope.showContestDetails($scope.contest)
-
     if $stateParams.viewPlayer
       setTimeout (->
         $('#tablePlayers tr:first-child').click()

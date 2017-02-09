@@ -47,7 +47,7 @@
         <label for="number-question">Max Number of Answers</label>
       </div>
       <div class="col-sm-2">
-        <select class="form-control max-number-question" name="number-answers" ng-options="item.number for item in items"  ng-model="number_answers" ng-change="setAnswer(number_answers)" required></select>
+        <select  class="form-control max-number-question" name="number-answers" ng-options="item.number for item in answer_items"  ng-model="number_answers" ng-change="setAnswer(number_answers)" required></select>
       </div>
     </div>
     <div class="row m-t-10">

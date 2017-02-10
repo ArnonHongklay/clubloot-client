@@ -1,7 +1,7 @@
 set :application, 'clubloot'
 set :repo_url,    'git@github.com:abovelab/clubloot.git'
 
-set :deploy_to,   '/home/deploy/clubloot'
+set :deploy_to,   '/home/deploy/clubloot/client'
 
 set :linked_files, %w{config/database.yml config/mongoid.yml config/application.yml
                       server/config/environment/development.coffee }
@@ -62,35 +62,4 @@ namespace :deploy do
   after :publishing, 'deploy:restart'
   after :finishing, 'deploy:cleanup'
   after :finishing, :grunt
-end
-
-namespace :node do
-  desc 'log production'
-  task :log do
-    on roles(:web) do
-      within current_path do
-        execute :tail, '-f log/access.log'
-      end
-    end
-  end
-end
-
-namespace :rails do
-  desc 'Console to production'
-  task :console do
-    on roles(:web) do
-      within current_path do
-        execute :rails, 'console production'
-      end
-    end
-  end
-
-  desc "Task log"
-  task :logs do
-    on roles(:web) do
-      within current_path do
-        execute :tail, '-f log/puma_error.log'
-      end
-    end
-  end
 end

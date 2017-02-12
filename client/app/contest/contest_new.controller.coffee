@@ -7,6 +7,7 @@ angular.module 'clublootApp'
   $scope.questions = questions.data
   $scope.contests = {loot:{prize:'',category:''},fee:''}
   $scope.gemIndex = null
+  $scope.selectQues = null
   $scope.currentPrize = 0
   $scope.qaSelection = []
   $scope.checkAnswer = false
@@ -301,4 +302,5 @@ angular.module 'clublootApp'
 
   $scope.qaShowAns = []
   $scope.openAns = (index) ->
-    $scope.qaShowAns[index] = true
+    $('html, body').animate { scrollTop: $("#ques_"+index).offset().top }, 'fast'
+

@@ -86,8 +86,8 @@
                   <div class="box-left pull-left">Public or private contest? (private contests do not appear)</div>
                   <div class="box-right pull-right">
                     <select class="form-control" ng-model="contests.public">
-                      <option value="" selected>true</option>
-                      <option value="false">false</option>
+                      <option value="true" selected>public</option>
+                      <option value="false">private</option>
                     </select>
                   </div>
                   </div>
@@ -118,12 +118,12 @@
           </h3>
           <h5 class="g-text" style="text-indent: 10px;">Answer [ xx ] questions for your [ program ] contest.</h5>
             <div class="main-q-box">
-              <div ng-repeat="(i,q) in contest.ques track by i" class="g-text">
+              <div ng-repeat="(i,q) in contest.ques track by i" class="g-text" id="ques_{{i}}">
                 <i class="fa fa-check-circle checked-icon" aria-hidden="true" ng-show="qaSelection[i]"></i>
-                <div class="q-box" ng-click="openAns(i)">Question {{q.title}}</div>
+                <div class="q-box" ng-click="$root.selectQues = i;openAns(i)">Question {{q.title}} {{selectQues}}</div>
 
-                <div class="q-box ans" ng-repeat="(x,a) in q.answers track by x" ng-show="qaShowAns[i]">
-                  <input type=radio ng-model="qaSelection[i]" value="{{x}}"> {{a.title}}
+                <div class="q-box ans" ng-repeat="(x,a) in q.answers track by x" ng-show="$root.selectQues==i">
+                  <input type=radio ng-model="qaSelection[i]" value="{{x}}" ng-click="openAns(i)"> {{a.title}}
                 </div>
 
               </div>

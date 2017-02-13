@@ -14,8 +14,6 @@ angular.module 'clublootApp'
   $scope.alertText = ""
 
   $scope.convertGem = (type)->
-    console.log $scope.gems
-    return
     $(".value-box-added").removeClass('changed')
     rate = 0
     if type == "diamond"

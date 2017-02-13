@@ -1,7 +1,7 @@
 angular.module 'clublootApp'
 .controller 'AdminSystemGemCtrl', ($scope, $http, socket, $state, gems, buckets) ->
   $scope.buckets = buckets.data
-
+  $scope.taxMenu = 'gem'
   $scope.update = () ->
     $http.put("/api/gem_conversion/#{$scope.gems._id}",
       $scope.gems

@@ -10,8 +10,11 @@
   <div class="col-md-9" ng-show="taxMenu=='gem'">
     <h5>Gem Conversion</h5>
     <div class="rate-box g-text">
-      <div class="rate-value-box pull-left">
+      <div class="rate-value-box pull-left" style="width: 100px;">
         <i class="fa fa-diamond gem-grey" aria-hidden="true"></i></span>&nbsp Diamond
+      </div>
+      <div class="rate-value-box pull-left" style="margin-left:10px;">
+        Fee: {{gems.diamond.fee}}
       </div>
       <div class="rate-value-box pull-right">
       {{gems.diamond.rate}} &nbsp <i class="fa fa-diamond gem-green" style="margin-right: 50px;"></i>
@@ -21,8 +24,11 @@
     </div>
 
     <div class="rate-box g-text">
-      <div class="rate-value-box pull-left">
+      <div class="rate-value-box pull-left" style="width: 100px;">
         <i class="fa fa-diamond gem-green" aria-hidden="true"></i></span>&nbsp Emerald
+      </div>
+      <div class="rate-value-box pull-left" style="margin-left:10px;">
+        Fee: {{gems.emerald.fee}}
       </div>
       <div class="rate-value-box pull-right">
       {{gems.emerald.rate}} &nbsp <i class="fa fa-diamond gem-blue" style="margin-right: 50px;"></i>
@@ -32,8 +38,11 @@
     </div>
 
     <div class="rate-box g-text">
-      <div class="rate-value-box pull-left">
+      <div class="rate-value-box pull-left" style="width: 100px;">
         <i class="fa fa-diamond gem-blue" aria-hidden="true" ></i></span>&nbsp Sapphire
+      </div>
+      <div class="rate-value-box pull-left" style="margin-left:10px;">
+        Fee: {{gems.sapphire.fee}}
       </div>
       <div class="rate-value-box pull-right">
       {{gems.sapphire.rate}} &nbsp <i class="fa fa-diamond gem-red" style="margin-right: 50px;"></i>
@@ -43,8 +52,11 @@
     </div>
 
     <div class="rate-box g-text">
-      <div class="rate-value-box pull-left">
+      <div class="rate-value-box pull-left" style="width: 100px;">
         <i class="fa fa-diamond gem-red" aria-hidden="true"></i></span>&nbsp Ruby
+      </div>
+      <div class="rate-value-box pull-left" style="margin-left:10px;">
+        Fee: {{gems.ruby.fee}}
       </div>
       <div class="rate-value-box pull-right">
       {{gems.ruby.rate}} &nbsp <img class="money-bag" src="assets/images/Money Bag Icon.png" style="margin-right: 50px;">
@@ -181,13 +193,23 @@
     <div class="modal-bg" ng-click="showSystemModal=false"></div>
     <div class="context-box" ng-hide="confirmChange">
       <a class="close-btn" ng-click="showRateModal=false"><i class="fa fa-times" aria-hidden="true"></i></a>
-      <div class="title b-text">Update {{showRateModal.name}} Rate</div>
-      <div class="desc g-text">Changes are effective immediately<br><br>
+      <div class="title b-text">Update {{showRateModal.name}} Rate and Fee</div>
+      <div class="desc g-text">Changes are effective immediately<br>
         <!-- <input ng-model="showRateModal.rate" value="{{showRateModal.rate}}" style="text-align:center;"> -->
+        <span>Rate</span>
         <input ng-model="gems.diamond.rate" ng-show="showRateModal.name == 'Diamond'">
         <input ng-model="gems.emerald.rate" ng-show="showRateModal.name == 'Emerald'">
         <input ng-model="gems.sapphire.rate" ng-show="showRateModal.name == 'Sapphire'">
         <input ng-model="gems.ruby.rate" ng-show="showRateModal.name == 'Ruby'">
+
+      </div>
+      <div class="desc g-text">
+        <span>Fee&nbsp</span>
+        <!-- <input ng-model="showRateModal.rate" value="{{showRateModal.rate}}" style="text-align:center;"> -->
+        <input ng-model="gems.diamond.fee" ng-show="showRateModal.name == 'Diamond'">
+        <input ng-model="gems.emerald.fee" ng-show="showRateModal.name == 'Emerald'">
+        <input ng-model="gems.sapphire.fee" ng-show="showRateModal.name == 'Sapphire'">
+        <input ng-model="gems.ruby.fee" ng-show="showRateModal.name == 'Ruby'">
 
       </div>
       <div class="btn submit-btn" style="display:inherit;margin:auto;margin-top: 20px;" ng-click="confirmChange=true">SUBMIT</div>

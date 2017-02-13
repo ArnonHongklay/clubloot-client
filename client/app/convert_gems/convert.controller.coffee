@@ -14,22 +14,24 @@ angular.module 'clublootApp'
   $scope.alertText = ""
 
   $scope.convertGem = (type)->
+    console.log $scope.gems
+    return
     $(".value-box-added").removeClass('changed')
     rate = 0
     if type == "diamond"
-      rate = 30000
+      rate = $scope.gems.diamond.fee
       $scope.titleText = "Convert Emerald to Diamond"
       if $scope.currentGem.emeralds < $scope.gems.diamond.rate
         $scope.alertText  = "You need more Emerald"
 
     else if type == "emerald"
-      rate = 20000
+      rate = $scope.gems.emerald.fee
       $scope.titleText = "Convert Sapphire to Emerald"
       if $scope.currentGem.sapphires < $scope.gems.emerald.rate
         $scope.alertText = "You need more Sapphire"
 
     else if type == "sapphire"
-      rate = 10000
+      rate = $scope.gems.sapphire.fee
       $scope.titleText = "Convert Ruby to Sapphire"
       if $scope.currentGem.rubies < $scope.gems.sapphire.rate
         $scope.alertText = "You need more Ruby"

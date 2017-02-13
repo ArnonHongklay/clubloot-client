@@ -1,5 +1,4 @@
 'use strict'
 
 angular.module 'clublootApp'
-.controller 'AdminCtrl', ($scope, $http, Auth, User) ->
-
+.controller 'AdminCtrl', ($scope, $http, Auth, User, $timeout) ->

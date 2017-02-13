@@ -24,6 +24,7 @@ UserSchema = new Schema(
   first_name: String
   last_name: String
   birthday: Date
+  is_admin: Boolean
   billing_address: String
   billing_city: String
   billing_state: String

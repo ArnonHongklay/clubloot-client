@@ -266,7 +266,7 @@ angular.module 'clublootApp'
         closeOnCancel: true
       }, (isConfirm) ->
         if isConfirm
-          $http.post("/api/contest/#{$scope.contest.id}/destroy", {}).success (data, status, headers, config) ->
+          $http.post("/api/contest/#{$scope.contest.id}/destroy", {user_id: Auth.getCurrentUser()._id}).success (data, status, headers, config) ->
             window.location.href = next
         else
           event.preventDefault()

@@ -896,6 +896,9 @@ exports.destroy = (req, res) ->
   Contest.findById req.params.id, (err, contest) ->
     return handleError(res, err)  if err
     return res.status(404).end()  unless contest
+    User.findById req.body.user_id, (err, user) ->
+      user.coins = user.coins + contest.fee
+      user.save()
     contest.remove (err) ->
       return handleError(res, err)  if err
       res.status(204).end()

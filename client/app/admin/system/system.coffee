@@ -29,6 +29,19 @@ angular.module 'clublootApp'
         $http.get "/api/winner_log"
 
 
+  .state 'AdminSystem.admin',
+    url: '/manage_admin'
+    templateUrl: 'app/admin/system/admin/admin.html'
+    controller: 'AdminSystemAdminCtrl'
+    resolve:
+      users: ($http, $stateParams) ->
+        $http.get "/api/users/all_user"
+      admins: ($http, $stateParams) ->
+        $http.get "/api/users/all_admin"
+      masters: ($http, $stateParams) ->
+        $http.get "/api/users/all_master"
+
+
   .state 'AdminSystem.programming',
     url: '/programming'
     templateUrl: 'app/admin/system/programming/programming.html'

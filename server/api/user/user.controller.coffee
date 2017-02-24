@@ -43,6 +43,29 @@ exports.index = (req, res) ->
     return res.status(500).json err  if err
     res.status(200).json users
 
+exports.allUser = (req, res) ->
+  User.find { role: 'user'}, '-salt -hashedPassword', (err, users) ->
+    return res.status(500).json err  if err
+    res.status(200).json users
+
+
+exports.adminIndex = (req, res) ->
+  User.find { role: "admin"}, '-salt -hashedPassword', (err, users) ->
+    return res.status(500).json err  if err
+    res.status(200).json users
+
+exports.masterIndex = (req, res) ->
+  User.find { role: "master"}, '-salt -hashedPassword', (err, users) ->
+    return res.status(500).json err  if err
+    res.status(200).json users
+
+exports.editRole = (req, res, next) ->
+  userId = req.params.id
+  User.findById userId, (err, user) ->
+    user.role = req.body.role
+    user.save()
+    res.status(200).json user
+
 ###*
 Creates a new user
 ###

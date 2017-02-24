@@ -12,6 +12,7 @@ angular.module 'clublootApp'
     { name: "Winners",       state: 'winners' ,         title: '' },
     { name: "Free loot",     state: 'freeloot' ,      title: '' },
     { name: "Subscribe",     state: 'subscribe' ,      title: '' }
+    { name: "Admin",         state: 'admin' ,      title: '' }
   ]
   $scope.systemTab  = $scope.menus[0]
 

@@ -27,7 +27,7 @@ angular.module 'clublootApp'
       window.location.href = "/login"
     if Auth.getCurrentUser()
       console.log "user"
-      if Auth.getCurrentUser().role != "admin"
+      if Auth.getCurrentUser().role != "admin" && Auth.getCurrentUser().role != "master"
         console.log "not admin"
         Auth.logout()
         window.location.href = "/admin_login"

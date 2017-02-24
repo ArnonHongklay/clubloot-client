@@ -10,6 +10,10 @@ router = express.Router()
 router.get '/', controller.index
 # router.get '/', auth.hasRole('admin'), controller.index
 router.get '/all', auth.isAuthenticated(), controller.index
+router.get '/all_user', auth.isAuthenticated(), controller.allUser
+router.get '/all_admin', auth.isAuthenticated(), controller.adminIndex
+router.get '/all_master', auth.isAuthenticated(), controller.masterIndex
+router.post '/:id/edit_role', auth.isAuthenticated(), controller.editRole
 router.delete '/:id', auth.hasRole('admin'), controller.destroy
 router.get '/me', auth.isAuthenticated(), controller.me
 router.put '/:id/deletemessage', auth.isAuthenticated(), controller.deleteMessage

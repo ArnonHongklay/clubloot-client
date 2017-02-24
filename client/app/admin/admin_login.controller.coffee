@@ -19,7 +19,7 @@ angular.module 'clublootApp'
         console.log Auth.getCurrentUser().role
         console.log Auth.getCurrentUser()._id
         $timeout ->
-          if Auth.getCurrentUser().role == "admin"
+          if Auth.getCurrentUser().role == "admin" || Auth.getCurrentUser().role == "master"
             window.location.href =  '/admin'
             console.log "admin"
           else

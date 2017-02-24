@@ -18,8 +18,10 @@ angular.module 'clublootApp'
       password: user.password
 
     .success (data) ->
+      console.log data
       $cookieStore.put 'token', data.token
       currentUser = User.get()
+      console.log currentUser
       deferred.resolve data
       callback?()
 

@@ -57,12 +57,10 @@ angular.module 'clublootApp'
 
   }
 
-
-  $scope.checkActive = (start, end) ->
+  $scope.checkActive = (start) ->
     now = new Date().getTime()
     start = new Date(start).getTime()
-    end = new Date(end).getTime()
-    return now < end
+    return now < start
 
   $scope.landingContest = ->
     $scope.contests.owner = Auth.getCurrentUser().username

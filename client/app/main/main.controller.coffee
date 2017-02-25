@@ -60,6 +60,12 @@ angular.module 'clublootApp'
 
   }
 
+  $scope.liveCount = () ->
+    $('.live-contest-el').length
+
+  $scope.upcomingCount = () ->
+    $('.upcoming-contest-el').length
+
   socket.syncUpdates 'contest', $scope.contests
 
   $scope.socket.on 'message', (data) ->

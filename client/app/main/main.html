@@ -1,6 +1,5 @@
 <div ng-include="'components/navbar/navbar.html'"></div>
-
-<div class="container desktop" style="color: #93898A">
+<div class="container desktop main-dashboard" style="color: #93898A">
   <div ng-include="'components/dashboard/score.html'"></div>
   <div class="row">
     <div  ng-click="setFilter('live')"
@@ -104,3 +103,248 @@
     </div>
   </div>
 </div>
+
+
+
+
+
+<!-- -------------------Mobile section-------------------------------- -->
+
+
+<div class="container phone main-dashboard" style="color: #93898A">
+  <div class="row">
+    <div class="col-lg-12">
+      <h2 style="color: #8066A0; cursor: pointer" ui-sref="main" class="name-head">
+        {{$root.currentUser.username}} Dashboard
+      </h2>
+    </div>
+
+    <div class="col-lg-12">
+      <div class="tab-list" ng-click="mobileTab = 'Announcements'">
+        <div class="left-name">
+          Announcements
+        </div>
+        <div class="right-name">
+          <div class="block-number red">
+            {{$root.currentUser.messages.length}}
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-12 in-tab-mobile" ng-show="mobileTab == 'Announcements'">
+        <h5 ng-show="$root.currentUser.messages.length == 0">No Announcements now</h5>
+        <div class="alert alert-info" style="padding: 5px 10px 0px 10px;
+        line-height: 15px;
+        margin-bottom: 5px;" role="alert" ng-repeat="message in $root.currentUser.messages"
+        ng-click="openMessage($index)"
+        >
+          <div class="close-message" ng-click="deleteMessage($index)">{{openMessage}}<i class="fa fa-times" aria-hidden="true" ></i></div>
+          <i style="font-size: 25px;color: #999;margin-top:3;" class="fa fa-bullhorn" aria-hidden="true"></i>
+          <span class="sr-only"></span>
+          <div class="message" ng-class="{'open':$root.openMessage==$index}">{{message.message}}</div>
+        </div>
+      </div>
+
+      <div class="tab-list" ng-click="mobileTab = 'Wins'">
+        <div class="left-name">
+          Wins
+        </div>
+        <div class="right-name">
+          <div class="block-number purple">
+            {{$root.currentUser.wonContest.length}}
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-12 in-tab-mobile" ng-show="mobileTab == 'Wins'">
+        <div ng-repeat="contest in $root.currentUser.wonContest" class="col-lg-12" style="border-bottom: 1px solid #ccc; line-height:50px; font-size: 18px; color: #42A3BE; cursor: pointer;width: 100%;height: 51px;padding-top:0px;padding-bottom: 1px;">
+          <div style="width: 100px; display: inline-block; float:left; color: #912927">
+            <div ng-repeat="player in contest.player">
+              <span ng-repeat="prize in player.winPrize" ng-if="currentUser._id == player.uid">
+                <i ng-show="prize.type!='coin'" class="fa fa-diamond" style="{{checkGemColor(prize.type)}}" aria-hidden="true"></i>
+                <i ng-if="prize.type!='coin' && prize.value>1" class="fa fa-diamond" style="{{checkGemColor(prize.type)}}" aria-hidden="true"></i>
+                <i ng-if="prize.type!='coin' && prize.value>2" class="fa fa-diamond" style="{{checkGemColor(prize.type)}}" aria-hidden="true"></i>
+                <span ng-show="prize.type == 'coin'" style="color:#999;">{{prize.value}} coins</span>
+              </span>
+            </div>
+          </div>
+          <div style="width: 145px; display: inline-block; float:left;overflow:hidden;white-space: nowrap;text-overflow:ellipsis;" ui-sref="contestshow({contest: contest._id, liveDashboard: true})">
+            <div ng-if="contest.owner == currentUser.email || contest.owner == currentUser.username" style="display: inline-block; width: 30px; height: 30px; border-radius: 15px; font-size: 16px; line-height: 30px; text-align: center; border: 1px solid">H</div>
+            {{contest.name}}
+          </div>
+          <!-- <div style="width: 20%; display: inline-block; float:left;">{{contest.program}}</div> -->
+          <div style="width: 60px; display: inline-block; float:right; text-align: center;">
+            <div style="color: #fff; background: #26AE58;" ui-sref="contestshow({contest: contest._id, liveDashboard: true, viewPlayer: true})">View</div>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div class="tab-list" ng-click="mobileTab = 'live'">
+        <div class="left-name">
+          Live Contests
+        </div>
+        <div class="right-name">
+          <div class="block-number sky">
+            {{liveCount()}}
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-12 in-tab-mobile" ng-show="mobileTab == 'live'">
+        <div  ng-repeat="contest in contests"
+              ng-if="contest.stage == 'live' && checkJoin(contest)"
+              class="col-lg-12 live-contest-el"
+              style="border-bottom: 1px solid #ccc; line-height:50px; font-size: 18px; color: #42A3BE; cursor: pointer">
+          <div class="row">
+            <div style="width: 70px; display: inline-block; float:left; color: #912927">
+              <div gem-repeat="" fee="{{contest.fee}}" player="{{contest.max_player}}" gemcount="{{calGem(contest.fee, contest.max_player).count}}"></div>
+            </div>
+            <div style="width: 145px; display: inline-block; float:left;overflow:hidden;white-space: nowrap;text-overflow:ellipsis;" ui-sref="contestshow({contest: contest._id, liveDashboard: true})">
+              <div ng-if="contest.owner == currentUser.email || contest.owner == currentUser.username" style="display: inline-block; width: 30px; height: 30px; border-radius: 15px; font-size: 16px; line-height: 30px; text-align: center; border: 1px solid">H</div>
+              {{contest.name}}
+            </div>
+            <div style="width: 15%; display: inline-block; float:left;">{{checkPosition(contest)}}</div>
+            <div style="width: 60px; display: inline-block; float:left; text-align: center;">
+              <div style="color: #fff; background: #26AE58;" ui-sref="contestshow({contest: contest._id, liveDashboard: true, viewPlayer: true})">View</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="tab-list" ng-click="mobileTab = 'Upcoming'">
+        <div class="left-name">
+          Upcoming Contests
+        </div>
+        <div class="right-name">
+          <div class="block-number sky">
+            {{upcomingCount()}}
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-12 in-tab-mobile" ng-show="mobileTab == 'Upcoming'">
+        <div  ng-repeat="contest in contests"
+            ng-if="contest.stage == 'upcoming' && checkJoin(contest)"
+            class="col-lg-12 upcoming-contest-el"
+            style="border-bottom: 1px solid #ccc; line-height:50px; font-size: 18px; color: #42A3BE; cursor: pointer">
+          <div class="row">
+            <div style="width: 70px; display: inline-block; float:left; color: #912927">
+              <div gem-repeat="" fee="{{contest.fee}}" player="{{contest.max_player}}" gemcount="{{calGem(contest.fee, contest.max_player).count}}"></div>
+            </div>
+            <div style="width: 45px; display: inline-block; float:left;overflow:hidden;white-space: nowrap;text-overflow:ellipsis;" ng-click="goContest(contest)">
+              <div style="display: inline-block; width: 30px; height: 30px; border-radius: 15px; font-size: 16px; line-height: 30px; text-align: center; border: 1px solid">H</div>
+            </div>
+
+            <div style="width: 60px; display: inline-block; float:left;">{{contest.player.length}} / {{contest.max_player}} P</div>
+            <div style="width: 100px; display: inline-block; float:left; text-align: center;">
+              <div style="color: #BB0E0E;" count-down="{{contest.end_time}}"></div>
+            </div>
+
+            <div style="width: 60px; display: inline-block; float:left; text-align: center;">
+              <div style="color: #fff; background: #26AE58;" ui-sref="contestshow({contest: contest._id, liveDashboard: true, viewPlayer: true})">View</div>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+
+
+    </div>
+  </div>
+
+  <div class="row my-loot-box">
+    <div class="my-loot-text">
+      My Loot
+    </div>
+    <div class="loot-block">
+      <div class="loot-left">
+        <img src="assets/images/Piggy Bank Icon.png" width="44">
+      </div>
+      <div class="loot-right">
+         {{$root.currentUser.coins | currency:"":0}}
+      </div>
+    </div>
+
+    <div class="loot-block">
+      <div class="loot-left">
+        <i class="fa fa-diamond" style="color: #9F9B93" aria-hidden="true"></i>
+      </div>
+      <div class="loot-right">
+         {{$root.currentUser.diamonds}}
+      </div>
+    </div>
+
+    <div class="loot-block">
+      <div class="loot-left">
+        <i class="fa fa-diamond" style="color: #758F42" aria-hidden="true"></i>
+      </div>
+      <div class="loot-right">
+         {{$root.currentUser.emeralds}}
+      </div>
+    </div>
+
+    <div class="loot-block">
+      <div class="loot-left">
+        <i class="fa fa-diamond" style="color: #2A4C7A" aria-hidden="true"></i>
+      </div>
+      <div class="loot-right">
+        {{$root.currentUser.sapphires}}
+      </div>
+    </div>
+
+    <div class="loot-block">
+      <div class="loot-left">
+        <i class="fa fa-diamond"  style="color: #951111" aria-hidden="true"></i>
+      </div>
+      <div class="loot-right">
+         {{$root.currentUser.rubies}}
+      </div>
+    </div>
+
+
+
+
+  </div>
+
+
+</div>
+
+<!-- <div class="flex-main-item">
+        {{$root.currentUser.rubies}} <br>
+        <i class="fa fa-diamond"  style="color: #951111" aria-hidden="true"></i>
+      </div>
+      <div class="flex-main-item" >
+        {{$root.currentUser.sapphires}} <br>
+        <i class="fa fa-diamond" style="color: #2A4C7A" aria-hidden="true"></i>
+      </div>
+      <div class="flex-main-item" >
+        {{$root.currentUser.emeralds}} <br>
+        <i class="fa fa-diamond" style="color: #758F42" aria-hidden="true"></i>
+      </div>
+      <div class="flex-main-item">
+        {{$root.currentUser.diamonds}} <br>
+        <i class="fa fa-diamond" style="color: #9F9B93" aria-hidden="true"></i>
+      </div>
+ -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

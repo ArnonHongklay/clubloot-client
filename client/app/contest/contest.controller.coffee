@@ -2,7 +2,13 @@
 
 angular.module 'clublootApp'
 .controller 'ContestCtrl', ($scope, $http, socket, contests) ->
-  $scope.contests = contests.data
+  $.ajax(
+    method: 'GET'
+    url: 'http://api.clubloot.com/contests/programs.json'
+    ).done (data) ->
+    console.log data
+    $scope.programList = data.data
+    console.log $scope.programList
 
   $('.item-show').css 'display', 'none'
   $('.item-hover').css 'display', 'block'

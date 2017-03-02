@@ -20,6 +20,7 @@ UserSchema = new Schema(
   email:
     type: String
     lowercase: true
+  tokens: String
   created_at: Date
   first_name: String
   last_name: String

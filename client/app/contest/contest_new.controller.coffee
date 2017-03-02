@@ -1,11 +1,33 @@
 'use strict'
 
 angular.module 'clublootApp'
-.controller 'NewContestCtrl', ($scope, $http, socket, $timeout, Auth, programs, templates, questions) ->
-  $scope.programList = programs.data
-  $scope.templates = templates.data
-  $scope.questions = questions.data
-  $scope.contests = {loot:{prize:'',category:''},fee:''}
+.controller 'NewContestCtrl', ($scope, $http, socket, $timeout, Auth) ->
+  # $scope.programList = programs.data.data
+  # console.log programs
+  $scope.templates = []
+  $scope.user = Auth.getCurrentUser()
+  console.log $scope.user
+
+  $.ajax(
+    method: 'GET'
+    url: 'http://api.clubloot.com/contests/programs.json'
+    ).done (data) ->
+    console.log data
+    $scope.programList = data.data
+
+  # $http.get("/api/templates/#{$scope.template_id}/questions",
+  #   null
+  # ).success((ques) ->
+  #   $scope.contest.challenge = ques.length
+  #   $scope.contest.ques = ques
+  # ).error((data, status, headers, config) ->
+  #   swal("Not Active")
+  # )
+
+
+  # $scope.questions = questions.data
+  # $scope.contests = {loot:{prize:'',category:''},fee:''}
+  # console.log $scope.programList
   $scope.gemIndex = null
   $scope.selectQues = null
   $scope.currentPrize = 0
@@ -56,6 +78,27 @@ angular.module 'clublootApp'
     ]
 
   }
+
+  $scope.selectProgram = () ->
+    console.log $scope.contests.program_id
+    $http.get("http://api.clubloot.com/contests/templates.json?program_id=#{$scope.contests.program_id}").success((data) ->
+      $scope.templates = data.data
+      console.log $scope.templates
+    )
+
+  $scope.createNewContest = () ->
+    $http.post("http://api.clubloot.com/user/contest/new",
+      {
+        'token': $scope.contests.program_id,
+        'template_id': $scope.contests.template_id,
+        'details[name]': $scope.contests.name,
+        'details[player]': $scope.contests.max_player,
+        'details[fee]': $scope.contests.fee
+      }
+    ).success (data) ->
+      console.log "65656565665565"
+      console.log data
+
 
   $scope.checkActive = (start) ->
     now = new Date().getTime()
@@ -164,11 +207,13 @@ angular.module 'clublootApp'
 
   $scope.calPrize = (index) ->
 
-    v = parseInt($('#contestFee').val())
+    v = parseInt($scope.gemMatrix.list[$scope.contests.max_player].fee[index])
+    console.log index
+    console.log v
+    console.log "----------------------------------------------------------"
+    $scope.gemIndex = $scope.gemMatrix.list[$scope.contests.max_player].fee.indexOf(v)
 
-    $scope.gemIndex = $scope.gemMatrix.list[$scope.contests.max_player-2].fee.indexOf(v)
-
-
+    console.log ""
     gemType = $scope.gemMatrix.gem[$scope.gemIndex].type
 
     if gemType == "DIAMOND"
@@ -188,7 +233,7 @@ angular.module 'clublootApp'
 
     # $scope.contests.loot.prize = parseInt(parseInt($scope.contests.fee) * parseInt($scope.contests.max_player))
 
-    $scope.contests.loot.prize = $scope.allPrize[$scope.gemIndex]
+    # $scope.contests.loot.prize = $scope.allPrize[$scope.gemIndex]
 
   $scope.calGem = (val) ->
     $scope.gemPrize = []

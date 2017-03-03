@@ -15,25 +15,36 @@ angular.module 'clublootApp'
     url: '/contest/new'
     templateUrl: 'app/contest/contest_new.html'
     controller: 'NewContestCtrl'
-    # resolve:
-      # programs: ($http, $stateParams) ->
-      #   $http.get "http://api.clubloot.com/contests/programs.json"
 
+  .state 'contestQuiz',
+    url: '/contest/:contest_id/:template_id/quiz'
+    templateUrl: 'app/contest/contest_quiz.html'
+    controller: 'ContestQuizCtrl'
 
-  .state 'contestshow',
-    url: '/contest/:contest'
-    templateUrl: 'app/contest/contest_show.html'
-    controller: 'ContestShowCtrl'
-    params:
-      liveDashboard: false,
-      viewPlayer: false
-    resolve:
-      templates: ($http, $stateParams) ->
-        $http.get "/api/templates"
-      program: ($http, $stateParams) ->
-        $http.get "/api/contest/program"
-      contest: ($http, $stateParams) ->
-        $http.get "/api/contest/program/#{$stateParams.contest}"
+  .state 'programTemplate',
+    url: '/contest/program/:program_id'
+    templateUrl: 'app/contest/program/template.html'
+    controller: 'ContestTemplateCtrl'
+
+  .state 'programTemplate.template',
+    url: '/contest/program/:program_id/:template_id'
+    templateUrl: 'app/contest/program/template_contest.html'
+    controller: 'ContestTemplateShowCtrl'
+
+  # .state 'contestshow',
+  #   url: '/contest/:contest'
+  #   templateUrl: 'app/contest/contest_show.html'
+  #   controller: 'ContestShowCtrl'
+  #   params:
+  #     liveDashboard: false,
+  #     viewPlayer: false
+  #   resolve:
+  #     templates: ($http, $stateParams) ->
+  #       $http.get "/api/templates"
+  #     program: ($http, $stateParams) ->
+  #       $http.get "/api/contest/program"
+  #     contest: ($http, $stateParams) ->
+  #       $http.get "/api/contest/program/#{$stateParams.contest}"
 
   .state 'question',
     url: '/question/:contest/'

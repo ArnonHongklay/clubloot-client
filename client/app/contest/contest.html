@@ -12,7 +12,7 @@
   <div class="row">
     <div class="col-lg-12">
       <div class="row">
-        <div class="col-sm-2" ng-repeat="program in programList" ng-mouseover="hoverIn($index)" ng-mouseleave="hoverOut($index)" ui-sref="contestshow({program: contest._id})">
+        <div class="col-sm-2" ng-repeat="program in programList" ng-mouseover="hoverIn($index)" ng-mouseleave="hoverOut($index)" ui-sref="programTemplate({program_id: program._id.$oid})">
            <div class="flex-container upcomming show-{{$index}}">
              <div class="item-show">
                <p>{{program.name}}</p>
@@ -29,7 +29,7 @@
     </div>
   </div>
 </div>
-
+<!--
 <div class="container-fluid phone">
   <div class="row">
     <div class="col-lg-12">
@@ -107,4 +107,4 @@
       12:22 <span style="font-size: 30px; line-height: 20px; color: #50ACC4">></span>
     </div>
   </div>
-</div>
+</div> -->

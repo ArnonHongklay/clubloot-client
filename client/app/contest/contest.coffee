@@ -15,13 +15,10 @@ angular.module 'clublootApp'
     url: '/contest/new'
     templateUrl: 'app/contest/contest_new.html'
     controller: 'NewContestCtrl'
-    resolve:
-      templates: ($http, $stateParams) ->
-        $http.get "/api/templates"
-      questions: ($http, $stateParams) ->
-        $http.get "/api/questions"
-      programs: ($http, $stateParams) ->
-        $http.get "/api/templates/program"
+    # resolve:
+      # programs: ($http, $stateParams) ->
+      #   $http.get "http://api.clubloot.com/contests/programs.json"
+
 
   .state 'contestshow',
     url: '/contest/:contest'

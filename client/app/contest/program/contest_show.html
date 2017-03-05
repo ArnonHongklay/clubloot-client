@@ -1,0 +1,122 @@
+
+<div class="contest-show-box" style="position:absolute;width: 100%;height: 100%;background:#50ACC4;top:0px;left:0px;">
+  <div class="contest-detail">
+    <h4 style="color:rgb(128,102,160);font-weight:300;cursor:pointer;" ng-click="goBack()">
+      <i class="fa fa-chevron-left" aria-hidden="true"></i> {{contest.name}}</h4>
+    <div style="text-indent: 19px">Hosted by <span class="text-blue">{{ contest.host.name || contest.host.name }}</span></div>
+    <div style="padding: 20px">
+      <table class="table" style="border-radius: 0px;">
+        <tbody>
+          <tr>
+            <td class="text-grey" style="color:#999;width:100px;text-align:left;">
+              Entry fee
+            </td>
+            <td class="loot gem-red" style="text-align:left;color:#999;width:230px;">
+              {{contest.fee}}
+              <img class="money-bag" src="assets/images/money-bag-grey.png">
+            </td>
+          </tr>
+
+          <tr>
+            <td class="text-grey" style="color:#999;width:200px;text-align:left;">
+              Loot
+            </td>
+            <td class="loot gem-red" style="text-align:left;color:#999">
+              <div ng-if="contest" id="currentPrize">
+                {{renderGem(contest.fee, contest.max_players)}}
+
+              </div>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="text-grey" style="color:#999;width:200px;text-align:left;">
+              Stake
+            </td>
+            <td class="loot" style="text-align:left;color:#999">
+              Winner take all
+            </td>
+          </tr>
+
+          <tr>
+            <td class="text-grey" style="color:#999;width:200px;text-align:left;">
+              Players
+            </td>
+            <td class="loot" style="text-align:left;color:#999">
+              {{contest.leaders.length}} / {{contest.max_players}}
+            </td>
+          </tr>
+
+          <tr>
+            <td class="text-grey" style="color:#999;width:200px;text-align:left;">
+              Program
+            </td>
+            <td class="loot" style="text-align:left;color:#999">
+              {{$root.currentProgram.name}}
+            </td>
+          </tr>
+
+          <tr>
+            <td class="text-grey" style="color:#999;width:200px;text-align:left;">
+              Status
+            </td>
+            <td class="loot" style="text-align:left;color:#999" id="selectedStatus" ng-hide="eventStarted">
+              {{contest.state}}
+            </td>
+          </tr>
+
+          <tr style="border-bottom: 1px solid #dedede">
+            <td class="text-grey" style="color:#999;width:200px;text-align:left;">
+              Challenge
+            </td>
+            <td class="loot text-blue" style="text-align:left;">
+              {{contest.challenge}} Questions
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div ng-show="contest.state =='upcoming' && !alreadyJoin && contest.leaders.length < contest.max_players" class="btn btn-primary" style="background: #50ACC4;width: 100%;border: 0px;" ng-click="joinContest()" ng-disabled="joinedDisabled">JOIN CONTEST</div>
+      <div ng-show="contest.state =='upcoming' && !alreadyJoin && contest.leaders.length == contest.max_players" class="btn btn-default" style="background: #999;color: #fff;width: 100%;border: 0px;" ng-disabled="joinedDisabled">CONTEST IS FULL</div>
+      <div ng-show="alreadyJoin && contest.state =='upcoming' && contest.state !='cancel'&& contest.state !='live'" class="btn btn-primary disabled" style="background: #50ACC4; width: 100%; border: 0px;">WAITING</div>
+      <div ng-show="contest.state=='cancel'" class="btn btn-danger" style="width: 100%;border: 0px;">CANCELED</div>
+      <div ng-show="contest.state=='live'" class="btn btn-success" style="width: 100%;border: 0px;">LIVE</div>
+      <div ng-show="contest.state=='close'" class="btn btn-default" style="background: #999;color:#fff;width: 100%;border: 0px;">ENDED</div>
+    </div>
+  </div>
+
+  <div class="room-detail">
+    <div style="padding: 20px">
+      <h4 style="color: #999">
+        <i class="fa fa-users" aria-hidden="true"></i>
+        {{contest.leaders.length}} Players
+      </h4>
+      <table id="tablePlayers" class="table" style="border-radius: 0px;">
+        <tbody>
+          <tr ng-repeat="player in contest.leaders | orderBy:'-score'" ng-click="compairPlayer(player, $index)">
+            <td class="text-blue" style="text-align:left;">
+              <div class="place-no" ng-if="!checkSameScore(player.score) || $index == 0" style="position: absolute;">
+                <span class="score-{{$index}}" ng-if="$index < 10">0</span>{{ $index + 1 }}
+              </div>
+              <div style="display: inline; margin-left: 45px;">{{ player.name }}</div>
+              <span class="pull-right">
+                <span ng-hide="player.isWin">{{ player.score || 0 }}</span>
+                <span ng-show="player.isWin">
+                  <span ng-repeat="prize in player.winPrize">
+                    <i ng-show="prize.type!='coin'" class="fa fa-diamond" style="{{checkGemColor(prize.type)}}" aria-hidden="true"></i>
+                    <i ng-if="prize.type!='coin' && prize.value>1" class="fa fa-diamond" style="{{checkGemColor(prize.type)}}" aria-hidden="true"></i>
+                    <i ng-if="prize.type!='coin' && prize.value>2" class="fa fa-diamond" style="{{checkGemColor(prize.type)}}" aria-hidden="true"></i>
+                    <span ng-show="prize.type == 'coin'" style="color:#999;">{{prize.value}} coins</span>
+                  </span>
+                </span>
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<ui-view>
+
+</ui-view>

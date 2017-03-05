@@ -1,7 +1,7 @@
 'use strict'
 
 angular.module 'clublootApp'
-.controller 'ContestQuizCtrl', ($scope, $http, socket, $timeout, Auth, $state, $stateParams) ->
+.controller 'ContestJoinCtrl', ($scope, $http, socket, $timeout, Auth, $state, $stateParams) ->
   console.log $stateParams
   $scope.user = Auth.getCurrentUser()
   $scope.selectQues = null
@@ -35,11 +35,27 @@ angular.module 'clublootApp'
       }
       url: "http://api.clubloot.com/user/contest/quiz.json"
       ).done (data) ->
+        console.log "submitAnswer"
+        console.log data
         $state.go('main')
         # console.log data
       # console.log data
     # console.log data
     # return
+
+  $scope.justSubmit = (next) ->
+    $.ajax(
+      method: 'POST'
+      data: {
+        'token': $scope.user.token,
+        'contest_id': $stateParams.contest_id,
+        'details': $scope.getAnswer()
+      }
+      url: "http://api.clubloot.com/user/contest/quiz.json"
+      ).done (data) ->
+        console.log "submitAnswer"
+        console.log data
+        window.location.href = next
 
   $scope.getAnswer = () ->
     answers = "["
@@ -53,9 +69,11 @@ angular.module 'clublootApp'
   window.onbeforeunload = (e) ->
     unless $scope.checkAnswer
       e.preventDefault()
+
       # $http.post("/api/contest/#{$scope.contest.id}/destroy", {}).success (data, status, headers, config) ->
 
   $scope.$on '$locationChangeStart', (event, next, current) ->
+    return if next.indexOf("join") >=0
     return if current.indexOf("contest/new") >=0
     return if $scope.createNewStep == '1'
     unless $scope.checkAnswer
@@ -73,7 +91,8 @@ angular.module 'clublootApp'
         closeOnCancel: true
       }, (isConfirm) ->
         if isConfirm
-          window.location.href = next
+          $scope.justSubmit(next)
+          # window.location.href = next
         else
           event.preventDefault()
     return

@@ -1,8 +1,8 @@
 
   <div class="row">
   <h3 style="font-weight: 300;">
-    <span class="pull-left" style="color:rgb(128,102,160)">{{selectedTemplate.name}}</span>
-    <span class="pull-right btn" style="background:rgb(128,102,160);color:#fff;">{{selectedTemplate.questions.length}} Q</span>
+    <span class="pull-left" style="color:rgb(128,102,160)">{{$root.currentProgram.name}}</span>
+    <span class="pull-right btn" style="background:rgb(128,102,160);color:#fff;">{{contests[0].template.number_questions}} Q</span>
   </h3>
   </div>
   <div class="row" style="padding-top: 20px">
@@ -21,7 +21,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr ng-repeat="contest in contests | orderBy: '-max_player-player.length'">
+          <tr ng-repeat="contest in contests | orderBy: '-max_player-player.length'" ng-click="showContestDetails(contest)">
             <td ng-click="showContestDetails(contest)" class="text-blue">{{contest.fee}}
               <img class="money-bag" src="assets/images/money-bag-blue.png">
             </td>
@@ -47,3 +47,4 @@
       </table>
     </div>
   </div>
+<ui-view></ui-view>

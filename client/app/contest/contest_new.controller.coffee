@@ -90,8 +90,12 @@ angular.module 'clublootApp'
       $scope.$apply()
 
   $scope.createNewContest = () ->
-    console.log $scope.contests
-    console.log $scope.user.token
+    console.log "createNewContest"
+    console.log "template_id:"+$scope.contests.template_id
+    console.log "token:"+$scope.user.token
+    console.log "details[name]:"+$scope.contests.name
+    console.log "details[player]:"+parseInt($scope.contests.max_player)+2
+    console.log "details[fee]:"+$scope.contests.fee
 
     $.ajax(
       method: 'POST'
@@ -104,6 +108,8 @@ angular.module 'clublootApp'
       }
       url: "http://api.clubloot.com/user/contest/new.json"
       ).done (data) ->
+        console.log data
+        console.log "=============-------"
         id = data.data.id.$oid
         $state.go("contestQuiz", { contest_id: id , template_id: $scope.contests.template_id})
 

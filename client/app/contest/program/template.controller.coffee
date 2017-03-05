@@ -1,7 +1,7 @@
 'use strict'
 
 angular.module 'clublootApp'
-.controller 'ContestTemplateCtrl', ($scope, $http, Auth, $state, $stateParams) ->
+.controller 'ContestTemplateCtrl', ($scope, $http, Auth, $state, $stateParams, $rootScope) ->
   $scope.user = Auth.getCurrentUser()
   $.ajax(
     method: 'GET'
@@ -12,8 +12,17 @@ angular.module 'clublootApp'
     $scope.$apply()
 
 
-  $scope.selectTemplate = (id) ->
-    $state.go('programTemplate.template', {template_id: id})
+  $.ajax(
+    method: 'GET'
+    url: 'http://api.clubloot.com/contests/programs.json'
+    ).done (data) ->
+    console.log data
+    $scope.programList = data.data
+    $scope.$apply()
+    console.log $scope.programList
+
+  $scope.selectTemplate = (program) ->
+    $state.go('programTemplate.template', {program_id: program._id.$oid})
 
 
 angular.module 'clublootApp'

@@ -1,10 +1,13 @@
 'use strict'
 
 angular.module 'clublootApp'
-.controller 'ContestTemplateShowCtrl', ($scope, $http, Auth, $state, $stateParams, $rootScope) ->
+.controller 'ContestShowCtrl', ($scope, $http, Auth, $state, $stateParams, $rootScope) ->
   $scope.user = Auth.getCurrentUser()
-  console.log 'ContestTemplateShowCtrl'
-  console.log $stateParams
+  $scope.alreadyJoin = false
+  console.log "user------------------"
+  console.log $rootScope
+  console.log $scope.user
+  $scope.oldScore = 0
 
   $scope.gemMatrix = {
     list:[
@@ -49,40 +52,12 @@ angular.module 'clublootApp'
 
   }
 
-  $.ajax(
-    method: 'GET'
-    url: "http://api.clubloot.com/contests/program/#{$stateParams.program_id}.json"
-    ).done (data) ->
-    $scope.contests = data.data
-    console.log $scope.contests
-    $scope.$apply()
-    return
+  $scope.compairPlayer = (player, index) ->
+    console.log player.id.$oid
+    $state.go('programTemplate.template.contest.vs', {user_id: player.id.$oid})
 
-  # $.ajax(
-  #   method: 'GET'
-  #   url: 'http://api.clubloot.com/contests/programs.json'
-  #   ).done (data) ->
-  #   console.log "=-=-=-=-=-=-=-="
-  #   for d in data.data
-  #     console.log d._id.$oid
-  #     console.log $stateParams.program_id
-  #     if d._id.$oid == $stateParams.program_id
-  #       console.log "same"
-  #       console.log d
-  #       $rootScope.program = d
-  #   $scope.$apply()
-  #   console.log $rootScope.program
-
-  $.ajax(
-    method: 'GET'
-    url: "http://api.clubloot.com/program/#{$stateParams.program_id}.json"
-    ).done (data) ->
-    console.log $stateParams
-    console.log "---------------ssssssssssssss--"
-
-    $rootScope.currentProgram = data.data
-    console.log $rootScope.currentProgram
-    $scope.$apply()
+  $scope.goBack = () ->
+    $state.go('^')
 
   $scope.gemColor = (gemType) ->
     if gemType == "DIAMOND"
@@ -95,18 +70,81 @@ angular.module 'clublootApp'
       gemColor = "color: green;"
     return gemColor
 
-  $scope.showContestDetails = (contest) ->
-    console.log contest
-    $state.go('programTemplate.template.contest', {contest_id: contest.id.$oid})
-
   $scope.gemRepeat = (fee, player) ->
-    console.log "player:"+player
-    console.log "fee:#{fee}"
     prize = parseInt(fee) * parseInt(player)
     gemIndex = $scope.gemMatrix.list[parseInt(player)-2].fee.indexOf(parseInt(fee))
     $scope.gemMatrix.gem[gemIndex]
 
-  $scope.calGem = (fee, player) ->
-    prize = parseInt(fee) * parseInt(player)
-    gemIndex = $scope.gemMatrix.list[parseInt(player)-2].fee.indexOf(fee)
-    return $scope.gemMatrix.gem[gemIndex] || $scope.gemMatrix.gem[0]
+  $scope.renderGem = (fee, player) ->
+    theGem = $scope.gemRepeat(fee, player)
+    color = $scope.gemColor(theGem.type)
+    gem = "<i class='fa fa-diamond' style='"+color+"'></i>"
+    tmp = ""
+    for i in [1..theGem.count]
+      tmp += gem
+      $('#currentPrize').html tmp
+    return tmp
+
+  $scope.joinContest = () ->
+    $.ajax(
+      method: 'POST'
+      data: {
+        'token': $scope.user.token,
+        'contest_id': $stateParams.contest_id,
+      }
+      url: "http://api.clubloot.com/user/contest/join.json"
+      ).done (data) ->
+        console.log "join"
+        console.log data
+        $state.go('contestQuizJoin', {contest_id: $stateParams.contest_id, template_id: $scope.template_id})
+
+  $scope.checkSameScore = (score) ->
+    if $scope.oldScore == score
+      return 1
+    else
+      $scope.oldScore = score
+      return 0
+
+  # $scope.checkScore = (player, index) ->
+  #   score = 0
+  #   for q, i in player.quizes
+  #     for tq in $scope.contest.template.questions
+  #       if q.answer_id == tq.is_correct && q.question_id == tq._id.$oid
+  #         score = score + 1
+
+  #   console.log "checkScore"
+  #   console.log score
+  #   console.log $scope.contest.leaders[index].score
+  #   score
+
+
+
+  $.ajax(
+    method: 'GET'
+    url: "http://api.clubloot.com/contests/program/#{$stateParams.program_id}.json"
+    ).done (data) ->
+    console.log "--------------"
+    console.log data.data
+    for d in data.data
+      if d.id.$oid == $stateParams.contest_id
+        $scope.contest = d
+
+    $scope.$apply()
+    $scope.template_id = $scope.contest.template._id.$oid
+    $rootScope.template_id = $scope.template_id
+    $.ajax(
+      method: 'GET'
+      url: "http://api.clubloot.com/contests/program/#{$stateParams.program_id}/template/#{$scope.template_id}/contest/#{$stateParams.contest_id}.json"
+      ).done (data) ->
+      $scope.contest = data.data
+      console.log $scope.contest
+      for player in $scope.contest.leaders
+        if player.id.$oid == $scope.user._id
+          $scope.alreadyJoin = true
+      $scope.$apply()
+
+    return
+
+
+
+

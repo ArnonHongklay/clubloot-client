@@ -8,6 +8,7 @@ angular.module 'clublootApp'
     ).done (data) ->
     console.log data
     $scope.programList = data.data
+    $scope.$apply()
     console.log $scope.programList
 
   $('.item-show').css 'display', 'none'

@@ -3,6 +3,7 @@
 angular.module 'clublootApp'
 .controller 'NavbarCtrl', ($scope, $location, Auth, $http, $rootScope, $timeout, socket) ->
   $scope.socket = socket.socket
+  $scope.user = Auth.getCurrentUser()
   $scope.socket.on 'message', (data) ->
     return
 

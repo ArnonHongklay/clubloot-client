@@ -21,15 +21,30 @@ angular.module 'clublootApp'
     templateUrl: 'app/contest/contest_quiz.html'
     controller: 'ContestQuizCtrl'
 
+  .state 'contestQuizJoin',
+    url: '/contest/:contest_id/:template_id/join'
+    templateUrl: 'app/contest/contest_join.html'
+    controller: 'ContestJoinCtrl'
+
   .state 'programTemplate',
-    url: '/contest/program/:program_id'
+    url: '/contest/program'
     templateUrl: 'app/contest/program/template.html'
     controller: 'ContestTemplateCtrl'
 
   .state 'programTemplate.template',
-    url: '/contest/program/:program_id/:template_id'
+    url: '/:program_id'
     templateUrl: 'app/contest/program/template_contest.html'
     controller: 'ContestTemplateShowCtrl'
+
+  .state 'programTemplate.template.contest',
+    url: '/:contest_id'
+    templateUrl: 'app/contest/program/contest_show.html'
+    controller: 'ContestShowCtrl'
+
+  .state 'programTemplate.template.contest.vs',
+    url: '/vs/:user_id'
+    templateUrl: 'app/contest/program/contest_vs.html'
+    controller: 'ContestVsCtrl'
 
   # .state 'contestshow',
   #   url: '/contest/:contest'

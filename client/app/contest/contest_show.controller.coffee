@@ -3,7 +3,6 @@
 angular.module 'clublootApp'
 .controller 'ContestShowCtrl', ($scope, $filter, $http, socket, $state, Auth, $stateParams, contest, program, templates, $timeout) ->
   $scope.programs = program.data
-  # console.log $scope.programs
   $scope.contest = contest.data
   $scope.menu = $stateParams.contest
   $scope.$apend
@@ -14,8 +13,22 @@ angular.module 'clublootApp'
   $scope.currentPlayer
   $scope.currentTemplate = ''
   $scope.selectedContestStatus = ''
+  $scope.oldScore = 0
 
+  $http.get("/api/users").success (data) ->
+    $scope.users = data
 
+  $scope.checkSameScore = (score) ->
+    if $scope.oldScore == score
+      return 1
+    else
+      $scope.oldScore = score
+      return 0
+
+  $scope.username = (email) ->
+    for user in $scope.users
+      if email == user.email
+        return user.username
 
   $scope.checkJoin = (contest) ->
     alreadyJoin = false
@@ -67,31 +80,12 @@ angular.module 'clublootApp'
 
   }
 
-
-    # console.log "templates"
-    # console.log $scope.templates
-    # console.log socket
-    # console.log "Userid"
-    # console.log Auth.getCurrentUser()._id
-
-    # console.log $scope.templates
-
-
   $scope.checkActive = (contest) ->
     status = contest.stage
     if contest.stage != "close"
       return true
     else
       return false
-    # if status == "upcoming" || status == "finish"
-    #     # console.log status
-    #   return true
-    # else if status =="cancel"
-    #   return false
-    # else
-    #   now = new Date().getTime()
-    #   start = new Date(status).getTime()
-    #   return now < start
 
   $scope.stepBack = () ->
     window.location.href = '/contest'
@@ -111,12 +105,7 @@ angular.module 'clublootApp'
       swal("Not Active")
     )
 
-  # socket.syncUpdates 'question', $scope.questions
-
-
   $scope.checkGemColor = (type) ->
-
-    # console.log type
     return "color:red;!important"     if type == "ruby"
     return "color:blue;!important"    if type == "sapphire"
     return "color:green;!important"   if type == "emerald"
@@ -124,48 +113,44 @@ angular.module 'clublootApp'
 
   $scope.checkScore = (player, index) ->
     score = 0
+    return 0 if player.answers.length == 0
     for uAnswer, i in player.answers
-      if $scope.questions[i].answers[uAnswer].is_correct == true
-        score = score + 1
+      if uAnswer
+        if $scope.questions[i].answers[uAnswer].is_correct == true
+          score = score + 1
+
     player.score = score
     score
 
   $scope.checkstatus = (status) ->
     return status
 
-
-  $scope.compairPlayer = (player) ->
+  $scope.compairPlayer = (player, index) ->
+    if $scope.currentPlayer._id == player._id
+      index = parseInt(index)+1
     $scope.selectedCompair = {
       user: [],
       vs: [],
-      player: player,
+      player: $scope.contestSelection.player[index],
       me: $scope.currentPlayer
     }
-      # console.log $scope.currentPlayer
 
-      # console.log $scope.selectedCompair.me.answers
-      # console.log "==================="
 
-    $scope.selectedCompair.name = player.name || "enemy"
+    $scope.selectedCompair.name = $scope.contestSelection.player[index].name || "enemy"
     return unless $scope.currentPlayer.answers
-    for ans, i in $scope.currentPlayer.answers
+    for ans, i in $scope.questions
         # console.log ans
       $scope.selectedCompair.user.push {
         ans: $scope.ansChoice[$scope.currentPlayer.answers[i]],
         p: $scope.currentPlayer.answers[i]
       }
       $scope.selectedCompair.vs.push {
-        ans: $scope.ansChoice[player.answers[i]],
-        p: player.answers[i]
+        ans: $scope.ansChoice[$scope.contestSelection.player[index].answers[i]],
+        p: $scope.contestSelection.player[index].answers[i]
       }
-      # console.log $scope.selectedCompair
-
 
   $scope.checkAns = (ans, index) ->
-      # console.log $scope.questions
-      # console.log ans
-      # console.log index
-
+    return "fa-times" unless $scope.questions[index].answers[ans]
     return "fa-check" if $scope.questions[index].answers[ans].is_correct == true
 
     for i, k in $scope.questions[index].answers
@@ -184,15 +169,9 @@ angular.module 'clublootApp'
 
 
   socket.syncUpdates 'contest', [], (event, item, object) ->
-    # console.log "contest syncUpdates"
-    # console.log object
-    # console.log item
-    # console.log $scope.contestSelection._id
     if item._id == $scope.contestSelection._id
       $scope.contestSelection = item
       $scope.$apply()
-
-    # console.log "------------------"
 
     if $scope.contest.program == item.program && event == "created"
       i = 0
@@ -206,7 +185,6 @@ angular.module 'clublootApp'
         return
 
     for contest in $scope.allContest
-        # console.log contest._id == item._id
       if contest._id == item._id
         contest.stage = item.stage
         contest.player = item.player
@@ -219,26 +197,18 @@ angular.module 'clublootApp'
 
   socket.syncUpdates 'contest', $scope.templates
 
-  # $scope.orderContest = (contest) ->
-  #     # console.log "contest"
-  #     # console.log contest
-  #     # console.log contest.max_player - contest.player.length
-  #   return contest.max_player - contest.player.length
-
   $scope.orderContest = (contest) ->
     $scope.students = $filter('orderBy')(contest, ->
-        # console.log contest
+
     )
     return
 
   $scope.showContestDetail = false
   $scope.showContestDetails = (contest) ->
-      # console.log contest
     $scope.alreadyJoin = false
     $scope.contestSelection = contest
     for p in $scope.contestSelection.player
       if Auth.getCurrentUser()._id == p.uid
-          # console.log "alreadyJoin"
         $scope.alreadyJoin = true
     cd_time = ''
     $http.get("/api/templates/#{contest.template_id}/questions",
@@ -267,7 +237,6 @@ angular.module 'clublootApp'
         $scope.currentPlayer = i
 
   $scope.getNumber = (num) ->
-      # console.log num
     if (typeof(num) != "undefined")
       num = num / 500
       new Array(parseInt(num))
@@ -275,9 +244,7 @@ angular.module 'clublootApp'
       new Array()
 
   $scope.calGem = (fee, player) ->
-      # console.log player
     prize = parseInt(fee) * parseInt(player)
-      # console.log prize
     gemIndex = $scope.gemMatrix.list[parseInt(player)-2].fee.indexOf(fee)
     return $scope.gemMatrix.gem[gemIndex] || $scope.gemMatrix.gem[0]
 
@@ -315,28 +282,17 @@ angular.module 'clublootApp'
 
     $scope.joinedDisabled = true
 
-      # console.log "1"
     if Auth.getCurrentUser().coins < con.fee
       swal("you need more coin to join")
       return false
 
     for play, i in con.player
-        # console.log con.player
       if Auth.getCurrentUser()._id == play.uid
         return false
 
       if i == con.player.length - 1
         if con.player.length <= con.max_player
-            # console.log con._id
           $state.go("question", { contest: con._id })
-          # $http.put("/api/contest/#{con._id}/join",
-          #     Auth.getCurrentUser()
-          #   ).success((ok) ->
-          #     $scope.contestSelection = ok
-          #     $state.go("question", { contest: con._id })
-          #   ).error((data, status, headers, config) ->
-          #     swal("Not Active")
-          #   )
         else
           swal("Full contest")
           return false
@@ -347,12 +303,8 @@ angular.module 'clublootApp'
 
   if $stateParams.liveDashboard
     $scope.showContestDetails($scope.contest)
-
     if $stateParams.viewPlayer
-        # console.log $stateParams.viewPlayer
-        # console.log $('#tablePlayers tr:first-child')
       setTimeout (->
-        #your code to be executed after 1 second
         $('#tablePlayers tr:first-child').click()
         return
       ), 1000
@@ -371,6 +323,4 @@ angular.module 'clublootApp'
     tmp = ""
     for i in [1..theGem.count]
       tmp += gem
-      # console.log "-------------------------"
-      # console.log tmp
     element.html tmp

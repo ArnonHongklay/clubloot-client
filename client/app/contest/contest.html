@@ -12,16 +12,16 @@
   <div class="row">
     <div class="col-lg-12">
       <div class="row">
-        <div class="col-sm-2" ng-repeat="contest in contests" ng-mouseover="hoverIn($index)" ng-mouseleave="hoverOut($index)" ui-sref="contestshow({contest: contest._id})">
+        <div class="col-sm-2" ng-repeat="program in programList" ng-mouseover="hoverIn($index)" ng-mouseleave="hoverOut($index)" ui-sref="contestshow({program: contest._id})">
            <div class="flex-container upcomming show-{{$index}}">
              <div class="item-show">
-               <p>{{contest.program}}</p>
-               <p>{{contest.prize}}</p>
+               <p>{{program.name}}</p>
+               <p>{{program.prize}}</p>
                <p>Starts in</p>
-               <p count-down="{{contest.end_time || contest.status}}"></p>
+               <p count-down="{{program.end_time || program.status}}"></p>
              </div>
              <div class="item-hover">
-               <img ng-src="{{contest.program_image}}">
+               <img ng-src="{{program.program_image}}">
              </div>
            </div>
         </div>

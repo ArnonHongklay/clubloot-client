@@ -14,6 +14,7 @@ angular.module 'clublootApp'
 
   $scope.broadcasts = broadcasts.data
   $scope.contests = contests.data
+
   $scope.id_logs = []
 
   $scope.gemMatrix = {
@@ -59,6 +60,12 @@ angular.module 'clublootApp'
 
   }
 
+  $scope.liveCount = () ->
+    $('.live-contest-el').length
+
+  $scope.upcomingCount = () ->
+    $('.upcoming-contest-el').length
+
   socket.syncUpdates 'contest', $scope.contests
 
   $scope.socket.on 'message', (data) ->
@@ -66,13 +73,11 @@ angular.module 'clublootApp'
     return
 
   $scope.deleteMessage = (index) ->
-  # console.log index
     $rootScope.currentUser.messages.splice(index, 1)
-  # console.log $rootScope.currentUser.messages
     $http.put("/api/users/#{$rootScope.currentUser._id}/deletemessage",
       $rootScope.currentUser.messages
     ).success((ok) ->
-    # console.log ok
+
     ).error((data, status, headers, config) ->
       swal("Not Active")
     )
@@ -81,7 +86,6 @@ angular.module 'clublootApp'
 
 
   $scope.openMessage = (index) ->
-  # console.log index
     return $rootScope.openMessage = "k" if $rootScope.openMessage == index
     $rootScope.openMessage = index
 
@@ -106,9 +110,6 @@ angular.module 'clublootApp'
     index_score = score.sort().reverse()
     user_score = contest.player[cur_user].score
     rank = index_score.indexOf(user_score) + 1
-  # console.log index_score
-  # console.log "user_score:"+user_score
-  # console.log rank + 1
     return $scope.ordinal_suffix_of(rank)
 
 
@@ -121,10 +122,6 @@ angular.module 'clublootApp'
     $rootScope.currentUser = data
 
   $scope.awesomeThings = []
-
-  # $http.get('/api/templates').success (awesomeThings) ->
-  #   $scope.awesomeTemplates = awesomeTemplates
-  #   # socket.syncUpdates 'thing', $scope.awesomeThings
 
   $http.get('/api/things').success (awesomeThings) ->
     $scope.awesomeThings = awesomeThings
@@ -152,19 +149,24 @@ angular.module 'clublootApp'
     socket.unsyncUpdates 'thing'
 
   $scope.setFilter = (value) ->
-    if value == 'live'
-      $scope.live = true
-      $scope.upcoming = false
-    else
-      $scope.live = false
-      $scope.upcoming = true
+    switch value
+      when 'live'
+        $scope.live = true
+        $scope.upcoming = false
+        $scope.past = false
+      when 'upcoming'
+        $scope.live = false
+        $scope.upcoming = true
+        $scope.past = false
+      when 'past'
+        $scope.live = false
+        $scope.upcoming = false
+        $scope.past = true
 
   $scope.setFilter('live')
 
   $scope.calGem = (fee, player) ->
-    # console.log player
     prize = parseInt(fee) * parseInt(player)
-    # console.log prize
     gemIndex = $scope.gemMatrix.list[parseInt(player)-2].fee.indexOf(fee)
     return $scope.gemMatrix.gem[gemIndex] || $scope.gemMatrix.gem[0]
 
@@ -184,12 +186,13 @@ angular.module 'clublootApp'
     gemIndex = $scope.gemMatrix.list[parseInt(player)-2].fee.indexOf(parseInt(fee))
     $scope.gemMatrix.gem[gemIndex]
 
-
   $scope.goContest = (contest) ->
     window.location.href = "/question/#{contest._id}/"
 
   $scope.goLive = (contest) ->
     window.location.href = "/contest/#{contest.template_id}/"
+
+
 
 angular.module 'clublootApp'
 .directive 'gemRepeat', ($timeout, $state, $stateParams) ->

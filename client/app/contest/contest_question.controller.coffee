@@ -1,11 +1,12 @@
 'use strict'
 
 angular.module 'clublootApp'
-.controller 'ContestQuestionCtrl', ($timeout, $scope, $http, Auth, templates, contest) ->
+.controller 'ContestQuestionCtrl', ($timeout, $scope, $stateParams, $http, Auth, templates, contest) ->
   $scope.templates = templates.data
   $scope.contests = contest.data
   $scope.current_user = Auth.getCurrentUser()
   $scope.newPlayer = false
+  $scope.qaSelection = []
 
   for player, i in $scope.contests.player
 
@@ -15,15 +16,19 @@ angular.module 'clublootApp'
       if player.name != $scope.current_user.name
         $scope.newPlayer = true
 
-  $scope.qaSelection = []
+
+  for player in $scope.contests.player
+    $scope.currentPlayer = player if player.uid == $scope.current_user._id
 
   $scope.template_ids = []
   for template in $scope.templates
     if template.program == $scope.contests.program
       $scope.template_ids.push(template._id)
-      # console.log template._id
 
-  $scope.template_id = $scope.template_ids[$scope.template_ids.length-1]
+  $scope.template_id = $scope.template_ids[$scope.template_ids.length-2]
+
+  $scope.template_id = $scope.contests.template_id
+
   $scope.contest = {}
 
   $scope.contest._id = $scope.contests._id
@@ -31,13 +36,13 @@ angular.module 'clublootApp'
       null
     ).success((ques) ->
       $scope.contest.ques = ques
+      for q, i in $scope.contest.ques
+        $scope.qaSelection[i] = "#{$scope.currentPlayer.answers[i]}"
     ).error((data, status, headers, config) ->
       swal("Not Active")
     )
 
   $scope.joinNewContest = () ->
-    # console.log $scope.contest.ques
-    # console.log $scope.qaSelection
     if $scope.qaSelection.length == 0
       swal 'You must answer at less 1 question'
       return
@@ -61,7 +66,15 @@ angular.module 'clublootApp'
               $scope.addScore()
 
             ).error((data, status, headers, config) ->
-              swal("Not Active")
+              swal {
+                title: data.message
+                text: ''
+                type: 'warning'
+                confirmButtonColor: '#DD6B55'
+                confirmButtonText: 'ok'
+                closeOnConfirm: true
+              }, (isConfirm) ->
+                window.location.href = "/"
             )
         else
     else
@@ -71,7 +84,15 @@ angular.module 'clublootApp'
         $scope.addScore()
 
       ).error((data, status, headers, config) ->
-        swal("Not Active")
+        swal {
+          title: data.message
+          text: ''
+          type: 'warning'
+          confirmButtonColor: '#DD6B55'
+          confirmButtonText: 'ok'
+          closeOnConfirm: true
+        }, (isConfirm) ->
+          window.location.href = "/"
       )
 
 
@@ -84,7 +105,6 @@ angular.module 'clublootApp'
           counter += 1
 
     $timeout ->
-      # console.log counter
       $scope.contest.player = {
         uid: Auth.getCurrentUser()._id,
         name: Auth.getCurrentUser().email,
@@ -95,7 +115,6 @@ angular.module 'clublootApp'
       $http.put("/api/contest/#{$scope.contest._id}/player",
         $scope.contest
       ).success (data) ->
-        # console.log data
         window.location.href = "/contest"
       $scope.createNewStep = '3'
     , 300
@@ -105,13 +124,11 @@ angular.module 'clublootApp'
     return false if $scope.contest == undefined
     return false if $scope.contest.ques == undefined
 
-    # console.log $scope.contest.ques
-    # console.log $scope.qaSelection
     if $scope.contest.ques.length == $scope.qaSelection.length
-      # console.log "xxxxx"
       return true
 
   $scope.qaShowAns = []
   $scope.openAns = (index) ->
-    # console.log index
     $scope.qaShowAns[index] = true
+
+

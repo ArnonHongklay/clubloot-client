@@ -15,9 +15,11 @@ angular.module 'clublootApp', [
 .config ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) ->
   $urlRouterProvider
   .otherwise '/'
-
   $locationProvider.html5Mode true
   $httpProvider.interceptors.push 'authInterceptor'
+  $httpProvider.defaults.useXDomain = true
+  $httpProvider.defaults.headers.common['X-CSRF-Token'] = $('meta[name=csrf-token]').attr('content')
+  delete $httpProvider.defaults.headers.common['X-Requested-With']
 
 .factory 'authInterceptor', ($rootScope, $q, $cookieStore, $location) ->
   # Add authorization token to headers

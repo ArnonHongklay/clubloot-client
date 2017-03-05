@@ -1,15 +1,38 @@
 'use strict'
 
 angular.module 'clublootApp'
-.controller 'NewContestCtrl', ($scope, $http, socket, $timeout, Auth, programs, templates, questions) ->
-  $scope.programList = programs.data
-  $scope.templates = templates.data
-  $scope.questions = questions.data
-  $scope.contests = {loot:{prize:'',category:''},fee:''}
-  # console.log $scope.templates
+.controller 'NewContestCtrl', ($scope, $http, socket, $timeout, Auth) ->
+  # $scope.programList = programs.data.data
+  # console.log programs
+  $scope.templates = []
+  $scope.user = Auth.getCurrentUser()
+  console.log $scope.user
+
+  $.ajax(
+    method: 'GET'
+    url: 'http://api.clubloot.com/contests/programs.json'
+    ).done (data) ->
+    console.log data
+    $scope.programList = data.data
+
+  # $http.get("/api/templates/#{$scope.template_id}/questions",
+  #   null
+  # ).success((ques) ->
+  #   $scope.contest.challenge = ques.length
+  #   $scope.contest.ques = ques
+  # ).error((data, status, headers, config) ->
+  #   swal("Not Active")
+  # )
+
+
+  # $scope.questions = questions.data
+  # $scope.contests = {loot:{prize:'',category:''},fee:''}
+  # console.log $scope.programList
   $scope.gemIndex = null
+  $scope.selectQues = null
   $scope.currentPrize = 0
   $scope.qaSelection = []
+  $scope.checkAnswer = false
 
   $scope.allPrize = [110, 220, 330, 440, 550, 1100, 1650, 2200, 2750, 5500, 8250, 11000]
 
@@ -56,43 +79,49 @@ angular.module 'clublootApp'
 
   }
 
+  $scope.selectProgram = () ->
+    console.log $scope.contests.program_id
+    $http.get("http://api.clubloot.com/contests/templates.json?program_id=#{$scope.contests.program_id}").success((data) ->
+      $scope.templates = data.data
+      console.log $scope.templates
+    )
 
-  # console.log $scope.gemMatrix
+  $scope.createNewContest = () ->
+    $http.post("http://api.clubloot.com/user/contest/new",
+      {
+        'token': $scope.contests.program_id,
+        'template_id': $scope.contests.template_id,
+        'details[name]': $scope.contests.name,
+        'details[player]': $scope.contests.max_player,
+        'details[fee]': $scope.contests.fee
+      }
+    ).success (data) ->
+      console.log "65656565665565"
+      console.log data
 
-  $scope.checkActive = (start, end) ->
+
+  $scope.checkActive = (start) ->
     now = new Date().getTime()
     start = new Date(start).getTime()
-    end = new Date(end).getTime()
-    # console.log moment(now).format('LLL')
-    # console.log moment(end).format('LLL')
-    # console.log "=============="
-    return now < end
+    return now < start
 
   $scope.landingContest = ->
-    $scope.contests.owner = Auth.getCurrentUser().email
+    $scope.contests.owner = Auth.getCurrentUser().username
     $scope.contests.loot.category = "gem-red"
     $scope.contests.participant = []
     $scope.contests.participant.push(Auth.getCurrentUser())
-    # $scope.contests.fee = $scope.addFeeTax($scope.contests.fee)
-
     $scope.contests.user_id = Auth.getCurrentUser()._id
 
     $http.post("/api/contest",
         $scope.contests
       ).success((data, status, headers, config) ->
-        # console.log $scope.programList
-        # console.log $scope.templates
-        # console.log $scope.questions
-
-        # console.log data
         $scope.template_ids = []
         for template in $scope.templates
           if template.program == data.program #&& template.active == true
             $scope.template_ids.push(template._id)
-            # console.log template._id
 
         $scope.template_id = $scope.template_ids[$scope.template_ids.length-1]
-
+        $scope.template_id = $scope.contests.template_id
         $scope.contest = {}
         $scope.contest.id = data._id
         $http.get("/api/templates/#{$scope.template_id}", null).success (d) ->
@@ -148,10 +177,6 @@ angular.module 'clublootApp'
     { title: 5000 },
   ]
 
-  # for fee in $scope.fees
-  #   tax = (fee.title * 10) / 100
-  #   fee.title = fee.title + tax
-
   $scope.prizes = [
     { title: 1, fee: 5000  },
     { title: 2, fee: 10000 },
@@ -181,14 +206,14 @@ angular.module 'clublootApp'
     parseInt(fee) + parseInt(tax)
 
   $scope.calPrize = (index) ->
-    # console.log index
-    # console.log $('#contestFee').val()
-    # console.log "================="
-    v = parseInt($('#contestFee').val())
 
-    $scope.gemIndex = $scope.gemMatrix.list[$scope.contests.max_player-2].fee.indexOf(v)
+    v = parseInt($scope.gemMatrix.list[$scope.contests.max_player].fee[index])
+    console.log index
+    console.log v
+    console.log "----------------------------------------------------------"
+    $scope.gemIndex = $scope.gemMatrix.list[$scope.contests.max_player].fee.indexOf(v)
 
-
+    console.log ""
     gemType = $scope.gemMatrix.gem[$scope.gemIndex].type
 
     if gemType == "DIAMOND"
@@ -200,28 +225,19 @@ angular.module 'clublootApp'
     if gemType == "EMERALD"
       $scope.gemColor = "color: green;"
 
-    # console.log parseInt($scope.gemMatrix.gem[$scope.gemIndex].count)
     $scope.gemCounts = []
-    # console.log "GRM:"+parseInt($scope.gemMatrix.gem[$scope.gemIndex].count)
-    # console.log gemType
     for num in [1..parseInt($scope.gemMatrix.gem[$scope.gemIndex].count)]
       $scope.gemCounts.push {}
 
-    # console.log parseInt(
-    #   parseInt($scope.contests.fee) * parseInt($scope.contests.max_player)
-    # )
     tax = parseInt($scope.contests.fee) * parseInt($scope.contests.max_player) * 10 / 100
 
     # $scope.contests.loot.prize = parseInt(parseInt($scope.contests.fee) * parseInt($scope.contests.max_player))
 
-    $scope.contests.loot.prize = $scope.allPrize[$scope.gemIndex]
-    # $scope.calGem(parseInt(parseInt($scope.contests.fee) * parseInt($scope.contests.max_player)))
+    # $scope.contests.loot.prize = $scope.allPrize[$scope.gemIndex]
 
   $scope.calGem = (val) ->
-    # console.log val
     $scope.gemPrize = []
     prize = val
-    # console.log "prize:"+prize
     diamond = 12500
     emerald = 2500
     saphire = 500
@@ -237,75 +253,81 @@ angular.module 'clublootApp'
     if diamond <= $scope.currentPrize
       diamondCount = parseInt($scope.currentPrize/diamond)
       $scope.currentPrize = $scope.currentPrize - (diamondCount * diamond)
-      # console.log "---------------"
-      # console.log diamond <= $scope.currentPrize
-      # console.log "diamond:"+diamond
-      # console.log "prize:"+$scope.currentPrize
-      # console.log "diamondCount:"+diamondCount
       $scope.gemList.push {name: 'diamond', value: diamondCount}
-      # console.log diamondCount * diamond
-      # console.log "current:"+$scope.currentPrize
-      # console.log $scope.gemList
 
     if emerald <= $scope.currentPrize
       emeraldCount = parseInt($scope.currentPrize/emerald)
       $scope.currentPrize = $scope.currentPrize - (emeraldCount * emerald)
       $scope.gemList.push {name: 'emerald', value: emeraldCount}
-      # console.log "current:"+$scope.currentPrize
-      # console.log $scope.gemList
 
     if saphire <= $scope.currentPrize
       saphireCount = parseInt($scope.currentPrize/saphire)
       $scope.currentPrize = $scope.currentPrize - (saphireCount * saphire)
       $scope.gemList.push {name: 'saphire', value: saphireCount}
-      # console.log "current:"+$scope.currentPrize
-      # console.log $scope.gemList
 
     if ruby <= $scope.currentPrize
       rubyCount = parseInt($scope.currentPrize/ruby)
       $scope.currentPrize = $scope.currentPrize - (rubyCount * ruby)
       $scope.gemList.push {name: 'ruby', value: rubyCount}
-      # console.log "current:"+$scope.currentPrize
-      # console.log $scope.gemList
 
     fullDiamond = prize/diamond
     fullEmerald = prize/emerald
-
-    # console.log $scope.gemList
 
   $scope.finishNewContest = () ->
     window.location.href = '/dashboard'
 
   $scope.doneProcessing =  ->
-    # console.log $scope.newContestQuestion
+
 
   $scope.unlessEmpty = () ->
     return false if $scope.qaSelection == undefined
     return false if $scope.contest == undefined
     return false if $scope.contest.ques == undefined
 
-    # console.log $scope.contest.ques
-    # console.log $scope.qaSelection
     if $scope.contest.ques.length == $scope.qaSelection.length
-      # console.log "xxxxx"
       return true
+
+  window.onbeforeunload = (e) ->
+    unless $scope.checkAnswer
+      e.preventDefault()
+      $http.post("/api/contest/#{$scope.contest.id}/destroy", {}).success (data, status, headers, config) ->
+
+  $scope.$on '$locationChangeStart', (event, next, current) ->
+    return if $scope.createNewStep == '1'
+    unless $scope.checkAnswer
+      event.preventDefault()
+
+      swal {
+        title: 'Are you sure?'
+        text: 'Contest will not be create'
+        type: 'warning'
+        showCancelButton: true
+        confirmButtonColor: '#DD6B55'
+        confirmButtonText: 'yes'
+        cancelButtonText: 'No'
+        closeOnConfirm: false
+        closeOnCancel: true
+      }, (isConfirm) ->
+        if isConfirm
+          $http.post("/api/contest/#{$scope.contest.id}/destroy", {user_id: Auth.getCurrentUser()._id}).success (data, status, headers, config) ->
+            window.location.href = next
+        else
+          event.preventDefault()
+    return
 
   $scope.addScore = ->
     counter = 0
+    $scope.checkAnswer = true
     for q,i in $scope.contest.ques
       for a in q.answers
-        # console.log a
-        # console.log a.is_correct
-        # console.log $scope.qaSelection[i]
         if a.title == $scope.qaSelection[i] && a.is_correct
           # console.log "=============================================fuck"
           counter += 1
 
     $timeout ->
-      # console.log counter
       $scope.contest.player = [{
         uid: Auth.getCurrentUser()._id,
-        name: Auth.getCurrentUser().email,
+        name: Auth.getCurrentUser().username,
         score: counter,
         answers: $scope.qaSelection
       }]
@@ -313,17 +335,15 @@ angular.module 'clublootApp'
       $http.put("/api/contest/#{$scope.contest.id}",
         $scope.contest
       ).success (data) ->
-        # console.log data
-
         $http.put("/api/contest/#{$scope.contest.id}/join_created",
           Auth.getCurrentUser()
         ).success((data) ->
-          console.log data
+
         )
       $scope.createNewStep = '3'
     , 300
 
   $scope.qaShowAns = []
   $scope.openAns = (index) ->
-    # console.log index
-    $scope.qaShowAns[index] = true
+    $('html, body').animate { scrollTop: $("#ques_"+index).offset().top }, 'fast'
+

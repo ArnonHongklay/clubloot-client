@@ -30,6 +30,7 @@ socketio = require('socket.io')(server,
 require('./config/socketio') socketio
 require('./config/express') app
 require('./routes') app
+require('./jobs/daily_loot')
 
 # Start server
 server.listen config.port, config.ip, ->

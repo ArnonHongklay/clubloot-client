@@ -2,10 +2,8 @@
 
 angular.module 'clublootApp'
 .controller 'ConvertGemsCtrl', ($scope, $http, socket, $timeout, gems, $rootScope, Auth) ->
-  # console.log "ConvertGemsCtrl"
   $scope.showModal = false
   $scope.gems = gems.data[0]
-# console.log $scope.gems[0]
   user = $rootScope.currentUser || Auth.getCurrentUser()
   return window.location.href = "/login" unless user
   $scope.currentGem = {
@@ -17,23 +15,21 @@ angular.module 'clublootApp'
 
   $scope.convertGem = (type)->
     $(".value-box-added").removeClass('changed')
-  # console.log $scope.gems
-  # console.log "=====GEM====="
     rate = 0
     if type == "diamond"
-      rate = 30000
+      rate = $scope.gems.diamond.fee
       $scope.titleText = "Convert Emerald to Diamond"
       if $scope.currentGem.emeralds < $scope.gems.diamond.rate
         $scope.alertText  = "You need more Emerald"
 
     else if type == "emerald"
-      rate = 20000
+      rate = $scope.gems.emerald.fee
       $scope.titleText = "Convert Sapphire to Emerald"
       if $scope.currentGem.sapphires < $scope.gems.emerald.rate
         $scope.alertText = "You need more Sapphire"
 
     else if type == "sapphire"
-      rate = 10000
+      rate = $scope.gems.sapphire.fee
       $scope.titleText = "Convert Ruby to Sapphire"
       if $scope.currentGem.rubies < $scope.gems.sapphire.rate
         $scope.alertText = "You need more Ruby"
@@ -69,7 +65,6 @@ angular.module 'clublootApp'
     coinFee = 0
     gemMinus = 0
     subType = ''
-    # console.log $scope.mirorCurrent = $scope.currentGem
     if type == "diamond"
       subType = "emerald"
       coinFee = 30000
@@ -120,13 +115,10 @@ angular.module 'clublootApp'
         fee: coinFee
       }
     ).success((ok) ->
-    # console.log ok
 
     ).error((data, status, headers, config) ->
       swal("Not Active")
     )
-
-  # console.log $scope.currentGem
 
   $scope.goDashboard = () ->
     window.location.href = "/dashboard"

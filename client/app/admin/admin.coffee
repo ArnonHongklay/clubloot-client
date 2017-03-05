@@ -7,3 +7,7 @@ angular.module 'clublootApp'
     url: '/admin'
     templateUrl: 'app/admin/admin.html'
     controller: 'AdminCtrl'
+  .state 'adminLogin',
+    url: '/admin_login'
+    templateUrl: 'app/admin/admin_login.html'
+    controller: 'AdminLoginCtrl'

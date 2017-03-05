@@ -4,8 +4,6 @@ angular.module 'clublootApp'
   $scope.menuActive = 'Prizes'
   $scope.prizes = prizes.data
 
-  console.log $scope.prizes
-
   $scope.editPrize = (prize)->
     $modal.open(
       templateUrl: 'ModalPrizesEdit.html'
@@ -16,7 +14,6 @@ angular.module 'clublootApp'
     ).result.then (->
       $http.get("/api/users/#{$stateParams.user_id}/prizes").success (data) ->
         $scope.prizes = data
-        console.log $scope.prizes
     )
 
   $scope.showDetail = (prize)->
@@ -45,10 +42,8 @@ angular.module 'clublootApp'
         $http.put("/api/ledgers/#{$scope.prizesEdit._id}/complete",
           $scope.prizesEdit
         ).success (data) ->
-          console.log data
 
     $modalInstance.close()
 
 .controller 'ModalPrizesCtrl', ($scope, prize) ->
   $scope.prize = prize
-  console.log prize

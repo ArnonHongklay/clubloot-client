@@ -3,9 +3,12 @@ angular.module 'clublootApp'
 # console.log signinCounts
 # console.log winnerLogs
   $scope.signinCounts = signinCounts.data.length
-  $scope.todayClaimed = winnerLogs.data
+  # $scope.todayClaimed = winnerLogs.data
   $scope.allClaimed = allWinnerLogs.data
   $scope.lootClaimed = 0
+  $scope.todayClaimed = []
+  $scope.todayClaimedList = []
+  $scope.claimedName = []
 
   $scope.data = [ {
     'key': 'Quantity'
@@ -13,13 +16,33 @@ angular.module 'clublootApp'
     'values': [
     ]
   } ]
-# console.log $scope.data
   $scope.data[0].values = []
   for claimed in $scope.allClaimed
     $scope.data[0].values.push [new Date(claimed.created_at).getTime(), claimed.prize]
-# console.log $scope.data
-  for winner in winnerLogs.data
-    $scope.lootClaimed = $scope.lootClaimed + winner.prize
+
+  f = new Date()
+  t = new Date()
+
+  $http.post("/api/v2/dashboard/allloot_by_date", {fr: f, to: t }).success (data, status, headers, config) ->
+    allClaimed = 0
+    for ca in data
+      if ca.format == "loot"
+        for t in ca.transaction
+          if t.action == "plus"
+            if t.unit == "coins"
+              coin = t.amount
+            else if t.unit == "rubies"
+              coin = t.amount*100
+            else if t.unit == "sapphires"
+              coin = t.amount*500
+            else if t.unit == "emeralds"
+              coin = t.amount*2500
+            else if t.unit == "diamonds"
+              coin = t.amount*12500
+            allClaimed = allClaimed + coin
+            $scope.todayClaimed.push({user: ca.user, amount: coin})
+
+    $scope.lootClaimed = allClaimed
 
   $scope.options = chart:
     type: 'historicalBarChart'
@@ -61,9 +84,3 @@ angular.module 'clublootApp'
       horizontalOff: false
       verticalOff: true
       unzoomEventType: 'dblclick.zoom'
-
-
-
-
-
-

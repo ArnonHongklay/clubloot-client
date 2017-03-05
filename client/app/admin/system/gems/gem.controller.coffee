@@ -1,26 +1,17 @@
 angular.module 'clublootApp'
 .controller 'AdminSystemGemCtrl', ($scope, $http, socket, $state, gems, buckets) ->
-  # console.log "AdminSystemGemCtrl"
-  # console.log gems
   $scope.buckets = buckets.data
-  # console.log "-----"
-
-  # console.log buckets
-
-  # console.log "-----"
-
-
+  $scope.taxMenu = 'gem'
   $scope.update = () ->
     $http.put("/api/gem_conversion/#{$scope.gems._id}",
       $scope.gems
     ).success((data, status, headers, config) ->
-      # console.log data
+
     ).error((data, status, headers, config) ->
-      # console.log status
+
     )
 
   $scope.addNewBucket = () ->
-    # console.log $scope.newBucket
     $http.post("/api/coin_package",
       $scope.newBucket
     ).success((data, status, headers, config) ->
@@ -34,7 +25,7 @@ angular.module 'clublootApp'
     $http.put("/api/coin_package/#{bucket._id}",
       bucket
     ).success((data, status, headers, config) ->
-      # console.log status
+
     ).error((data, status, headers, config) ->
       swal("Not found!!")
     )

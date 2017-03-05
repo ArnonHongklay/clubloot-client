@@ -264,28 +264,16 @@ getFefund = (user_id, refund) ->
 getQuestions = (tem_id) ->
   query = Question.find({'templates': tem_id})
   query.exec (err, templates) ->
-      # console.log templates
-      # console.log "99999999999999999999999999999999999999999"
     return templates
 
 checkScore = (player, questions) ->
   score = 0
   num = 0
-    # console.log player
-    # console.log "questions----------------------------"
   for uAnswer in player.answers
-      # console.log "ans"
-      # console.log "num:"+num
-      # console.log questions[num]
-      # console.log "player"
-      # console.log uAnswer
     if questions[num].answers[uAnswer].is_correct
-        # console.log score
       score = score + 1
     num = num + 1
   player.score = score
-    # console.log score
-    # console.log "score================================================================="
   score
 
 myContest =
@@ -320,6 +308,40 @@ myContest =
             for user in contest.participant
               User.findById user._id, (err, user) ->
                 user.coins = user.coins + contest.fee
+
+                Ledger.create {
+                  status: 'completed'
+                  format: 'contest'
+                  user: {
+                    id:       user._id,
+                    username: user.username
+                    name:     "#{user.first_name} #{user.last_name}",
+                    email:    user.email
+                  }
+                  balance: {
+                    coins:      user.coins
+                    diamonds:   user.diamonds
+                    emeralds:   user.emeralds
+                    sapphires:  user.sapphires
+                    rubies:     user.rubies
+                  }
+                  transaction: [
+                    {
+                      action:       'plus'
+                      description:  'Refund'
+                      from:         'system'
+                      to:           'refund'
+                      unit:         'coins'
+                      amount:       contest.fee
+                      tax:          0
+                      ref: {
+                        format: null
+                        id: null
+                      }
+                    }
+                  ]
+                }
+
                 user.save()
             contest.status = "cancel"
             contest.stage = "cancel"
@@ -417,6 +439,8 @@ exports.joinContest = (req, res) ->
   Contest.findById req.params.id, (err, contest) ->
     return handleError(res, err)  if err
     return res.status(404).end()  unless contest
+    if contest.player.length == contest.max_player
+      return res.status(500).send({ message: "Contest is full" })
     # console.log "joinContest==========================="
     User.findById req.body._id, (err, user) ->
       # console.log "user==========================="
@@ -468,7 +492,7 @@ exports.joinContest = (req, res) ->
       }
 
       contest.participant.push(req.body)
-      contest.player.push({ uid: req.body._id, name: req.body.email, score: 10 })
+      contest.player.push({ uid: req.body._id, name: user.username, score: 10 })
 
       contest.save (err) ->
         return handleError(res, err)  if err
@@ -573,19 +597,62 @@ exports.findByTemplates = (req, res) ->
                 user.joinedContest.push contest
                 user.save()
               else
-                for jc, i in user.joinedContest
-                  if i == user.joinedContest.length - 1 && jc._id == contest._id
-                    user.joinedContest.push contest
-                    user.save()
+                jcs = []
+                for jc in user.joinedContest
+                  jcs.push(String(jc._id))
+
+                console.log jcs
+                console.log contest._id
+                if jcs.indexOf(String(contest._id)) < 0
+                  user.joinedContest.push contest
+                  user.save()
 
           if winner.length == c.max_player
             for py, k in contest.player
-              contest.player[k].isWin = false
-              contest.player[k].winPrize = []
+              contest.player[k].isWin = true
+              contest.player[k].winPrize = { value: c.fee, type: "coin" }
             contest.save()
             for s_winner in winner
               User.findById s_winner.uid, (err, user) ->
                 user.coins = user.coins + c.fee
+                s_contest = contest
+                s_contest.loot.prize = c.fee
+                user.wonContest.push s_contest
+
+
+                Ledger.create {
+                  status: 'completed'
+                  format: 'contest'
+                  user: {
+                    id:       user._id,
+                    username: user.username
+                    name:     "#{user.first_name} #{user.last_name}",
+                    email:    user.email
+                  }
+                  balance: {
+                    coins:      user.coins
+                    diamonds:   user.diamonds
+                    emeralds:   user.emeralds
+                    sapphires:  user.sapphires
+                    rubies:     user.rubies
+                  }
+                  transaction: [
+                    {
+                      action:       'plus'
+                      description:  'Refund'
+                      from:         'system'
+                      to:           'refund'
+                      unit:         'coins'
+                      amount:       s_contest.loot.prize
+                      tax:          0
+                      ref: {
+                        format: null
+                        id: null
+                      }
+                    }
+                  ]
+                }
+
                 user.save()
           else if winner.length > 1
             refund_index = c.loot.prize
@@ -612,10 +679,58 @@ exports.findByTemplates = (req, res) ->
                       user.wonContest.push contest
                       user.save()
 
-#---------------------------------------------------------------------------------
+              WinnerLog.create {
+                user_id: w.uid,
+                contest_id: c._id,
+                template_id: req.params.id,
+                contest_name: c.name,
+                score: w.score,
+                prize:  c.loot.prize
+                created_at: new Date()
+                }, (err, winnerlog) ->
+                    # console.log "callback"
+                    # log ledger
+                  user = w
+                  for re in refund
+
+                    Ledger.create {
+                      status: 'completed'
+                      format: 'won'
+                      user: {
+                        id:       user._id,
+                        username: user.username
+                        name:     "#{user.first_name} #{user.last_name}",
+                        email:    user.email
+                      }
+                      balance: {
+                        coins:      user.coins
+                        diamonds:   user.diamonds
+                        emeralds:   user.emeralds
+                        sapphires:  user.sapphires
+                        rubies:     user.rubies
+                      }
+                      transaction: [
+                        {
+                          action:       'plus'
+                          description:  'Winner contest'
+                          from:         'contest'
+                          to:           'winner'
+                          unit:         re.type
+                          amount:       re.value
+                          tax:          0
+                          ref: {
+                            format: null
+                            id: null
+                          }
+                        }
+                      ]
+                    }
+
 
           else if winner.length == 1
+            console.log "won11111"
             User.findById winner[0].uid, (err, user) ->
+              console.log user
               for py, k in contest.player
                 contest.player[k].isWin = false
                 contest.player[k].winPrize = []
@@ -639,7 +754,6 @@ exports.findByTemplates = (req, res) ->
 
               if user.wonContest.length == 0
                 user.wonContest.push contest
-                user.save()
               else
                 wonList = []
                 for won, i in user.wonContest
@@ -653,7 +767,7 @@ exports.findByTemplates = (req, res) ->
 
             # User.update { _id: winner.uid }, { wonContest: [ contest ] }, { multi: true }, (err, data) ->
                 # console.log data
-
+            console.log "create winner log"
             WinnerLog.create {
               user_id: winner[0].uid,
               contest_id: c._id,
@@ -732,34 +846,38 @@ exports.findByTemplates = (req, res) ->
 
 exports.findProgramActive = (req, res) ->
   bucket = []
-  program = Program.find({}).select('name -_id')
   current_time = new Date().getTime()
-
   temp = 0
+
+  program = Program.find({}).select('name -_id')
   program.exec (err, programs) ->
     if err
       return next(err)
 
     for program in programs
       # contest = Contest.findOne({program: program.name})
-      contest = Contest.find program: program.name, (err, contests) ->
-        if contests
-          for contest, i in contests
-            continue if contest.end_time == undefined
-            e_time = contest.end_time.getTime()
+      contest = Contest.where('program').equals(program.name)
+        .where('end_time').gt(current_time)
+        .exec (err, contests) ->
+          if contests
+            for contest, i in contests
+              continue if contest.end_time == undefined
+              e_time = contest.end_time.getTime()
 
-            # console.log contest.end_time
-            # console.log e_time
+              console.log e_time
+              console.log current_time
+              console.log current_time < e_time
+              console.log contest
+              if current_time < e_time
+                if i == 0
+                  temp = e_time
+                  c = contest
+                else if temp > e_time
+                  temp = e_time
+                  c = contest
 
-            # console.log current_time < e_time
-            if current_time < e_time
-              if i == 0
-                temp = e_time
-              else if temp > e_time
-                temp = e_time
-
-              if i == contests.length - 1
-                bucket.push(contest)
+                if i == contests.length - 1
+                  bucket.push(c)
 
     setTimeout (->
       # console.log bucket
@@ -774,11 +892,16 @@ render = (res, data) ->
 
 
 
-
-
-
-
-
+exports.destroy = (req, res) ->
+  Contest.findById req.params.id, (err, contest) ->
+    return handleError(res, err)  if err
+    return res.status(404).end()  unless contest
+    User.findById req.body.user_id, (err, user) ->
+      user.coins = user.coins + contest.fee
+      user.save()
+    contest.remove (err) ->
+      return handleError(res, err)  if err
+      res.status(204).end()
 
 
 

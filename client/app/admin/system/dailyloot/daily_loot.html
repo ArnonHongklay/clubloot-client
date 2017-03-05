@@ -50,8 +50,8 @@
 
 
       <li class="list-group-item" ng-repeat="c in todayClaimed" ng-class="{menuactive: menu=='Academy Awards'}" ng-click="menu='Academy Awards'">
-        <span class="pull-left b-text">{{c.contest_name}}</span>
-        <span class="pull-right g-text">{{c.prize}} Coins</span>
+        <span class="pull-left b-text">{{c.user.username || c.user.email}}</span>
+        <span class="pull-right g-text">{{c.amount}} Coins</span>
       </li>
 
     </ul>

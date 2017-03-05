@@ -23,9 +23,9 @@
                 <td class="g-text" style="padding: 5px 5px">
                   <div class="box-left pull-left">Which program do you wish to compete in?</div>
                   <div class="box-right pull-right">
-                    <select class="form-control" ng-model="contests.program">
+                    <select class="form-control" ng-model="contests.program_id" ng-change="selectProgram()">
                       <option value="">Program</option>
-                      <option ng-repeat="program in programList" name="{{program.program}}">{{program.program}}</option>
+                      <option ng-repeat="program in programList" value="{{program._id.$oid}}" name="{{program.program}}">{{program.name}}</option>
                     </select>
                   </div>
                 </td>
@@ -37,7 +37,7 @@
                   <div class="box-right pull-right">
                     <select class="form-control" ng-model="contests.template_id">
                       <option value="">Template</option>
-                      <option ng-repeat="template in templates" name="{{template}}" value="{{template._id}}" ng-show="template.program == contests.program">{{template.name}}</option>
+                      <option ng-repeat="template in templates" name="{{template}}" value="{{template._id}}">{{template.name}}</option>
                     </select>
                   </div>
                 </td>
@@ -49,7 +49,7 @@
                   <div class="box-right pull-right">
                     <select class="form-control" ng-model="contests.max_player" ng-change="calPlayer()">
                       <option value="">Player</option>
-                      <option ng-repeat="number in gemMatrix.list" name="{{number.player}}">{{number.player}}</option>
+                      <option ng-repeat="number in gemMatrix.list" value="{{$index}}" name="{{number.player}}">{{number.player}}</option>
                     </select>
                   </div>
                   </div>
@@ -62,7 +62,7 @@
                   <div class="box-right pull-right">
                   <select class="form-control" id="contestFee" ng-model="contests.fee" ng-change="calPrize(contests.fee)">
                       <option value="">Fee</option>
-                      <option ng-repeat="fee in gemMatrix.list[contests.max_player-2].fee" name="{{fee}}" value="{{fee}}">{{fee}}</option>
+                      <option ng-repeat="fee in gemMatrix.list[contests.max_player].fee" name="{{fee}}" value="{{$index}}">{{fee}}</option>
                     </select>
                   </div>
                 </td>
@@ -86,8 +86,8 @@
                   <div class="box-left pull-left">Public or private contest? (private contests do not appear)</div>
                   <div class="box-right pull-right">
                     <select class="form-control" ng-model="contests.public">
-                      <option value="" selected>true</option>
-                      <option value="false">false</option>
+                      <option value="true" ng-selected="true">public</option>
+                      <option value="false">private</option>
                     </select>
                   </div>
                   </div>
@@ -100,7 +100,7 @@
       <div class="row terms hmb" style="margin-top: 60px">
         <div class="term-text">
         By continuing you agree to the <span class="b-text">terms and conditions</span> governing Clubloot tournaments
-        <div class="btn get-prize" ng-click="landingContest()">CONTINUE</div>
+        <div class="btn get-prize" ng-click="createNewContest()">CONTINUE</div>
         </div>
 
       </div>
@@ -118,12 +118,12 @@
           </h3>
           <h5 class="g-text" style="text-indent: 10px;">Answer [ xx ] questions for your [ program ] contest.</h5>
             <div class="main-q-box">
-              <div ng-repeat="(i,q) in contest.ques track by i" class="g-text">
+              <div ng-repeat="(i,q) in contest.ques track by i" class="g-text" id="ques_{{i}}">
                 <i class="fa fa-check-circle checked-icon" aria-hidden="true" ng-show="qaSelection[i]"></i>
-                <div class="q-box" ng-click="openAns(i)">Question {{q.title}}</div>
+                <div class="q-box" ng-click="$root.selectQues = i;openAns(i)">Question {{q.title}} {{selectQues}}</div>
 
-                <div class="q-box ans" ng-repeat="(x,a) in q.answers track by x" ng-show="qaShowAns[i]">
-                  <input type=radio ng-model="qaSelection[i]" value="{{x}}"> {{a.title}}
+                <div class="q-box ans" ng-repeat="(x,a) in q.answers track by x" ng-show="$root.selectQues==i">
+                  <input type=radio ng-model="qaSelection[i]" value="{{x}}" ng-click="openAns(i)"> {{a.title}}
                 </div>
 
               </div>

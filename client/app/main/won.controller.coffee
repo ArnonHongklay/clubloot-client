@@ -2,6 +2,7 @@
 
 angular.module 'clublootApp'
 .controller 'WonCtrl', ($scope, $http, socket, $rootScope, Auth, contests) ->
+  $scope.currentUser = Auth.getCurrentUser()
   $scope.contests = Auth.getCurrentUser().wonContest
   $scope.id_logs = []
 
@@ -50,17 +51,12 @@ angular.module 'clublootApp'
 
   socket.syncUpdates 'contest', $scope.contests
 
-  # $scope.currentUser = Auth.getCurrentUser()
   $('body').css({background: '#fff'})
 
   $http.get("/api/users/#{Auth.getCurrentUser()._id}").success (data) ->
     $rootScope.currentUser = data
 
   $scope.awesomeThings = []
-
-  # $http.get('/api/templates').success (awesomeThings) ->
-  #   $scope.awesomeTemplates = awesomeTemplates
-  #   # socket.syncUpdates 'thing', $scope.awesomeThings
 
   $http.get('/api/things').success (awesomeThings) ->
     $scope.awesomeThings = awesomeThings
@@ -98,9 +94,7 @@ angular.module 'clublootApp'
   $scope.setFilter('live')
 
   $scope.calGem = (fee, player) ->
-    # console.log player
     prize = parseInt(fee) * parseInt(player)
-    # console.log prize
     gemIndex = $scope.gemMatrix.list[parseInt(player)-2].fee.indexOf(fee)
     return $scope.gemMatrix.gem[gemIndex] || $scope.gemMatrix.gem[0]
 
@@ -114,6 +108,13 @@ angular.module 'clublootApp'
     if gemType == "EMERALD"
       gemColor = "color: green;"
     return gemColor
+
+  $scope.checkGemColor = (type) ->
+    return "color:red;!important"     if type == "ruby"
+    return "color:blue;!important"    if type == "sapphire"
+    return "color:green;!important"   if type == "emerald"
+    return "color:grey;!important" if type == "diamond"
+
 
   $scope.gemRepeat = (fee, player) ->
     prize = parseInt(fee) * parseInt(player)

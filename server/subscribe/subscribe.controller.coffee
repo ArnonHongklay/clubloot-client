@@ -24,8 +24,8 @@ exports.create = (req, res) ->
       from: 'clublootcom@gmail.com'
       to: subscribe.email
       subject: 'Hello ✔'
-      text: 'Thank you for subscribe 🐴'
-      html: '<b>Thank you for subscribe 🐴</b>'
+      text: "thank you for subscribing to clubloot. We will notify you if you are this week's winner. Please stay tuned for exclusive information and an invitation to our private beta."
+      html: "<b>thank you for subscribing to clubloot. We will notify you if you are this week's winner. Please stay tuned for exclusive information and an invitation to our private beta.</b>"
 
     transporter.sendMail mailOptions, (error, info) ->
       if error

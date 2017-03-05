@@ -37,10 +37,10 @@ module.exports = (grunt) ->
       server:
         options:
           index: '.server/app.js'
-          logDir: 'logs'
-          logFile: 'access.log'
-          errFile: 'errors.log'
-          outFile: 'outs.log'
+          logDir: 'log'
+          logFile: 'node_access.log'
+          errFile: 'node_errors.log'
+          outFile: 'node_outs.log'
 
     express:
       options:

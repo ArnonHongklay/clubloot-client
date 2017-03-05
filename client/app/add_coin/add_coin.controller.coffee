@@ -2,14 +2,7 @@
 
 angular.module 'clublootApp'
 .controller 'AddCoinCtrl', ($scope, $http, socket, buckets, $rootScope, Auth) ->
-  # console.log "AddCoinCtrl"
-  # console.log $rootScope
-  # console.log "============="
-  # console.log Auth.getCurrentUser()
-
   $http.get('/api/users/me', null).success (data, status, headers, config) ->
-    # console.log "999999999999999999999999999999999999"
-    # console.log data
 
   $scope.people = [
     { name: "John1"},
@@ -17,7 +10,7 @@ angular.module 'clublootApp'
     { name: "John3"},
     { name: "John4"},
     { name: "John5"}
-    ]
+  ]
 
   $scope.buyCoin = () ->
     $http.put("/api/coin_package/#{$scope.currentUser._id}/addcoin",

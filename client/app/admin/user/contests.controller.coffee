@@ -1,9 +1,6 @@
 
 angular.module 'clublootApp'
 .controller 'AdminUserContestsCtrl', ($scope, $http, socket, $state, $stateParams) ->
-  # console.log $scope.user._id
-  # console.log "/api/users/#{$scope.user._id}/contests"
-
 
   $http.get("/api/program").success (data) ->
     $scope.program = data
@@ -20,5 +17,4 @@ angular.module 'clublootApp'
           if p.name == c.program
             p.contest_count += 1
 
-        # console.log p
   $scope.menu('active')

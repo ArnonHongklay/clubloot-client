@@ -1,0 +1,128 @@
+
+
+<div class="row tax">
+  <div class="col-md-2">
+    <div class="tag-menu-box">
+        <div class="tag-menu" ng-click="adminMenu='users'" ng-class="{'active': adminMenu=='users'}">users</div>
+        <div class="tag-menu" ng-click="adminMenu='admins'" ng-class="{'active': adminMenu=='admins'}">admins</div>
+        <div class="tag-menu" ng-click="adminMenu='masters'" ng-class="{'active': adminMenu=='masters'}">masters</div>
+      </div>
+  </div>
+
+  <div class="col-md-10" ng-show="adminMenu == 'users'">
+    <table class="table">
+      <tr>
+        <td>
+          ID
+        </td>
+        <td>
+          Email
+        </td>
+        <td>
+          Role
+        </td>
+        <td  ng-show="isMaster">
+          set admin
+        </td>
+        <td ng-show="isMaster">
+          set master
+        </td>
+      </tr>
+      <tr ng-repeat="user in users">
+        <td>
+          <a href="/admin/user/{{user._id}}/profile">{{user._id}}</a>
+        </td>
+        <td>
+          {{user.email}}
+        </td>
+        <td>
+          {{user.role}}
+        </td>
+        <td  ng-show="isMaster">
+          <div class="btn btn-primary" ng-click="setRole(user._id, 'admin')">admin</div>
+        </td>
+        <td ng-show="isMaster">
+          <div class="btn btn-primary" ng-click="setRole(user._id, 'master')">master</div>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="col-md-10"  ng-show="adminMenu == 'admins'">
+    <table class="table">
+      <tr>
+        <td>
+          ID
+        </td>
+        <td>
+          Email
+        </td>
+        <td>
+          Role
+        </td>
+        <td  ng-show="isMaster">
+          set user
+        </td>
+        <td  ng-show="isMaster">
+          set admin
+        </td>
+        <td  ng-show="isMaster">
+          set master
+        </td>
+      </tr>
+      <tr ng-repeat="user in admins">
+        <td>
+          <a href="/admin/user/{{user._id}}/profile">{{user._id}}</a>
+        </td>
+        <td>
+          {{user.email}}
+        </td>
+        <td>
+          {{user.role}}
+        </td>
+        <td  ng-show="isMaster">
+          <div class="btn btn-primary" ng-click="setRole(user._id, 'user')">user</div>
+        </td>
+        <td  ng-show="isMaster">
+          <div class="btn btn-primary" ng-click="setRole(user._id, 'admin')">admin</div>
+        </td>
+        <td  ng-show="isMaster">
+          <div class="btn btn-success" ng-click="setRole(user._id, 'master')">master</div>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="col-md-10" ng-show="adminMenu == 'masters'">
+    <table class="table">
+      <tr>
+        <td>
+          ID
+        </td>
+        <td>
+          Email
+        </td>
+        <td>
+          Role
+        </td>
+
+      </tr>
+      <tr ng-repeat="user in masters">
+        <td>
+          <a href="/admin/user/{{user._id}}/profile">{{user._id}}</a>
+        </td>
+        <td>
+          {{user.email}}
+        </td>
+        <td>
+          {{user.role}}
+        </td>
+
+      </tr>
+    </table>
+  </div>
+
+
+
+
+</div>

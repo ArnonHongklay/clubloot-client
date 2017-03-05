@@ -67,3 +67,13 @@ exports.complete = (req, res) ->
     prize.save (err) ->
       return handleError(res, err)  if err
       res.status(200).json prize
+
+exports.byDate = (req, res) ->
+  start = new Date(req.body.fr)
+  s = start.setHours(0,0,0,0)
+  end = new Date(req.body.to)
+  e = end.setHours(23,59,59,999)
+
+  Ledger.find({ created_at: {$gte: s, $lt: e} }).exec (err, ledgers) ->
+    return handleError(res, err)  if err
+    res.status(200).json ledgers

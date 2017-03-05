@@ -39,7 +39,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr ng-repeat="contest in allContest | orderBy: '-max_player-player.length'" ng-show="checkActive(contest)" ng-class="{'max-room': contest.max_player<=contest.player.length}">
+            <tr ng-repeat="contest in allContest | orderBy: '-max_player-player.length'" ng-show="checkActive(contest)" ng-class="{'max-room': contest.max_player <= contest.player.length}">
               <td ng-click="showContestDetails(contest)" class="text-blue">{{contest.fee}}
                 <img class="money-bag" src="assets/images/money-bag-blue.png">
               </td>
@@ -70,7 +70,7 @@
   <div class="contest-detail" ng-show="showContestDetail">
     <h4 style="color:rgb(128,102,160);font-weight:300;cursor:pointer;" ng-click="showContestDetail=false">
       <i class="fa fa-chevron-left" aria-hidden="true"></i> {{contestSelection.name}}</h4>
-    <div style="text-indent: 19px">Hosted by <span class="text-blue">{{contestSelection.owner}}</span></div>
+    <div style="text-indent: 19px">Hosted by <span class="text-blue">{{ contestSelection.owner }}</span></div>
     <div style="padding: 20px">
       <table class="table" style="border-radius: 0px;">
         <tbody>
@@ -142,7 +142,8 @@
           </tr>
         </tbody>
       </table>
-      <div ng-show="contestSelection.stage =='upcoming' && !alreadyJoin" class="btn btn-primary" style="background: #50ACC4;width: 100%;border: 0px;" ng-click="joinContest(contestSelection)" ng-disabled="joinedDisabled">JOIN CONTEST</div>
+      <div ng-show="contestSelection.stage =='upcoming' && !alreadyJoin && contestSelection.player.length < contestSelection.max_player" class="btn btn-primary" style="background: #50ACC4;width: 100%;border: 0px;" ng-click="joinContest(contestSelection)" ng-disabled="joinedDisabled">JOIN CONTEST</div>
+      <div ng-show="contestSelection.stage =='upcoming' && !alreadyJoin && contestSelection.player.length == contestSelection.max_player" class="btn btn-default" style="background: #999;color: #fff;width: 100%;border: 0px;" ng-disabled="joinedDisabled">CONTEST IS FULL</div>
       <div ng-show="alreadyJoin && contestSelection.stage =='upcoming' && contestSelection.stage !='cancel'&& contestSelection.stage !='live'" class="btn btn-primary disabled" style="background: #50ACC4; width: 100%; border: 0px;">WAITING</div>
       <div ng-show="contestSelection.stage=='cancel'" class="btn btn-danger" style="width: 100%;border: 0px;">CANCELED</div>
       <div ng-show="contestSelection.stage=='live'" class="btn btn-success" style="width: 100%;border: 0px;">LIVE</div>
@@ -157,15 +158,12 @@
       </h4>
       <table id="tablePlayers" class="table" style="border-radius: 0px;">
         <tbody>
-          <tr ng-repeat="player in contestSelection.player | orderBy:'-score'" ng-click="compairPlayer(player)">
+          <tr ng-repeat="player in contestSelection.player | orderBy:'-score'" ng-click="compairPlayer(player, $index)">
             <td class="text-blue" style="text-align:left;">
-              <div class="place-no" ng-if="contestSelection.player[$index].score != contestSelection.player[$index-1].score">
+              <div class="place-no" ng-if="!checkSameScore(player.score) || $index == 0" style="position: absolute;">
                 <span class="score-{{$index}}" ng-if="$index < 10">0</span>{{ $index + 1 }}
               </div>
-              <div class="place-no" ng-if="contestSelection.player[$index].score == contestSelection.player[$index-1].score">
-                <span></span>
-              </div>
-              {{player.name}}
+              <div style="display: inline; margin-left: 45px;">{{ player.name }}</div>
               <span class="pull-right">
                 <span ng-hide="player.isWin">{{ checkScore(player, $index) || 0 }}</span>
                 <span ng-show="player.isWin">
@@ -183,199 +181,7 @@
       </table>
     </div>
   </div>
-  <!-- </div> -->
 </section>
-
-<!--
-<section class="contest-show phone">
-  <div class="contest-detail" ng-hide="showPlayerDetail">
-    <h4 style="color:rgb(128,102,160);font-weight:300;cursor:pointer;padding: 10px;" ng-click="stepBack()">
-      <i class="fa fa-chevron-left" aria-hidden="true"></i> {{menu}}
-      <span class="pull-right btn" style="background:rgb(128,102,160);color:#fff;margin-top: -7px;">26 Q</span>
-    </h4>
-    <table class="table" style="border-radius: 0px;">
-      <thead style="background:#dedede;">
-        <tr>
-          <td style="border-radius:0px;width:90px;">Entry Fee</td>
-          <td class="loot" style="width:65px;">Loot</td>
-          <td>Contest Name</td>
-        </tr>
-      </thead>
-      <tbody>
-        <tr ng-click="showContestDetail='Amazing Chicks of Long Beach'">
-          <td class="text-blue">500
-            <img class="money-bag" src="assets/images/money-bag-blue.png">
-          </td>
-          <td class="loot gem-red">06
-            <i class="fa fa-diamond" aria-hidden="true"></i>
-          </td>
-          <td>
-            <div class="circle blue">P</div>
-            <span class="text-contest text-blue">Amazing Chicks of Long Beach</span>
-          </td>
-        </tr>
-        <tr ng-click="showContestDetail='Bored Frat Boys of Sigma Tau'">
-          <td class="text-blue">1,000
-            <img class="money-bag" src="assets/images/money-bag-blue.png">
-          </td>
-          <td class="loot gem-red">12
-            <i class="fa fa-diamond" aria-hidden="true"></i>
-          </td>
-          <td>
-            <div class="circle blue">P</div>
-            <span class="text-contest text-blue">Bored Frat Boys of Sigma Tau</span>
-          </td>
-        </tr>
-        <tr ng-click="showContestDetail='Don s Digital Dance Squad'">
-          <td class="text-blue">12,500
-            <img class="money-bag" src="assets/images/money-bag-blue.png">
-          </td>
-          <td class="loot gem-blue">05
-            <i class="fa fa-diamond" aria-hidden="true"></i>
-          </td>
-          <td>
-            <div class="circle blue">H</div>
-            <span class="text-contest text-blue">Don's Digital Dance Squad</span>
-          </td>
-        </tr>
-         <tr ng-click="showContestDetail='Diamonds Are Forever'">
-          <td class="text-grey">60,000
-            <img class="money-bag" src="assets/images/money-bag-grey.png">
-          </td>
-          <td class="loot gem-grey">02
-            <i class="fa fa-diamond" aria-hidden="true"></i>
-          </td>
-          <td>
-            <div class="circle grey">P</div>
-            <span class="text-contest text-grey">Diamonds Are Forever</span>
-          </td>
-        </tr>
-        <tr ng-click="showContestDetail='Emerald s Couchsurfing Crew'" style="border-bottom: 1px solid #dedede;">
-          <td class="text-grey">25,000
-            <img class="money-bag" src="assets/images/money-bag-grey.png">
-          </td>
-          <td class="loot gem-green">01
-            <i class="fa fa-diamond" aria-hidden="true"></i>
-          </td>
-          <td>
-            <div class="circle grey">H</div>
-            <span class="text-contest text-grey">Emerald's Couchsurfing Crew</span>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="contest-detail" ng-show="showContestDetail && !showPlayerDetail">
-    <h4 style="color:rgb(128,102,160);font-weight:300;cursor:pointer;" ng-click="showContestDetail=false">
-      <i class="fa fa-chevron-left" aria-hidden="true"></i> {{showContestDetail}}</h4>
-    <div style="text-indent: 19px">Hosted by <span class="text-blue">mamachick</span></div>
-    <div style="padding: 0px">
-    <div class="btn btn-primary" style="
-    background: #50ACC4;width: 80%;border: 0px;margin: 10px 0px 20px 10%;line-height:30px;height: 40px;font-size: 20px;font-weight: 200;
-    ">JOIN CONTEST</div>
-      <table class="table" style="border-radius: 0px;">
-
-        <tbody>
-          <tr>
-            <td class="text-grey" style="color:#999;width:100px;text-align:left;">
-              Entry fee
-            </td>
-            <td class="loot gem-red" style="text-align:left;color:#999;width:230px;">
-              500
-              <img class="money-bag" src="assets/images/money-bag-grey.png">
-            </td>
-          </tr>
-
-          <tr>
-            <td class="text-grey" style="color:#999;width:200px;text-align:left;">
-              Loot
-            </td>
-            <td class="loot gem-red" style="text-align:left;color:#999">
-              <i class="fa fa-diamond gem-red"  aria-hidden="true"></i>
-              <i class="fa fa-diamond gem-red"  aria-hidden="true"></i>
-              <i class="fa fa-diamond gem-red"  aria-hidden="true"></i>
-              <i class="fa fa-diamond gem-red"  aria-hidden="true"></i>
-              <i class="fa fa-diamond gem-red"  aria-hidden="true"></i>
-              <i class="fa fa-diamond gem-red"  aria-hidden="true"></i>
-            </td>
-          </tr>
-
-          <tr>
-            <td class="text-grey" style="color:#999;width:200px;text-align:left;">
-              Stake
-            </td>
-            <td class="loot" style="text-align:left;color:#999">
-              Winner take all
-            </td>
-          </tr>
-
-          <tr>
-            <td class="text-grey" style="color:#999;width:200px;text-align:left;">
-              Players
-              <i class="fa fa-chevron-right" style="position: absolute; right: 10px;margin-top: 2px;color:#50ACC4;" aria-hidden="true" ng-click="showPlayerDetail=true"></i>
-            </td>
-            <td class="loot" style="text-align:left;color:#999">
-              18/20
-            </td>
-          </tr>
-
-          <tr>
-            <td class="text-grey" style="color:#999;width:200px;text-align:left;">
-              Program
-            </td>
-            <td class="loot" style="text-align:left;color:#999">
-              Academy Awards
-            </td>
-          </tr>
-
-          <tr>
-            <td class="text-grey" style="color:#999;width:200px;text-align:left;">
-              Status
-            </td>
-            <td class="loot" style="text-align:left;color:#999">
-              Starts in 12 hr 39 min
-            </td>
-          </tr>
-
-          <tr style="border-bottom: 1px solid #dedede">
-            <td class="text-grey" style="color:#999;width:200px;text-align:left;">
-              Challenge
-              <i class="fa fa-chevron-right" style="position: absolute; right: 10px;margin-top: 2px;color:#50ACC4;" aria-hidden="true"></i>
-            </td>
-            <td class="loot text-blue" style="text-align:left;">
-              26 Questions
-            </td>
-          </tr>
-
-        </tbody>
-      </table>
-    </div>
-
-  </div>
-
-  <div class="player-detail" ng-show="showPlayerDetail">
-    <h4 style="color:rgb(128,102,160);font-weight:300;cursor:pointer;" ng-click="showPlayerDetail=false">
-      <i class="fa fa-chevron-left" aria-hidden="true"></i>
-      18 Players
-      <div class="btn btn-primary pull-right" style="background: #50ACC4;border: 0px;margin-right: 20px;">JOIN</div>
-    </h4>
-    <div style="text-indent: 29px">{{showContestDetail}}</div>
-    <br>
-    <div style="padding: 0px">
-      <table class="table" style="border-radius: 0px;">
-        <tbody>
-          <tr>
-            <td class="text-blue" style="text-align:left;">
-              mamachick
-            </td>
-          </tr>
-
-        </tbody>
-      </table>
-    </div>
-  </div>
-</section> -->
 
 <div class="compair-modal" ng-show="selectedCompair">
   <div class="bg"></div>
@@ -415,12 +221,16 @@
               Q{{$index}}
             </td>
             <td class="text-blue" style="text-align:left;width: 25%">
-
-              {{selectedCompair.user[$index].ans}} <i class="check-ans fa {{checkAns(selectedCompair.user[$index].p, $index)}}" ></i>
-
+              {{selectedCompair.user[$index].ans}}
+              <span ng-hide="contestSelection.stage=='upcoming'">
+                <i class="check-ans fa {{checkAns(selectedCompair.user[$index].p, $index)}}" ></i>
+              </span>
             </td>
             <td class="text-blue" style="text-align:left;width: 25%">
-              {{selectedCompair.vs[$index].ans}} <i class="check-ans fa {{checkAns(ans.p, $index)}}" ></i>
+              <span ng-hide="contestSelection.stage=='upcoming'">
+                {{selectedCompair.vs[$index].ans}}
+                <i class="check-ans fa {{checkAns(ans.p, $index)}}" ></i>
+              </span>
             </td>
           </tr>
         </tbody>

@@ -75,10 +75,6 @@ angular.module 'clublootApp'
       $scope.tax = 0
       for tax in data
         $scope.tax += tax.coin
-    # $http.post("/api/winner_log/by_date", {fr: f, to: t }).success (data, status, headers, config) ->
-    #   $scope.prize = 0
-    #   for w in data
-    #     $scope.prize += w.prize
 
   for w in $scope.winnerLogs
     $scope.prize += w.prize
@@ -98,17 +94,13 @@ angular.module 'clublootApp'
         all = c+r+s+e+d
         $scope.economy += all
 
-  #
-  # $('#ex2').bootstrapSlider()
 
   $scope.getDataByDate()
 
   $scope.loop = () ->
-    console.log "loop"
     $timeout ->
       $scope.getDataByDate()
       $scope.loop()
     , 10000
 
   $scope.loop()
-

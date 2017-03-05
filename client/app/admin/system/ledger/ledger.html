@@ -1,31 +1,38 @@
 <div class="row ledger">
   <div class="col-md-12">
-    <h5>Ledger
+    <div class="row">
+    <h3>
+      Ledger
       <div class="ledger-value-box pull-right">
         <span class="pull-left">$</span>
         <span class="pull-right">{{ getTotal() }}</span>
       </div>
-    </h5>
+    </h3>
+
     <div class="col-md-12" style="margin-top: 30px;">
-      <div class="btn btn-primary" style="background:#50ACC4;border-color:#dedede;">Today</div>
-      <input id="ex2" type="text" data-slider-min="-5" data-slider-max="20" data-slider-step="1" data-slider-value="0">
-      <div class="btn btn-primary" style="background:#50ACC4;border-color:#dedede;">5/11/55</div>
-      <div class="btn btn-primary" style="background:#50ACC4;border-color:#dedede;">YTD</div>
-      <div class="btn btn-primary" style="background:#50ACC4;border-color:#dedede;">2015</div>
-      <div class="btn btn-primary" style="background:#50ACC4;border-color:#dedede;">2014</div>
+      <div class="btn btn-primary" ng-click="filterToday()" style="background:#50ACC4;border-color:#dedede;">Just Today</div>
+      <div style="display:inline-block;">From</div>
+      <input class="datetimepicker form-control" style="width:100px;display:inline-block;" type="text" ng-model="filterDate.from" required>
+
+      <div style="display:inline-block;">To</div>
+      <input class="datetimepicker form-control" style="width:100px;display:inline-block;" type="text" ng-model="filterDate.to" required>
+
+      <div class="btn btn-primary" ng-click="getDataByDate()"style="background:#50ACC4;border-color:#dedede;">Go</div>
     </div>
+
     <div class="col-md-12" style="margin-top: 20px;">
-      <table class="table table-bordered">
-          <tbody>
+
+        <table class="transaction table table-bordered" style="border-radius: 0px;">
+          <thead>
             <tr>
               <th>
-                Status
-              </th>
-              <th>
-                ScreenName
+                Code
               </th>
               <th>
                 Date Time
+              </th>
+              <th>
+                Username
               </th>
               <th>
                 Transaction #
@@ -36,29 +43,75 @@
               <th>
                 Amount
               </th>
+              <th>
+                Balance
+              </th>
             </tr>
-            <tr ng-repeat="lad in ledgers" ng-click="selectLedger(lad)">
-              <td>
-                <i class="fa" ng-class="{'fa-plus': lad.action=='plus','fa-minus': lad.action=='minus'}" aria-hidden="true"></i>
+          </thead>
+          <tbody>
+            <tr ng-repeat="ledger in ledgers" rowspan="{{ledger.transaction.length}}">
+              <td class="text-center">
+                <div ng-repeat="transaction in ledger.transaction">
+                  <i class="fa" ng-class="{'fa-plus': transaction.action=='plus','fa-minus': transaction.action=='minus'}" aria-hidden="true"></i>
+                </div>
               </td>
-              <td class="b-text">
-                [{{lad.user.email}}]
-              </td>
-              <td>
-                {{lad.created_at | amDateFormat:'MM/DD/YYYY HH:mm:ss' }}
-              </td>
-              <td>
-                {{lad._id}}
-              </td>
-              <td>
-                {{lad.description}} {{ lad.transaction.from }} -> {{ lad.transaction.to }}
+              <td class="b-text" style="vertical-align: middle;">
+                {{ ledger.created_at | amDateFormat:'MM/DD/YYYY' }} <br>
+                {{ ledger.created_at | amDateFormat:'HH:mm:ss' }}
               </td>
               <td>
-                {{lad.transaction.amount}}
+                  <a href="#" ng-click="gotoUser(ledger.user.id)">
+                    {{ ledger.user.username || ledger.user.email }}
+                  </a>
+              </td>
+              <td>
+                <div ng-repeat="transaction in ledger.transaction">
+                  <a href="#" ng-click="transactionDetail(ledger, transaction)">
+                    {{ transaction._id }}
+                  </a>
+                </div>
+              </td>
+              <td>
+                <div ng-repeat="transaction in ledger.transaction">
+                  ( {{transaction.description}} ) {{ transaction.from }} -> {{ transaction.to }}
+                </div>
+              </td>
+              <td>
+                <div ng-repeat="transaction in ledger.transaction">
+                  <p ng-if="ledger.format != 'won'">
+                    {{ transaction.amount }} {{ transaction.unit }}
+                  </p>
+                  <p ng-if="ledger.format == 'won'">
+                    {{ transaction.amount - transaction.tax }} {{ transaction.unit }}
+                  </p>
+                </div>
+              </td>
+              <td style="vertical-align: middle;">
+                <span>
+                  {{ ledger.balance.coins }}
+                  <img src="assets/images/Piggy Bank Icon.png" width="40">
+                </span>
+                <span style="color: #951111">
+                  {{ ledger.balance.rubies }}
+                  <i class="fa fa-diamond" aria-hidden="true"></i>
+                </span>
+                <span style="color: #2A4C7A">
+                  {{ ledger.balance.sapphires }}
+                  <i class="fa fa-diamond" aria-hidden="true"></i>
+                </span>
+                <span style="color: #758F42">
+                  {{ ledger.balance.emeralds }}
+                  <i class="fa fa-diamond" aria-hidden="true"></i>
+                </span>
+                <span style="color: #9F9B93">
+                  {{ ledger.balance.diamonds }}
+                  <i class="fa fa-diamond" aria-hidden="true"></i>
+                </span>
               </td>
             </tr>
           </tbody>
         </table>
+      </div>
     </div>
   </div>
 

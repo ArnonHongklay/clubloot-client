@@ -5,15 +5,13 @@ angular.module 'clublootApp'
 
   $scope.messages = messages.data
 
-  # console.log $scope.messages
-
   $scope.checkTime = (message) ->
     new Date(message.publish_time) > new Date()
 
   $scope.saveMessage = () ->
     return if $scope.newMessage.message == ''
     return if $scope.newMessage.publish_time == ''
-    # console.log $scope.newMessage
+    $scope.newMessage.publish_time = new Date($scope.newMessage.publish_time)
     $scope.newMessage.postBy = Auth.getCurrentUser().email
     $http.post("/api/broadcast",
       $scope.newMessage

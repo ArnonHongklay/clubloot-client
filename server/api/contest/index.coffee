@@ -12,6 +12,7 @@ router.get '/program/:name/all', controller.findAllProgram
 router.get '/template/:id/score', controller.updateScore
 router.get '/template/:id', controller.findByTemplates
 router.get '/:id', 							controller.show
+router.post '/:id/destroy',     controller.destroy
 
 router.post '/', controller.create
 router.put  '/:id', controller.updateQuestion

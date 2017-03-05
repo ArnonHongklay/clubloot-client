@@ -1,6 +1,8 @@
 <div class="row">
   <div class="col-lg-12">
-    <h2 style="color: #8066A0">{{$root.currentUser.email}} Dashboard</h2>
+    <h2 style="color: #8066A0; cursor: pointer" ui-sref="main">
+      {{$root.currentUser.username}} Dashboard
+    </h2>
   </div>
 </div>
 <div class="row">
@@ -22,7 +24,7 @@
   <div class="text-head" style="width: 80%; display: inline">
     <div class="flex-main-container">
       <div class="flex-main-header-left">
-        Wins <a href="#" style="font-size: 9pt;" ui-sref="joined">View Completed</a>
+        Wins
       </div>
       <div style="width: 50px"></div>
       <div class="flex-main-header-right">

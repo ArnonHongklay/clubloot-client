@@ -4,10 +4,14 @@ angular.module 'clublootApp'
 .controller 'AddNewTemplateCtrl', ($scope, $http, Auth, User) ->
   $scope.template = {}
   $scope.items = []
-
+  $scope.answer_items = []
   i = 1
   while i <= 20
     $scope.items.push({number: i})
+    i++
+  i = 2
+  while i <= 20
+    $scope.answer_items.push({number: i})
     i++
 
   $('.datetimepicker').datetimepicker()
@@ -16,7 +20,6 @@ angular.module 'clublootApp'
     $('#myInput').focus()
     return
 
-  # $scope.programList = {}
   $http.get("/api/program",
       null
     ).success((data, status, headers, config) ->
@@ -38,24 +41,18 @@ angular.module 'clublootApp'
     new Array(num)
 
   $scope.submit = ->
-    # console.log $scope.template
     return if Object.keys($scope.template).length < 6
 
     currentdate = new Date()
     start_time = new Date($scope.template.start_time)
     end_time = new Date($scope.template.end_time)
 
-    # console.log "fuck time #{start_time}"
-    # console.log "fuck end time #{end_time}"
-
     $scope.template.active = start_time > currentdate
     $scope.template.active = end_time < currentdate
 
-    console.log $scope.template
     $http.post("/api/templates",
         $scope.template
       ).success((data, status, headers, config) ->
-        # $scope.programList.push(data)
         $('#showModal').click()
         $scope.data_question = data
         $scope.number_questions = data.number_questions
@@ -67,8 +64,6 @@ angular.module 'clublootApp'
       )
 
   $scope.add_question = ->
-    # console.log $scope.data_question
-    # console.log $scope.questions
 
     $scope.data_question.questions = $scope.questions
     $.each $scope.data_question.questions, (index, value) ->
@@ -77,14 +72,9 @@ angular.module 'clublootApp'
       for answer, a_index in $scope.data_question.questions[index].answers
         $scope.data_question.questions[index].answers[a_index].is_correct = false
 
-    # console.log $scope.data_question.questions
-
     $http.post("/api/templates/#{$scope.data_question._id}/questions",
         $scope.data_question.questions
       ).success((data, status, headers, config) ->
-        # $scope.programList = data
-        # console.log "fuck"
-        # console.log data
         $('#add_template').modal('hide')
         swal {
           title: 'template created'

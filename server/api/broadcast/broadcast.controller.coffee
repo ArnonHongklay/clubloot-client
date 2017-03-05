@@ -41,7 +41,7 @@ exports.create = (req, res) ->
       User.update {}, { $push: {messages: broadcast} }, { upsert: true, multi: true }, (err) ->
         # console.log "9999"
         # console.log broadcast
-        c_socket.emit 'message', broadcast
+        c_socket.emit 'message', broadcast if c_socket != ""
     )
 
 

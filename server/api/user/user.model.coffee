@@ -20,10 +20,12 @@ UserSchema = new Schema(
   email:
     type: String
     lowercase: true
+  tokens: String
   created_at: Date
   first_name: String
   last_name: String
   birthday: Date
+  is_admin: Boolean
   billing_address: String
   billing_city: String
   billing_state: String

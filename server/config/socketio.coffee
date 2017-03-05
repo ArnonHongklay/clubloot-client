@@ -17,13 +17,16 @@ onConnect = (socket) ->
 
   # Insert sockets below
   (require '../api/thing/thing.socket').register socket
+  (require '../api/question/question.socket').register socket
+  (require '../api/contest/contest.socket').register socket
+  (require '../api/broadcast/broadcast.controller').register socket
 
 module.exports = (socketio) ->
   # socket.io (v1.x.x) is powered by debug.
   # In order to see all the debug output, set DEBUG (in server/config/local.env.js) to including the desired scope.
   #
   # ex: DEBUG: 'http*,socket.io:socket'
-  
+
   # We can authenticate socket.io users and access their token through socket.handshake.decoded_token
   #
   # 1. You will need to send the token in `client/components/socket/socket.service.js`
@@ -37,7 +40,7 @@ module.exports = (socketio) ->
   socketio.on 'connection', (socket) ->
     socket.address = (if socket.handshake.address isnt null then socket.handshake.address.address + ':' + socket.handshake.address.port else process.env.DOMAIN)
     socket.connectedAt = new Date()
-    
+
     # Call onDisconnect.
     socket.on 'disconnect', ->
       onDisconnect socket

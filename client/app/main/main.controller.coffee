@@ -3,6 +3,9 @@
 angular.module 'clublootApp'
 .controller 'MainCtrl', ($scope, $http, socket, $rootScope, Auth, contests, $window, broadcasts, $timeout) ->
   $scope.socket = socket.socket
+  $scope.user = Auth.getCurrentUser()
+  console.log "token"
+  console.log $scope.user.token
   $rootScope.openMessage = "k"
   if $window.location.host == 'clubloot.com'
     $window.location.replace('http://clubloot.com/landing.html')
@@ -60,6 +63,44 @@ angular.module 'clublootApp'
 
   }
 
+  $.ajax(
+    method: 'GET'
+    url: "http://api.clubloot.com/user/contests.json?token=#{$scope.user.token}&state=upcoming"
+    ).done (data) ->
+    console.log $scope.user.token
+    console.log "user-contests"
+    $scope.upcomingContests = data.data
+    console.log $scope.upcomingContests
+    $scope.$apply()
+
+  $.ajax(
+    method: 'GET'
+    url: "http://api.clubloot.com/user/contests.json?token=#{$scope.user.token}&state=live"
+    ).done (data) ->
+    console.log $scope.user.token
+    console.log "user-contests"
+    $scope.liveContests = data.data
+    $scope.$apply()
+
+  $.ajax(
+    method: 'GET'
+    url: "http://api.clubloot.com/user/contests.json?token=#{$scope.user.token}&state=cancel"
+    ).done (data) ->
+    console.log $scope.user.token
+    console.log "user-contests"
+    $scope.cancelContests = data.data
+    $scope.$apply()
+
+  $.ajax(
+    method: 'GET'
+    url: "http://api.clubloot.com/user/contests.json?token=#{$scope.user.token}&state=end"
+    ).done (data) ->
+    console.log $scope.user.token
+    console.log "user-contests"
+    $scope.endContests = data.data
+    $scope.$apply()
+
+
   $scope.liveCount = () ->
     $('.live-contest-el').length
 
@@ -101,16 +142,20 @@ angular.module 'clublootApp'
     i + 'th'
 
   $scope.checkPosition = (contest) ->
+    console.log contest
     score = []
     cur_user = 0
-    for p, k in contest.player
-      if p.uid == $rootScope.currentUser._id
-        cur_user = k
-      score.push p.score
-    index_score = score.sort().reverse()
-    user_score = contest.player[cur_user].score
-    rank = index_score.indexOf(user_score) + 1
-    return $scope.ordinal_suffix_of(rank)
+    for p, k in contest.leaders
+      if p.id.$oid == $scope.user._id
+        cur_user = p
+      # score.push p.score
+    # index_score = score.sort().reverse()
+    # user_score = contest.player[cur_user].score
+    # rank = index_score.indexOf(user_score) + 1
+    console.log "position"
+    console.log cur_user.position
+    console.log $scope.ordinal_suffix_of(cur_user.position)
+    return $scope.ordinal_suffix_of(cur_user.position)
 
 
 
@@ -187,6 +232,7 @@ angular.module 'clublootApp'
     $scope.gemMatrix.gem[gemIndex]
 
   $scope.goContest = (contest) ->
+    return
     window.location.href = "/question/#{contest._id}/"
 
   $scope.goLive = (contest) ->

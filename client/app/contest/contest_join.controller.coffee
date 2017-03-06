@@ -73,6 +73,11 @@ angular.module 'clublootApp'
       # $http.post("/api/contest/#{$scope.contest.id}/destroy", {}).success (data, status, headers, config) ->
 
   $scope.$on '$locationChangeStart', (event, next, current) ->
+
+    console.log "location change"
+    console.log current
+    console.log next
+
     return if next.indexOf("join") >=0
     return if current.indexOf("contest/new") >=0
     return if $scope.createNewStep == '1'

@@ -26,6 +26,11 @@ angular.module 'clublootApp'
     templateUrl: 'app/contest/contest_join.html'
     controller: 'ContestJoinCtrl'
 
+  .state 'contestQuizEdit',
+    url: '/contest/:contest_id/:template_id/edit'
+    templateUrl: 'app/contest/contest_edit.html'
+    controller: 'ContestEditCtrl'
+
   .state 'programTemplate',
     url: '/contest/program'
     templateUrl: 'app/contest/program/template.html'

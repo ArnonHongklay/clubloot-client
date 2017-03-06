@@ -3,6 +3,7 @@
 angular.module 'clublootApp'
 .controller 'WonCtrl', ($scope, $http, socket, $rootScope, Auth, contests) ->
   $scope.currentUser = Auth.getCurrentUser()
+  $scope.user = Auth.getCurrentUser()
   $scope.contests = Auth.getCurrentUser().wonContest
   $scope.id_logs = []
 
@@ -61,6 +62,16 @@ angular.module 'clublootApp'
   $http.get('/api/things').success (awesomeThings) ->
     $scope.awesomeThings = awesomeThings
     socket.syncUpdates 'thing', $scope.awesomeThings
+
+  $.ajax(
+    method: 'GET'
+    url: "http://api.clubloot.com/user/contests.json?token=#{$scope.user.token}&state=won"
+    ).done (data) ->
+    console.log $scope.user.token
+    console.log "user-contests"
+    $scope.wonContests = data.data
+    console.log $scope.wonContests
+    $scope.$apply()
 
 
   $scope.checkJoin = (contest) ->

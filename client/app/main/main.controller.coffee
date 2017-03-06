@@ -63,42 +63,54 @@ angular.module 'clublootApp'
 
   }
 
-  $.ajax(
-    method: 'GET'
-    url: "http://api.clubloot.com/user/contests.json?token=#{$scope.user.token}&state=upcoming"
-    ).done (data) ->
-    console.log $scope.user.token
-    console.log "user-contests"
-    $scope.upcomingContests = data.data
-    console.log $scope.upcomingContests
-    $scope.$apply()
+  $scope.getUpcoming = () ->
+    $.ajax(
+      method: 'GET'
+      url: "http://api.clubloot.com/user/contests.json?token=#{$scope.user.token}&state=upcoming"
+      ).done (data) ->
+      console.log $scope.user.token
+      console.log "user-contests"
+      $scope.upcomingContests = data.data
+      console.log $scope.upcomingContests
+      $scope.$apply()
 
-  $.ajax(
-    method: 'GET'
-    url: "http://api.clubloot.com/user/contests.json?token=#{$scope.user.token}&state=live"
-    ).done (data) ->
-    console.log $scope.user.token
-    console.log "user-contests"
-    $scope.liveContests = data.data
-    $scope.$apply()
+  $scope.getlive = () ->
+    $.ajax(
+      method: 'GET'
+      url: "http://api.clubloot.com/user/contests.json?token=#{$scope.user.token}&state=live"
+      ).done (data) ->
+      console.log $scope.user.token
+      console.log "user-contests"
+      $scope.liveContests = data.data
+      $scope.$apply()
 
-  $.ajax(
-    method: 'GET'
-    url: "http://api.clubloot.com/user/contests.json?token=#{$scope.user.token}&state=cancel"
-    ).done (data) ->
-    console.log $scope.user.token
-    console.log "user-contests"
-    $scope.cancelContests = data.data
-    $scope.$apply()
+  $scope.getCancel = () ->
+    $.ajax(
+      method: 'GET'
+      url: "http://api.clubloot.com/user/contests.json?token=#{$scope.user.token}&state=cancel"
+      ).done (data) ->
+      console.log $scope.user.token
+      console.log "user-contests"
+      $scope.cancelContests = data.data
+      $scope.$apply()
 
-  $.ajax(
-    method: 'GET'
-    url: "http://api.clubloot.com/user/contests.json?token=#{$scope.user.token}&state=end"
-    ).done (data) ->
-    console.log $scope.user.token
-    console.log "user-contests"
-    $scope.endContests = data.data
-    $scope.$apply()
+  $scope.getEnd = () ->
+    $.ajax(
+      method: 'GET'
+      url: "http://api.clubloot.com/user/contests.json?token=#{$scope.user.token}&state=end"
+      ).done (data) ->
+      console.log $scope.user.token
+      console.log "user-contests"
+      $scope.endContests = data.data
+      $scope.$apply()
+
+  $scope.getAll = () ->
+    $scope.getUpcoming()
+    $scope.getlive()
+    $scope.getCancel()
+    $scope.getEnd()
+
+  $scope.getAll()
 
 
   $scope.liveCount = () ->
@@ -196,17 +208,21 @@ angular.module 'clublootApp'
   $scope.setFilter = (value) ->
     switch value
       when 'live'
+        $scope.getlive()
         $scope.live = true
         $scope.upcoming = false
         $scope.past = false
       when 'upcoming'
+        $scope.getUpcoming()
         $scope.live = false
         $scope.upcoming = true
         $scope.past = false
       when 'past'
+        $scope.getEnd()
         $scope.live = false
         $scope.upcoming = false
         $scope.past = true
+
 
   $scope.setFilter('live')
 

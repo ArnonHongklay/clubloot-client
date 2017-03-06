@@ -1,7 +1,7 @@
 'use strict'
 
 angular.module 'clublootApp'
-.controller 'ContestTemplateShowCtrl', ($scope, $http, Auth, $state, $stateParams, $rootScope) ->
+.controller 'ContestTemplateShowCtrl', ($scope, $http, Auth, $state, $stateParams, $rootScope, $timeout) ->
   $scope.user = Auth.getCurrentUser()
   console.log 'ContestTemplateShowCtrl'
   console.log $stateParams
@@ -49,40 +49,36 @@ angular.module 'clublootApp'
 
   }
 
-  $.ajax(
-    method: 'GET'
-    url: "http://api.clubloot.com/contests/program/#{$stateParams.program_id}.json"
-    ).done (data) ->
-    $scope.contests = data.data
-    console.log $scope.contests
-    $scope.$apply()
-    return
+  $scope.setData = () ->
+    $.ajax(
+      method: 'GET'
+      url: "http://api.clubloot.com/contests/program/#{$stateParams.program_id}.json"
+      ).done (data) ->
+      $scope.contests = data.data
+      console.log $scope.contests
+      $scope.$apply()
+      return
 
-  # $.ajax(
-  #   method: 'GET'
-  #   url: 'http://api.clubloot.com/contests/programs.json'
-  #   ).done (data) ->
-  #   console.log "=-=-=-=-=-=-=-="
-  #   for d in data.data
-  #     console.log d._id.$oid
-  #     console.log $stateParams.program_id
-  #     if d._id.$oid == $stateParams.program_id
-  #       console.log "same"
-  #       console.log d
-  #       $rootScope.program = d
-  #   $scope.$apply()
-  #   console.log $rootScope.program
+    $.ajax(
+      method: 'GET'
+      url: "http://api.clubloot.com/program/#{$stateParams.program_id}.json"
+      ).done (data) ->
+      console.log $stateParams
+      console.log "---------------ssssssssssssss--"
 
-  $.ajax(
-    method: 'GET'
-    url: "http://api.clubloot.com/program/#{$stateParams.program_id}.json"
-    ).done (data) ->
-    console.log $stateParams
-    console.log "---------------ssssssssssssss--"
+      $rootScope.currentProgram = data.data
+      console.log $rootScope.currentProgram
+      $scope.$apply()
 
-    $rootScope.currentProgram = data.data
-    console.log $rootScope.currentProgram
-    $scope.$apply()
+  $scope.loopGetData = () ->
+    console.log "looCAll"
+    $timeout ->
+      $scope.setData()
+      $scope.loopGetData()
+    , 30000
+
+  $scope.setData()
+  $scope.loopGetData()
 
   $scope.gemColor = (gemType) ->
     if gemType == "DIAMOND"

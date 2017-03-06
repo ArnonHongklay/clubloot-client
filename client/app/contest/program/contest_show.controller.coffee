@@ -1,7 +1,7 @@
 'use strict'
 
 angular.module 'clublootApp'
-.controller 'ContestShowCtrl', ($scope, $http, Auth, $state, $stateParams, $rootScope) ->
+.controller 'ContestShowCtrl', ($scope, $http, Auth, $state, $stateParams, $rootScope, $timeout) ->
   $scope.user = Auth.getCurrentUser()
   $scope.alreadyJoin = false
   console.log "user------------------"
@@ -117,33 +117,43 @@ angular.module 'clublootApp'
   #   console.log $scope.contest.leaders[index].score
   #   score
 
+  $scope.setData = () ->
 
-
-  $.ajax(
-    method: 'GET'
-    url: "http://api.clubloot.com/contests/program/#{$stateParams.program_id}.json"
-    ).done (data) ->
-    console.log "--------------"
-    console.log data.data
-    for d in data.data
-      if d.id.$oid == $stateParams.contest_id
-        $scope.contest = d
-
-    $scope.$apply()
-    $scope.template_id = $scope.contest.template._id.$oid
-    $rootScope.template_id = $scope.template_id
     $.ajax(
       method: 'GET'
-      url: "http://api.clubloot.com/contests/program/#{$stateParams.program_id}/template/#{$scope.template_id}/contest/#{$stateParams.contest_id}.json"
+      url: "http://api.clubloot.com/contests/program/#{$stateParams.program_id}.json"
       ).done (data) ->
-      $scope.contest = data.data
-      console.log $scope.contest
-      for player in $scope.contest.leaders
-        if player.id.$oid == $scope.user._id
-          $scope.alreadyJoin = true
-      $scope.$apply()
+      console.log "--------------"
+      console.log data.data
+      for d in data.data
+        if d.id.$oid == $stateParams.contest_id
+          $scope.contest = d
 
-    return
+      $scope.$apply()
+      $scope.template_id = $scope.contest.template._id.$oid
+      $rootScope.template_id = $scope.template_id
+      $.ajax(
+        method: 'GET'
+        url: "http://api.clubloot.com/contests/program/#{$stateParams.program_id}/template/#{$scope.template_id}/contest/#{$stateParams.contest_id}.json"
+        ).done (data) ->
+        $scope.contest = data.data
+        console.log $scope.contest
+        for player in $scope.contest.leaders
+          if player.id.$oid == $scope.user._id
+            $scope.alreadyJoin = true
+        $scope.$apply()
+
+      return
+
+  $scope.loopGetData = () ->
+    console.log "looCAll"
+    $timeout ->
+      $scope.setData()
+      $scope.loopGetData()
+    , 30000
+
+  $scope.setData()
+  $scope.loopGetData()
 
 
 

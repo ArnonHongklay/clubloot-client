@@ -152,6 +152,22 @@ angular.module 'clublootApp'
         $scope.getEnd()
         return
 
+  $scope.getWin = () ->
+    $.ajax
+      url: "http://api.clubloot.com/user/contests.json?token=#{$scope.user.token}&state=winners"
+      type: 'GET'
+      datatype: 'json'
+      success: (data) ->
+        console.log $scope.user.token
+        console.log "user-contestsขจจจจจจจจจจจจจจจจจจจจจจจจจจจจจ"
+        $scope.wonContests = data.data
+        $rootScope.wonContests = data.data
+        console.log $scope.winContests
+        $scope.$apply()
+      error: (jqXHR, textStatus, errorThrown) ->
+        $scope.getWin()
+        return
+
 
     # $.ajax(
     #   method: 'GET'
@@ -166,6 +182,7 @@ angular.module 'clublootApp'
     $scope.getUpcoming()
     $scope.getlive()
     $scope.getCancel()
+    $scope.getWin()
     $scope.getEnd()
 
 

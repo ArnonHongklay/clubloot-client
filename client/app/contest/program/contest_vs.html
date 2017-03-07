@@ -38,13 +38,13 @@
             <td class="text-blue" style="text-align:left;width: 25%">
               {{checkIndex($index, 'me')}}
               <span ng-hide="contest.state=='upcoming'">
-                <i class="check-ans fa" ng-class="{'fa-check': ans.correct, 'fa-times': !ans.correct}"></i>
+                <i class="check-ans fa" ng-class="{'fa-check': playerMe.quizes[$index].correct==1, 'fa-times': playerMe.quizes[$index].correct==0}"></i>
               </span>
             </td>
             <td class="text-blue" style="text-align:left;width: 25%">
               {{checkIndex($index, 'vs')}}
               <span ng-hide="contest.state=='upcoming'">
-              <i class="check-ans fa" ng-class="{'fa-check': ans.correct, 'fa-times': !ans.correct}"></i>
+              <i class="check-ans fa" ng-class="{'fa-check': playerVs.quizes[$index].correct==1, 'fa-times': playerVs.quizes[$index].correct==0}"></i>
               </span>
             </td>
           </tr>

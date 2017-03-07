@@ -59,19 +59,25 @@ angular.module 'clublootApp'
 
   $scope.awesomeThings = []
 
-  $http.get('/api/things').success (awesomeThings) ->
-    $scope.awesomeThings = awesomeThings
-    socket.syncUpdates 'thing', $scope.awesomeThings
-
-  $.ajax(
-    method: 'GET'
-    url: "http://api.clubloot.com/user/contests.json?token=#{$scope.user.token}&state=winners"
-    ).done (data) ->
-    console.log $scope.user.token
-    console.log "user-contests"
-    $scope.wonContests = data.data
-    console.log $scope.wonContests
-    $scope.$apply()
+  # $http.get('/api/things').success (awesomeThings) ->
+  #   $scope.awesomeThings = awesomeThings
+  #   socket.syncUpdates 'thing', $scope.awesomeThings
+  $scope.getWin = () ->
+    $.ajax
+      url: "http://api.clubloot.com/user/contests.json?token=#{$scope.user.token}&state=winners"
+      type: 'GET'
+      datatype: 'json'
+      success: (data) ->
+        console.log $scope.user.token
+        console.log "user-contestsขจจจจจจจจจจจจจจจจจจจจจจจจจจจจจ"
+        $scope.wonContests = data.data
+        $rootScope.wonContests = data.data
+        console.log $scope.wonContests
+        $scope.$apply()
+      error: (jqXHR, textStatus, errorThrown) ->
+        $scope.getWin()
+        return
+  $scope.getWin()
 
 
   $scope.checkJoin = (contest) ->

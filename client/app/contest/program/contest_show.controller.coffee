@@ -130,8 +130,8 @@ angular.module 'clublootApp'
         if data.status != 'failure'
           for d in data.data
             if d.id.$oid == $stateParams.contest_id
-              $scope.contest = d
-        unless $scope.contest
+              contest = d
+        unless contest
           console.log '0000000000000099999999999999999999'
           console.log $stateParams.contest_id
           $.ajax
@@ -141,6 +141,8 @@ angular.module 'clublootApp'
             success: (data) ->
               console.log '812937812731289372189372189279'
               $scope.contest = data.data
+              $scope.contestPrize = data.data
+              console.log $scope.contest
               $scope.$apply()
               $scope.template_id = $scope.contest.template._id.$oid
               $rootScope.template_id = $scope.template_id
@@ -160,7 +162,7 @@ angular.module 'clublootApp'
                   return
         else
           $scope.$apply()
-          $scope.template_id = $scope.contest.template._id.$oid
+          $scope.template_id = contest.template._id.$oid
           $rootScope.template_id = $scope.template_id
           $.ajax
             url: "http://api.clubloot.com/contests/program/#{$stateParams.program_id}/template/#{$scope.template_id}/contest/#{$stateParams.contest_id}.json"
@@ -209,6 +211,45 @@ angular.module 'clublootApp'
 
     #   return
 
+  $scope.calGem = (fee, player) ->
+    prize = parseInt(fee) * parseInt(player)
+    gemIndex = $scope.gemMatrix.list[parseInt(player)-2].fee.indexOf(fee)
+    return $scope.gemMatrix.gem[gemIndex] || $scope.gemMatrix.gem[0]
+
+  $scope.gemColor = (gemType) ->
+    if gemType == "DIAMOND"
+      gemColor = "color: #dedede;"
+    if gemType == "RUBY"
+      gemColor = "color: red;"
+    if gemType == "SAPPHIRE"
+      gemColor = "color: blue;"
+    if gemType == "EMERALD"
+      gemColor = "color: green;"
+    return gemColor
+
+  $scope.checkGemColor = (type) ->
+    return "color:red;!important"     if type == "ruby"
+    return "color:blue;!important"    if type == "sapphire"
+    return "color:green;!important"   if type == "emerald"
+    return "color:grey;!important" if type == "diamond"
+
+
+  $scope.gemRepeat = (fee, player) ->
+    prize = parseInt(fee) * parseInt(player)
+    gemIndex = $scope.gemMatrix.list[parseInt(player)-2].fee.indexOf(parseInt(fee))
+    $scope.gemMatrix.gem[gemIndex]
+
+  $scope.checkWin = (player, contest) ->
+    console.log player
+    return unless contest
+    console.log '=-=-=-=-=-=000000'
+    a = 1
+    return unless contest.winners
+    for w in contest.winners
+      if w._id.$oid == player.id.$oid
+        console.log 'win'
+        a = 0
+    return a
   $scope.loopGetData = () ->
     console.log "looCAll"
     $timeout ->

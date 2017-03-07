@@ -162,7 +162,7 @@ angular.module 'clublootApp'
         console.log "user-contestsขจจจจจจจจจจจจจจจจจจจจจจจจจจจจจ"
         $scope.wonContests = data.data
         $rootScope.wonContests = data.data
-        console.log $scope.winContests
+        console.log $scope.wonContests
         $scope.$apply()
       error: (jqXHR, textStatus, errorThrown) ->
         $scope.getWin()

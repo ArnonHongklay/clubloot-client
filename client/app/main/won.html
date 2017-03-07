@@ -13,8 +13,8 @@
         <div style="width: 10%; display: inline-block; float:left; color: #912927">
         <!-- <div gem-repeat="" fee="{{contest.fee}}" player="{{contest.max_player}}" gemcount="{{calGem(contest.fee, contest.max_player).count}}">
         </div> -->
-        <div ng-repeat="player in contest.leaders">
-          <span ng-repeat="prize in player.winPrize" ng-if="user.id == player.uid">
+        <div>
+          <span ng-repeat="prize in contest.loot_prize">
             <i ng-show="prize.type!='coin'" class="fa fa-diamond" style="{{checkGemColor(prize.type)}}" aria-hidden="true"></i>
             <i ng-if="prize.type!='coin' && prize.value>1" class="fa fa-diamond" style="{{checkGemColor(prize.type)}}" aria-hidden="true"></i>
             <i ng-if="prize.type!='coin' && prize.value>2" class="fa fa-diamond" style="{{checkGemColor(prize.type)}}" aria-hidden="true"></i>

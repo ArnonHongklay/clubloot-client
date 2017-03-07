@@ -65,7 +65,7 @@ angular.module 'clublootApp'
 
   $.ajax(
     method: 'GET'
-    url: "http://api.clubloot.com/user/contests.json?token=#{$scope.user.token}&state=won"
+    url: "http://api.clubloot.com/user/contests.json?token=#{$scope.user.token}&state=winners"
     ).done (data) ->
     console.log $scope.user.token
     console.log "user-contests"

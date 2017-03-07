@@ -50,25 +50,58 @@ angular.module 'clublootApp'
   }
 
   $scope.setData = () ->
-    $.ajax(
-      method: 'GET'
+    $.ajax
       url: "http://api.clubloot.com/contests/program/#{$stateParams.program_id}.json"
-      ).done (data) ->
-      $scope.contests = data.data
-      console.log $scope.contests
-      $scope.$apply()
-      return
+      type: 'GET'
+      datatype: 'json'
+      success: (data) ->
+        $scope.contests = data.data
+        console.log $scope.contests
+        $scope.$apply()
+        return
+      error: (jqXHR, textStatus, errorThrown) ->
+        $scope.setData()
+        return
 
-    $.ajax(
-      method: 'GET'
+    $.ajax
       url: "http://api.clubloot.com/program/#{$stateParams.program_id}.json"
-      ).done (data) ->
-      console.log $stateParams
-      console.log "---------------ssssssssssssss--"
+      type: 'GET'
+      datatype: 'json'
+      success: (data) ->
+        console.log $stateParams
+        console.log "---------------ssssssssssssss--"
 
-      $rootScope.currentProgram = data.data
-      console.log $rootScope.currentProgram
-      $scope.$apply()
+        $rootScope.currentProgram = data.data
+        console.log $rootScope.currentProgram
+        $scope.$apply()
+      error: (jqXHR, textStatus, errorThrown) ->
+        $scope.setData()
+        return
+
+
+
+
+
+
+    # $.ajax(
+    #   method: 'GET'
+    #   url: "http://api.clubloot.com/contests/program/#{$stateParams.program_id}.json"
+    #   ).done (data) ->
+    #   $scope.contests = data.data
+    #   console.log $scope.contests
+    #   $scope.$apply()
+    #   return
+
+    # $.ajax(
+    #   method: 'GET'
+    #   url: "http://api.clubloot.com/program/#{$stateParams.program_id}.json"
+    #   ).done (data) ->
+    #   console.log $stateParams
+    #   console.log "---------------ssssssssssssss--"
+
+    #   $rootScope.currentProgram = data.data
+    #   console.log $rootScope.currentProgram
+    #   $scope.$apply()
 
   $scope.loopGetData = () ->
     console.log "looCAll"

@@ -60,7 +60,9 @@ angular.module 'clublootApp'
         $scope.$apply()
         return
       error: (jqXHR, textStatus, errorThrown) ->
-        $scope.setData()
+        $timeout ->
+          $scope.setData()
+        , 10000
         return
 
     $.ajax
@@ -75,7 +77,9 @@ angular.module 'clublootApp'
         console.log $rootScope.currentProgram
         $scope.$apply()
       error: (jqXHR, textStatus, errorThrown) ->
-        $scope.setData()
+        $timeout ->
+          $scope.setData()
+        , 10000
         return
 
 

@@ -158,7 +158,9 @@ angular.module 'clublootApp'
                       $scope.alreadyJoin = true
                   $scope.$apply()
                 error: (jqXHR, textStatus, errorThrown) ->
-                  $scope.setData()
+                  $timeout ->
+                    $scope.setData()
+                  , 10000
                   return
         else
           $scope.$apply()
@@ -176,12 +178,16 @@ angular.module 'clublootApp'
                   $scope.alreadyJoin = true
               $scope.$apply()
             error: (jqXHR, textStatus, errorThrown) ->
-              $scope.setData()
+              $timeout ->
+                $scope.setData()
+              , 10000
               return
 
 
       error: (jqXHR, textStatus, errorThrown) ->
-        $scope.setData()
+        $timeout ->
+          $scope.setData()
+        , 10000
         return
 
 

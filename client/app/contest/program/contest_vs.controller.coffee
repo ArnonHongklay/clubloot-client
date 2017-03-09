@@ -56,7 +56,9 @@ angular.module 'clublootApp'
                   $scope.$apply()
                   return
                 error: (jqXHR, textStatus, errorThrown) ->
-                  $scope.setData()
+                  $timeout ->
+                    $scope.setData()
+                  , 10000
                   return
         else
           $scope.$apply()
@@ -79,10 +81,14 @@ angular.module 'clublootApp'
               $scope.$apply()
               return
             error: (jqXHR, textStatus, errorThrown) ->
-              $scope.setData()
+              $timeout ->
+                $scope.setData()
+              , 10000
               return
       error: (jqXHR, textStatus, errorThrown) ->
-        $scope.setData()
+        $timeout ->
+          $scope.setData()
+        , 10000
         return
 
 

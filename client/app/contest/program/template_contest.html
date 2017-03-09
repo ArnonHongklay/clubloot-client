@@ -25,7 +25,7 @@
             <td ng-click="showContestDetails(contest)" class="text-blue">{{contest.fee}}
               <img class="money-bag" src="assets/images/money-bag-blue.png">
             </td>
-            <td ng-click="showContestDetails(contest)" class="loot gem-red">{{contest.prize}}
+            <td ng-click="showContestDetails(contest)" class="loot gem-red">
                <div gem-repeat="" fee="{{contest.fee}}" player="{{contest.max_players}}" gemcount="{{calGem(contest.fee, contest.max_players).count}}"></div>
             </td>
             <td ng-click="showContestDetails(contest)">

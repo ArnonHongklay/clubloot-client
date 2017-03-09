@@ -2,7 +2,7 @@
   <div class="bg"></div>
   <div class="content-box">
     <i class="fa fa-times close-btn" ng-click="cancelVs()"></i>
-    <h3>{{playerMe.email}} VS {{playerVs.email}}</h3>
+    <h3>{{playerMe.name}} VS {{playerVs.name}}</h3>
     <div class="row">
       <table class="table" style="border-radius: 0px;">
         <tbody>
@@ -25,10 +25,10 @@
               question
             </td>
             <td class="text-blue" style="text-align:left;width: 25%">
-              {{playerMe.email}}
+              {{playerMe.name}}
             </td>
             <td class="text-blue" style="text-align:left;width: 25%">
-              {{playerVs.email}}
+              {{playerVs.name}}
             </td>
           </tr>
           <tr ng-repeat="ans in contest.template.questions">

@@ -100,7 +100,7 @@
               <div style="display: inline; margin-left: 45px;">{{ player.name }}</div>
               <span class="pull-right">
                 <span ng-hide="contest.state =='end'">{{ player.score || 0 }}</span>
-                <span ng-show="checkWin(player, contestPrize) == 1">
+                <span ng-show="checkWin(player, contestPrize) == 0">
                   <span ng-repeat="prize in contestPrize.loot_prize">
                     <i ng-show="prize.type!='coin'" class="fa fa-diamond" style="{{checkGemColor(prize.type)}}" aria-hidden="true"></i>
                     <i ng-if="prize.type!='coin' && prize.value>1" class="fa fa-diamond" style="{{checkGemColor(prize.type)}}" aria-hidden="true"></i>

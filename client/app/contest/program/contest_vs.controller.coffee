@@ -36,6 +36,7 @@ angular.module 'clublootApp'
             success: (data) ->
               console.log '812937812731289372189372189279'
               $scope.contest = data.data
+              console.log $scope.contest
               $scope.$apply()
               $scope.template_id = $scope.contest.template._id.$oid
               $rootScope.template_id = $scope.template_id

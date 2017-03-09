@@ -141,6 +141,8 @@ angular.module 'clublootApp'
             success: (data) ->
               console.log '812937812731289372189372189279'
               $scope.contest = data.data
+              console.log "=-=-=-=-=-=-32-32-3=2-3=2-="
+              console.log $scope.contest
               $scope.contestPrize = data.data
               console.log $scope.contest
               $scope.$apply()
@@ -172,6 +174,7 @@ angular.module 'clublootApp'
             datatype: 'json'
             success: (data) ->
               $scope.contest = data.data
+              console.log "=-=-=-=-=-=-32-32-3=2-3=2-="
               console.log $scope.contest
               for player in $scope.contest.leaders
                 if player.id.$oid == $scope.user._id

@@ -36,18 +36,16 @@
               Q{{$index}}
             </td>
             <td class="text-blue" style="text-align:left;width: 25%">
-              <span ng-show="contest.state=='cancel' || contest.state=='end'">
               {{checkIndex($index, 'me')}}
               <span ng-show="ans.is_correct!='false'">
               <span ng-hide="contest.state=='upcoming'">
                 <i class="check-ans fa" ng-class="{'fa-check': playerMe.quizes[$index].correct==1, 'fa-times': playerMe.quizes[$index].correct==0}"></i>
               </span>
               </span>
-              </span>
             </td>
             <td class="text-blue" style="text-align:left;width: 25%">
               
-              <span ng-show="contest.state=='cancel' || contest.state=='end'">
+              <span ng-show="contest.state=='live' || contest.state=='end'">
               {{checkIndex($index, 'vs')}}
               <span ng-hide="contest.state=='upcoming'">
               <span ng-show="ans.is_correct!='false'">

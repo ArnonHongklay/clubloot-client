@@ -76,18 +76,9 @@ angular.module 'clublootApp'
         console.log $scope.upcomingContests
         $scope.$apply()
       error: (jqXHR, textStatus, errorThrown) ->
-        $scope.getUpcoming()
-        return
-
-    # $.ajax(
-    #   method: 'GET'
-    #   url: "http://api.clubloot.com/user/contests.json?token=#{$scope.user.token}&state=upcoming"
-    #   ).done (data) ->
-    #   console.log $scope.user.token
-    #   console.log "user-contests"
-    #   $scope.upcomingContests = data.data
-    #   console.log $scope.upcomingContests
-    #   $scope.$apply()
+        $timeout ->
+          $scope.getUpcoming()
+        , 10000
 
   $scope.getlive = () ->
     $.ajax
@@ -101,17 +92,9 @@ angular.module 'clublootApp'
         console.log $scope.upcomingContests
         $scope.$apply()
       error: (jqXHR, textStatus, errorThrown) ->
-        $scope.getlive()
-        return
-
-    # $.ajax(
-    #   method: 'GET'
-    #   url: "http://api.clubloot.com/user/contests.json?token=#{$scope.user.token}&state=live"
-    #   ).done (data) ->
-    #   console.log $scope.user.token
-    #   console.log "user-contests"
-    #   $scope.liveContests = data.data
-    #   $scope.$apply()
+        $timeout ->
+          $scope.getlive()
+        , 10000
 
   $scope.getCancel = () ->
     $.ajax
@@ -125,17 +108,9 @@ angular.module 'clublootApp'
         console.log $scope.cancelContests
         $scope.$apply()
       error: (jqXHR, textStatus, errorThrown) ->
-        $scope.getCancel()
-        return
-
-    # $.ajax(
-    #   method: 'GET'
-    #   url: "http://api.clubloot.com/user/contests.json?token=#{$scope.user.token}&state=cancel"
-    #   ).done (data) ->
-    #   console.log $scope.user.token
-    #   console.log "user-contests"
-    #   $scope.cancelContests = data.data
-    #   $scope.$apply()
+        $timeout ->
+          $scope.getCancel()
+        , 10000
 
   $scope.getEnd = () ->
     $.ajax
@@ -149,8 +124,9 @@ angular.module 'clublootApp'
         console.log $scope.endContests
         $scope.$apply()
       error: (jqXHR, textStatus, errorThrown) ->
-        $scope.getEnd()
-        return
+        $timeout ->
+          $scope.getEnd()
+        , 10000
 
   $scope.getWin = () ->
     $.ajax
@@ -165,18 +141,10 @@ angular.module 'clublootApp'
         console.log $scope.wonContests
         $scope.$apply()
       error: (jqXHR, textStatus, errorThrown) ->
-        $scope.getWin()
-        return
+        $timeout ->
+          $scope.getWin()
+        , 10000
 
-
-    # $.ajax(
-    #   method: 'GET'
-    #   url: "http://api.clubloot.com/user/contests.json?token=#{$scope.user.token}&state=past"
-    #   ).done (data) ->
-    #   console.log $scope.user.token
-    #   console.log "user-contests"
-    #   $scope.endContests = data.data
-    #   $scope.$apply()
 
   $scope.getAll = () ->
     $scope.getUpcoming()

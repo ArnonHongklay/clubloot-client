@@ -14,8 +14,9 @@ angular.module 'clublootApp'
         $scope.$apply()
         console.log $scope.programList
       error: (jqXHR, textStatus, errorThrown) ->
-        $scope.setData()
-        return
+        $timeout ->
+          $scope.setData()
+        , 10000
 
   $scope.loopGetData = () ->
     console.log "looCAll"

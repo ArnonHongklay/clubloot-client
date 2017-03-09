@@ -97,7 +97,7 @@
               <div class="place-no" ng-if="!checkSameScore(player.score) || $index == 0" style="position: absolute;">
                 <span class="score-{{$index}}" ng-if="$index < 10">0</span>{{ $index + 1 }}
               </div>
-              <div style="display: inline; margin-left: 45px;">{{ player.name }}</div>
+              <div style="display: inline; margin-left: 45px;">{{ player.username }}</div>
               <span class="pull-right">
                 <span ng-hide="contest.state =='end'">{{ player.score || 0 }}</span>
                 <span ng-show="checkWin(player, contestPrize) == 0">

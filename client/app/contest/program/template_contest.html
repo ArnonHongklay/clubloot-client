@@ -41,7 +41,7 @@
               <!-- <div class="full-circle blue"></div> -->
             </td>
             <td ng-if="!checkJoin(contest)">&nbsp;</td>
-            <td ng-click="goContest(contest)" ng-if="checkJoin(contest)">
+            <td ui-sref="contestQuizEdit({contest_id: contest.id.$oid, liveDashboard: true, template_id: contest.template._id.$oid})" ng-if="checkJoin(contest)">
               <div class="btn btn-default" style="color: #fff; background: #26AE58;">
                 Edit
               </div>

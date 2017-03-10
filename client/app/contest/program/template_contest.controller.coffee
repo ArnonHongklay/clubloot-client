@@ -49,6 +49,15 @@ angular.module 'clublootApp'
 
   }
 
+  $scope.checkJoin = (contest) ->
+    for p in contest.players
+      if p._id.$oid == $scope.user._id
+        return true
+    return false
+
+  $scope.checkHost = (contest) ->
+    contest.host._id.$oid == $scope.user._id
+
   $scope.setData = () ->
     $.ajax
       url: "http://api.clubloot.com/contests/program/#{$stateParams.program_id}.json"

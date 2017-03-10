@@ -240,17 +240,18 @@ angular.module 'clublootApp'
 
   $scope.awesomeThings = []
 
+  $scope.checkJoin = (contest) ->
+    for p in contest.players
+      if p._id.$oid == $scope.user._id
+        return true
+    return false
+
+  $scope.checkHost = (contest) ->
+    contest.host._id.$oid == $scope.user._id
+
   $http.get('/api/things').success (awesomeThings) ->
     $scope.awesomeThings = awesomeThings
     socket.syncUpdates 'thing', $scope.awesomeThings
-
-
-  $scope.checkJoin = (contest) ->
-    alreadyJoin = false
-    for p in contest.player
-      if Auth.getCurrentUser()._id == p.uid
-        alreadyJoin = true
-    alreadyJoin
 
   $scope.addThing = ->
     return if $scope.newThing is ''

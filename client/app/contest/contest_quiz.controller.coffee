@@ -41,6 +41,20 @@ angular.module 'clublootApp'
     # console.log data
     # return
 
+  $scope.justSubmit = (next) ->
+    $.ajax(
+      method: 'POST'
+      data: {
+        'token': $scope.user.token,
+        'contest_id': $stateParams.contest_id,
+        'details': $scope.getAnswer()
+      }
+      url: "http://api.clubloot.com/user/contest/quiz.json"
+      ).done (data) ->
+        console.log "submitAnswer"
+        console.log data
+        window.location.href = next
+
   $scope.getAnswer = () ->
     answers = "["
     for q, i in $scope.qaSelection
@@ -73,7 +87,7 @@ angular.module 'clublootApp'
         closeOnCancel: true
       }, (isConfirm) ->
         if isConfirm
-          window.location.href = next
+          $scope.justSubmi(next)
         else
           event.preventDefault()
     return

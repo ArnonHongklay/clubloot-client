@@ -29,11 +29,16 @@
                <div gem-repeat="" fee="{{contest.fee}}" player="{{contest.max_players}}" gemcount="{{calGem(contest.fee, contest.max_players).count}}"></div>
             </td>
             <td ng-click="showContestDetails(contest)">
-              <div class="circle blue">P</div>
+              <div class="circle blue" ng-show="checkHost(contest)">
+                <span>H</span>
+              </div>
+              <div class="circle blue" ng-show="!checkHost(contest) && checkJoin(contest)">
+                <span>P</span>
+              </div>
               <span class="text-contest text-blue">{{contest.name}}</span>
             </td>
             <td ng-click="showContestDetails(contest)">
-              <div class="full-circle blue">M</div>
+              <!-- <div class="full-circle blue"></div> -->
             </td>
             <td ng-if="!checkJoin(contest)">&nbsp;</td>
             <td ng-click="goContest(contest)" ng-if="checkJoin(contest)">

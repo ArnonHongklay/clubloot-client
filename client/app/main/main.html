@@ -33,7 +33,8 @@
             <div gem-repeat="" fee="{{contest.fee}}" player="{{contest.max_players}}" gemcount="{{calGem(contest.fee, contest.max_players).count}}"></div>
           </div>
           <div style="width: 40%; display: inline-block; float:left;" ui-sref="contestshow({contest: contest._id, liveDashboard: true})">
-            <div ng-if="contest.owner == currentUser.email || contest.owner == currentUser.username" style="display: inline-block; width: 30px; height: 30px; border-radius: 15px; font-size: 16px; line-height: 30px; text-align: center; border: 1px solid">H</div>
+            <div ng-if="checkHost(contest)" style="display: inline-block; width: 30px; height: 30px; border-radius: 15px; font-size: 16px; line-height: 30px; text-align: center; border: 1px solid">H</div>
+            <div ng-if="!checkHost(contest) && checkJoin(contest)" style="display: inline-block; width: 30px; height: 30px; border-radius: 15px; font-size: 16px; line-height: 30px; text-align: center; border: 1px solid">P</div>
             {{contest.name}}
           </div>
           <div style="width: 20%; display: inline-block; float:left;">{{contest.program.name}}</div>
@@ -57,7 +58,9 @@
             <div gem-repeat="" fee="{{contest.fee}}" player="{{contest.max_players}}" gemcount="{{calGem(contest.fee, contest.max_players).count}}"></div>
           </div>
           <div style="width: 35%; display: inline-block; float:left;" ng-click="goContest(contest)" ui-sref="contestQuizEdit({contest_id: contest.id.$oid, liveDashboard: true, template_id: contest.template._id.$oid})">
-            <div style="display: inline-block; width: 30px; height: 30px; border-radius: 15px; font-size: 16px; line-height: 30px; text-align: center; border: 1px solid">H</div>
+            <div ng-if="checkHost(contest)" style="display: inline-block; width: 30px; height: 30px; border-radius: 15px; font-size: 16px; line-height: 30px; text-align: center; border: 1px solid">H</div>
+            <div ng-if="!checkHost(contest) && checkJoin(contest)" style="display: inline-block; width: 30px; height: 30px; border-radius: 15px; font-size: 16px; line-height: 30px; text-align: center; border: 1px solid">P</div>
+            {{contest.name}}
             {{contest.name}}
           </div>
 

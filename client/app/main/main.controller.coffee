@@ -223,6 +223,13 @@ angular.module 'clublootApp'
     return $scope.ordinal_suffix_of(cur_user.position)
 
 
+  $scope.$on '$locationChangeStart', (event, next, current) ->
+    console.log "state change"
+    console.log event
+    console.log next
+    console.log current
+    if current.indexOf('quiz') >= 0 || current.indexOf('edit') >= 0 || current.indexOf('join') >= 0
+      $scope.setFilter('upcoming')
 
 
   # $scope.currentUser = Auth.getCurrentUser()

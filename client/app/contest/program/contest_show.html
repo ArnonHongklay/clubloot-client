@@ -105,6 +105,8 @@
                     <i ng-show="prize.type!='coin'" class="fa fa-diamond" style="{{checkGemColor(prize.type)}}" aria-hidden="true"></i>
                     <i ng-if="prize.type!='coin' && prize.value>1" class="fa fa-diamond" style="{{checkGemColor(prize.type)}}" aria-hidden="true"></i>
                     <i ng-if="prize.type!='coin' && prize.value>2" class="fa fa-diamond" style="{{checkGemColor(prize.type)}}" aria-hidden="true"></i>
+                    <i ng-if="prize.type!='coin' && prize.value>3" class="fa fa-diamond" style="{{checkGemColor(prize.type)}}" aria-hidden="true"></i>
+                    <i ng-if="prize.type!='coin' && prize.value>4" class="fa fa-diamond" style="{{checkGemColor(prize.type)}}" aria-hidden="true"></i>
                     <span ng-show="prize.type == 'coin'" style="color:#999;">{{prize.value}} coins</span>
                   </span>
                 </span>

@@ -236,11 +236,16 @@ angular.module 'clublootApp'
       gemColor = "color: green;"
     return gemColor
 
-  $scope.checkGemColor = (type) ->
-    return "color:red;!important"     if type == "ruby"
-    return "color:blue;!important"    if type == "sapphire"
-    return "color:green;!important"   if type == "emerald"
-    return "color:grey;!important" if type == "diamond"
+  $scope.checkGemColor = (gemType) ->
+    if gemType == "DIAMOND"
+      gemColor = "color: #dedede;"
+    if gemType == "RUBY"
+      gemColor = "color: red;"
+    if gemType == "SAPPHIRE"
+      gemColor = "color: blue;"
+    if gemType == "EMERALD"
+      gemColor = "color: green;"
+    return gemColor
 
 
   $scope.gemRepeat = (fee, player) ->

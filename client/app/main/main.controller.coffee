@@ -293,13 +293,13 @@ angular.module 'clublootApp'
     return $scope.gemMatrix.gem[gemIndex] || $scope.gemMatrix.gem[0]
 
   $scope.gemColor = (gemType) ->
-    if gemType == "DIAMOND"
+    if gemType.toUpperCase() == "DIAMOND"
       gemColor = "color: #dedede;"
-    if gemType == "RUBY"
+    if gemType.toUpperCase() == "RUBY"
       gemColor = "color: red;"
-    if gemType == "SAPPHIRE"
+    if gemType.toUpperCase() == "SAPPHIRE"
       gemColor = "color: blue;"
-    if gemType == "EMERALD"
+    if gemType.toUpperCase() == "EMERALD"
       gemColor = "color: green;"
     return gemColor
 

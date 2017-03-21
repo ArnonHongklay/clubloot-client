@@ -184,6 +184,14 @@ angular.module 'clublootApp'
                 $scope.setData()
               , 10000
               return
+          $.ajax
+            url: "http://api.clubloot.com/user/contest/#{$stateParams.contest_id}.json?token=#{$scope.user.token}"
+            type: 'GET'
+            datatype: 'json'
+            success: (data) ->
+              console.log "lootprize"
+              $scope.contestPrize = data.data
+              $scope.$apply()
 
 
       error: (jqXHR, textStatus, errorThrown) ->
@@ -266,6 +274,7 @@ angular.module 'clublootApp'
       if w._id.$oid == player.id.$oid
         console.log 'win'
         a = 0
+        return a
     return a
   $scope.loopGetData = () ->
     console.log "looCAll"

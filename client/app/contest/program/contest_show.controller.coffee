@@ -70,12 +70,9 @@ angular.module 'clublootApp'
       gemColor = "color: green;"
     return gemColor
 
-  $scope.gemRepeat = (fee, player) ->
-    prize = parseInt(fee) * parseInt(player)
-    gemIndex = $scope.gemMatrix.list[parseInt(player)-2].fee.indexOf(parseInt(fee))
-    $scope.gemMatrix.gem[gemIndex]
-
   $scope.renderGem = (fee, player) ->
+    console.log fee
+    console.log "dkdskdksdksdksk"
     theGem = $scope.gemRepeat(fee, player)
     color = $scope.gemColor(theGem.type)
     gem = "<i class='fa fa-diamond' style='"+color+"'></i>"
@@ -119,18 +116,21 @@ angular.module 'clublootApp'
 
   $scope.setData = () ->
     $.ajax
-      url: "http://api.clubloot.com/contests/program/#{$stateParams.program_id}.json"
+      url: "http://api.clubloot.com/contests/program/#{$stateParams.program_id}/all_contests.json"
       type: 'GET'
       datatype: 'json'
       success: (data) ->
-        console.log "--------------"
-        console.log '848484848484848'
-        console.log data
+        $scope.contests = []
+        for templates in data.data
+          for contest in templates.contests
+            $scope.contests.push(contest)
         $scope.contest = null
         if data.status != 'failure'
-          for d in data.data
+          for d in $scope.contests
             if d.id.$oid == $stateParams.contest_id
               contest = d
+        console.log "ddsdsdksdksldksldksldksldksldksldksld"
+        console.log d
         unless contest
           console.log '0000000000000099999999999999999999'
           console.log $stateParams.contest_id
@@ -139,12 +139,10 @@ angular.module 'clublootApp'
             type: 'GET'
             datatype: 'json'
             success: (data) ->
-              console.log '812937812731289372189372189279'
+              console.log "1234"
               $scope.contest = data.data
-              console.log "=-=-=-=-=-=-32-32-3=2-3=2-="
               console.log $scope.contest
               $scope.contestPrize = data.data
-              console.log $scope.contest
               $scope.$apply()
               $scope.template_id = $scope.contest.template._id.$oid
               $rootScope.template_id = $scope.template_id
@@ -154,6 +152,7 @@ angular.module 'clublootApp'
                 datatype: 'json'
                 success: (data) ->
                   $scope.contest = data.data
+                  console.log "45454545"
                   console.log $scope.contest
                   for player in $scope.contest.leaders
                     if player.id.$oid == $scope.user._id
@@ -249,6 +248,7 @@ angular.module 'clublootApp'
 
 
   $scope.gemRepeat = (fee, player) ->
+    console.log fee
     prize = parseInt(fee) * parseInt(player)
     gemIndex = $scope.gemMatrix.list[parseInt(player)-2].fee.indexOf(parseInt(fee))
     $scope.gemMatrix.gem[gemIndex]

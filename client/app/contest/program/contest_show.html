@@ -5,23 +5,23 @@
       <i class="fa fa-chevron-left" aria-hidden="true"></i> {{contest.name}}</h4>
     <div style="text-indent: 19px">Hosted by <span class="text-blue">{{ contest.host.username || contest.host.name }}</span></div>
     <div style="padding: 20px">
-      <table class="table" style="border-radius: 0px;">
+      <table class="table" style="border-radius: 0px;cursor: default;">
         <tbody>
           <tr>
-            <td class="text-grey" style="color:#999;width:100px;text-align:left;">
+            <td class="text-grey" style="color:#999;width:100px;text-align:left;cursor: default;">
               Entry fee
             </td>
-            <td class="loot gem-red" style="text-align:left;color:#999;width:230px;">
+            <td class="loot gem-red" style="text-align:left;color:#999;width:230px;cursor: default;">
               {{contest.fee}}
               <img class="money-bag" src="assets/images/money-bag-grey.png">
             </td>
           </tr>
 
           <tr>
-            <td class="text-grey" style="color:#999;width:200px;text-align:left;">
+            <td class="text-grey" style="color:#999;width:200px;text-align:left;cursor: default;">
               Loot
             </td>
-            <td class="loot gem-red" style="text-align:left;color:#999">
+            <td class="loot gem-red" style="text-align:left;color:#999;cursor: default;">
               <div ng-if="contest" id="currentPrize">
                 {{renderGem(contest.fee, contest.max_players)}}
 
@@ -30,46 +30,46 @@
           </tr>
 
           <tr>
-            <td class="text-grey" style="color:#999;width:200px;text-align:left;">
+            <td class="text-grey" style="color:#999;width:200px;text-align:left;cursor: default;">
               Stake
             </td>
-            <td class="loot" style="text-align:left;color:#999">
+            <td class="loot" style="text-align:left;color:#999;cursor: default;">
               Winner take all
             </td>
           </tr>
 
           <tr>
-            <td class="text-grey" style="color:#999;width:200px;text-align:left;">
+            <td class="text-grey" style="color:#999;width:200px;text-align:left;cursor: default;">
               Players
             </td>
-            <td class="loot" style="text-align:left;color:#999">
+            <td class="loot" style="text-align:left;color:#999;cursor: default;">
               {{contest.leaders.length}} / {{contest.max_players}}
             </td>
           </tr>
 
           <tr>
-            <td class="text-grey" style="color:#999;width:200px;text-align:left;">
+            <td class="text-grey" style="color:#999;width:200px;text-align:left;cursor: default;">
               Program
             </td>
-            <td class="loot" style="text-align:left;color:#999">
+            <td class="loot" style="text-align:left;color:#999;cursor: default;">
               {{$root.currentProgram.name}}
             </td>
           </tr>
 
           <tr>
-            <td class="text-grey" style="color:#999;width:200px;text-align:left;">
+            <td class="text-grey" style="color:#999;width:200px;text-align:left;cursor: default;">
               Status
             </td>
-            <td class="loot" style="text-align:left;color:#999" id="selectedStatus" ng-hide="eventStarted">
+            <td class="loot" style="text-align:left;color:#999;cursor: default;" id="selectedStatus" ng-hide="eventStarted">
               {{contest.state}}
             </td>
           </tr>
 
-          <tr style="border-bottom: 1px solid #dedede">
-            <td class="text-grey" style="color:#999;width:200px;text-align:left;">
+          <tr style="border-bottom: 1px solid #dedede;cursor: default;">
+            <td class="text-grey" style="color:#999;width:200px;text-align:left;cursor: default;">
               Challenge
             </td>
-            <td class="loot text-blue" style="text-align:left;">
+            <td class="loot text-blue" style="text-align:left;cursor: default;">
               {{contest.challenge}} Questions
             </td>
           </tr>

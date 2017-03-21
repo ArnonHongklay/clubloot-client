@@ -60,11 +60,16 @@ angular.module 'clublootApp'
 
   $scope.setData = () ->
     $.ajax
-      url: "http://api.clubloot.com/contests/program/#{$stateParams.program_id}.json"
+      url: "http://api.clubloot.com/contests/program/#{$stateParams.program_id}/all_contests.json"
       type: 'GET'
       datatype: 'json'
       success: (data) ->
-        $scope.contests = data.data
+        console.log "dsdsdsdkkkk"
+        $scope.contests = []
+        for templates in data.data
+          for contest in templates.contests
+            $scope.contests.push(contest)
+
         console.log $scope.contests
         $scope.$apply()
         return

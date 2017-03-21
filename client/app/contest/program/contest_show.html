@@ -80,7 +80,7 @@
       <div ng-show="alreadyJoin && contest.state =='upcoming' && contest.state !='cancel'&& contest.state !='live'" class="btn btn-primary disabled" style="background: #50ACC4; width: 100%; border: 0px;">WAITING</div>
       <div ng-show="contest.state=='cancel'" class="btn btn-danger" style="width: 100%;border: 0px;">CANCELED</div>
       <div ng-show="contest.state=='live'" class="btn btn-success" style="width: 100%;border: 0px;">LIVE</div>
-      <div ng-show="contest.state=='close'" class="btn btn-default" style="background: #999;color:#fff;width: 100%;border: 0px;">ENDED</div>
+      <div ng-show="contest.state=='end'" class="btn btn-default" style="background: #999;color:#fff;width: 100%;border: 0px;">ENDED</div>
     </div>
   </div>
 
@@ -100,7 +100,7 @@
               <div style="display: inline; margin-left: 45px;">{{ player.username }}</div>
               <span class="pull-right">
                 <span ng-hide="contest.state =='end'">{{ player.score || 0 }}</span>
-                <span ng-show="checkWin(player, contestPrize) == 0">
+                <span ng-show="checkWin(player, contest) == 0">
                   <span ng-repeat="prize in contestPrize.loot_prize">
                     <i ng-show="prize.type!='coin'" class="fa fa-diamond" style="{{checkGemColor(prize.type)}}" aria-hidden="true"></i>
                     <i ng-if="prize.type!='coin' && prize.value>1" class="fa fa-diamond" style="{{checkGemColor(prize.type)}}" aria-hidden="true"></i>

@@ -255,8 +255,11 @@ angular.module 'clublootApp'
 
   $scope.checkWin = (player, contest) ->
     console.log player
+    console.log '=-=-=-=-=-=000000'
+    console.log contest
     return unless contest
     console.log '=-=-=-=-=-=000000'
+    console.log contest
     a = 1
     return unless contest.winners
     for w in contest.winners

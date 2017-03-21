@@ -163,7 +163,7 @@ angular.module 'clublootApp'
     , 30000
 
   $scope.getAll()
-  $scope.loopGetData()
+  # $scope.loopGetData()
 
 
   $scope.liveCount = () ->

@@ -129,7 +129,7 @@ angular.module 'clublootApp'
     , 30000
 
   $scope.setData()
-  $scope.loopGetData()
+  # $scope.loopGetData()
 
   $scope.gemColor = (gemType) ->
     if gemType == "DIAMOND"

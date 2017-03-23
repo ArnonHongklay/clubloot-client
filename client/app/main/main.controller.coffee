@@ -3,6 +3,9 @@
 angular.module 'clublootApp'
 .controller 'MainCtrl', ($scope, $http, socket, $rootScope, Auth, contests, $window, broadcasts, $timeout) ->
   $scope.socket = socket.socket
+  $scope.user = Auth.getCurrentUser()
+  console.log "token"
+  console.log $scope.user.token
   $rootScope.openMessage = "k"
   if $window.location.host == 'clubloot.com'
     $window.location.replace('http://clubloot.com/landing.html')
@@ -60,6 +63,109 @@ angular.module 'clublootApp'
 
   }
 
+  $scope.getUpcoming = () ->
+
+    $.ajax
+      url: "http://api.clubloot.com/user/contests.json?token=#{$scope.user.token}&state=upcoming"
+      type: 'GET'
+      datatype: 'json'
+      success: (data) ->
+        console.log $scope.user.token
+        console.log "user-contests"
+        $scope.upcomingContests = data.data
+        console.log $scope.upcomingContests
+        $scope.$apply()
+      error: (jqXHR, textStatus, errorThrown) ->
+        $timeout ->
+          $scope.getUpcoming()
+        , 10000
+
+  $scope.getlive = () ->
+    $.ajax
+      url: "http://api.clubloot.com/user/contests.json?token=#{$scope.user.token}&state=live"
+      type: 'GET'
+      datatype: 'json'
+      success: (data) ->
+        console.log $scope.user.token
+        console.log "user-contests"
+        $scope.liveContests = data.data
+        console.log $scope.upcomingContests
+        $scope.$apply()
+      error: (jqXHR, textStatus, errorThrown) ->
+        $timeout ->
+          $scope.getlive()
+        , 10000
+
+  $scope.getCancel = () ->
+    $.ajax
+      url: "http://api.clubloot.com/user/contests.json?token=#{$scope.user.token}&state=cancel"
+      type: 'GET'
+      datatype: 'json'
+      success: (data) ->
+        console.log $scope.user.token
+        console.log "user-contests"
+        $scope.cancelContests = data.data
+        console.log $scope.cancelContests
+        $scope.$apply()
+      error: (jqXHR, textStatus, errorThrown) ->
+        $timeout ->
+          $scope.getCancel()
+        , 10000
+
+  $scope.getEnd = () ->
+    $.ajax
+      url: "http://api.clubloot.com/user/contests.json?token=#{$scope.user.token}&state=past"
+      type: 'GET'
+      datatype: 'json'
+      success: (data) ->
+        console.log $scope.user.token
+        console.log "user-contests"
+        $scope.endContests = data.data
+        console.log $scope.endContests
+        $scope.$apply()
+      error: (jqXHR, textStatus, errorThrown) ->
+        $timeout ->
+          $scope.getEnd()
+        , 10000
+
+  $scope.getWin = () ->
+    $.ajax
+      url: "http://api.clubloot.com/user/contests.json?token=#{$scope.user.token}&state=winners"
+      type: 'GET'
+      datatype: 'json'
+      success: (data) ->
+        console.log $scope.user.token
+        console.log "user-contestsขจจจจจจจจจจจจจจจจจจจจจจจจจจจจจ"
+        $scope.wonContests = data.data
+        $rootScope.wonContests = data.data
+        console.log $scope.wonContests
+        $scope.$apply()
+      error: (jqXHR, textStatus, errorThrown) ->
+        $timeout ->
+          $scope.getWin()
+        , 10000
+
+
+  $scope.getAll = () ->
+    $scope.getUpcoming()
+    $scope.getlive()
+    $scope.getCancel()
+    $scope.getWin()
+    $scope.getEnd()
+
+
+
+  $scope.loopGetData = () ->
+    console.log "looCAll"
+    $timeout ->
+      $scope.getAll()
+      $scope.loopGetData()
+    , 30000
+
+  $scope.getAll()
+  # $scope.loopGetData()
+
+
   $scope.liveCount = () ->
     $('.live-contest-el').length
 
@@ -101,18 +207,29 @@ angular.module 'clublootApp'
     i + 'th'
 
   $scope.checkPosition = (contest) ->
+    console.log contest
     score = []
     cur_user = 0
-    for p, k in contest.player
-      if p.uid == $rootScope.currentUser._id
-        cur_user = k
-      score.push p.score
-    index_score = score.sort().reverse()
-    user_score = contest.player[cur_user].score
-    rank = index_score.indexOf(user_score) + 1
-    return $scope.ordinal_suffix_of(rank)
+    for p, k in contest.leaders
+      if p.id.$oid == $scope.user._id
+        cur_user = p
+      # score.push p.score
+    # index_score = score.sort().reverse()
+    # user_score = contest.player[cur_user].score
+    # rank = index_score.indexOf(user_score) + 1
+    console.log "position"
+    console.log cur_user.position
+    console.log $scope.ordinal_suffix_of(cur_user.position)
+    return $scope.ordinal_suffix_of(cur_user.position)
 
 
+  $scope.$on '$locationChangeStart', (event, next, current) ->
+    console.log "state change"
+    console.log event
+    console.log next
+    console.log current
+    if current.indexOf('quiz') >= 0 || current.indexOf('edit') >= 0 || current.indexOf('join') >= 0
+      $scope.setFilter('upcoming')
 
 
   # $scope.currentUser = Auth.getCurrentUser()
@@ -123,17 +240,18 @@ angular.module 'clublootApp'
 
   $scope.awesomeThings = []
 
+  $scope.checkJoin = (contest) ->
+    for p in contest.players
+      if p._id.$oid == $scope.user._id
+        return true
+    return false
+
+  $scope.checkHost = (contest) ->
+    contest.host._id.$oid == $scope.user._id
+
   $http.get('/api/things').success (awesomeThings) ->
     $scope.awesomeThings = awesomeThings
     socket.syncUpdates 'thing', $scope.awesomeThings
-
-
-  $scope.checkJoin = (contest) ->
-    alreadyJoin = false
-    for p in contest.player
-      if Auth.getCurrentUser()._id == p.uid
-        alreadyJoin = true
-    alreadyJoin
 
   $scope.addThing = ->
     return if $scope.newThing is ''
@@ -151,17 +269,21 @@ angular.module 'clublootApp'
   $scope.setFilter = (value) ->
     switch value
       when 'live'
+        $scope.getlive()
         $scope.live = true
         $scope.upcoming = false
         $scope.past = false
       when 'upcoming'
+        $scope.getUpcoming()
         $scope.live = false
         $scope.upcoming = true
         $scope.past = false
       when 'past'
+        $scope.getEnd()
         $scope.live = false
         $scope.upcoming = false
         $scope.past = true
+
 
   $scope.setFilter('live')
 
@@ -171,13 +293,13 @@ angular.module 'clublootApp'
     return $scope.gemMatrix.gem[gemIndex] || $scope.gemMatrix.gem[0]
 
   $scope.gemColor = (gemType) ->
-    if gemType == "DIAMOND"
+    if gemType.toUpperCase() == "DIAMOND"
       gemColor = "color: #dedede;"
-    if gemType == "RUBY"
+    if gemType.toUpperCase() == "RUBY"
       gemColor = "color: red;"
-    if gemType == "SAPPHIRE"
+    if gemType.toUpperCase() == "SAPPHIRE"
       gemColor = "color: blue;"
-    if gemType == "EMERALD"
+    if gemType.toUpperCase() == "EMERALD"
       gemColor = "color: green;"
     return gemColor
 
@@ -187,6 +309,7 @@ angular.module 'clublootApp'
     $scope.gemMatrix.gem[gemIndex]
 
   $scope.goContest = (contest) ->
+    return
     window.location.href = "/question/#{contest._id}/"
 
   $scope.goLive = (contest) ->

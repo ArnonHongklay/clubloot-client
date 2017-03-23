@@ -82,7 +82,7 @@ UserSchema.virtual('profile').get ->
   role: @role
 
 # Non-sensitive info we'll be putting in the token
-UserSchema.virtual('token').get ->
+UserSchema.virtual('accesstoken').get ->
   _id: @_id
   role: @role
 

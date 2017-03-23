@@ -1,0 +1,30 @@
+<div ng-include="'components/navbar/navbar.html'"></div>
+<style type="text/css">
+  body {
+    background: #50ACC4;
+  }
+</style>
+
+<section class="contest-show desktop">
+  <div class="list-box">
+    <div class="col-lg-12" style="margin: 0px;padding: 0px;">
+      <ul class="list-group">
+        <li class="list-group-item" ng-repeat="program in programList" ng-class="{menuactive: menu=='program._id'}" ng-click="selectTemplate(program)">
+          <span class="pull-left">{{ program.name }}</span>
+          <span class="pull-right" style="color:red;" count-down="{{program.upcoming_time || program.status}}" id="getting-started"></span>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="chanel-detail">
+    <ui-view>
+
+    </ui-view>
+  </div>
+
+
+
+
+
+</section>

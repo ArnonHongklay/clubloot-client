@@ -1,7 +1,7 @@
 'use strict'
 
 angular.module 'clublootApp'
-.controller 'NewContestCtrl', ($scope, $http, socket, $timeout, Auth) ->
+.controller 'NewContestCtrl', ($scope, $http, socket, $timeout, Auth, $state) ->
   # $scope.programList = programs.data.data
   # console.log programs
   $scope.templates = []
@@ -81,23 +81,38 @@ angular.module 'clublootApp'
 
   $scope.selectProgram = () ->
     console.log $scope.contests.program_id
-    $http.get("http://api.clubloot.com/contests/templates.json?program_id=#{$scope.contests.program_id}").success((data) ->
+    $.ajax(
+      method: 'GET'
+      url: "http://api.clubloot.com/contests/templates.json?program_id=#{$scope.contests.program_id}"
+      ).done (data) ->
+      console.log data
       $scope.templates = data.data
-      console.log $scope.templates
-    )
+      $scope.$apply()
 
   $scope.createNewContest = () ->
-    $http.post("http://api.clubloot.com/user/contest/new",
-      {
-        'token': $scope.contests.program_id,
+    console.log "createNewContest"
+    console.log "template_id:"+$scope.contests.template_id
+    console.log "token:"+$scope.user.token
+    console.log "details[name]:"+$scope.contests.name
+    console.log "details[player]:"+parseInt($scope.contests.max_player)+2
+    console.log "details[fee]:"+$scope.contests.fee
+
+    $.ajax(
+      method: 'POST'
+      data: {
+        'token': $scope.user.token,
         'template_id': $scope.contests.template_id,
         'details[name]': $scope.contests.name,
-        'details[player]': $scope.contests.max_player,
+        'details[player]': parseInt($scope.contests.max_player)+2,
         'details[fee]': $scope.contests.fee
       }
-    ).success (data) ->
-      console.log "65656565665565"
-      console.log data
+      url: "http://api.clubloot.com/user/contest/new.json"
+      ).done (data) ->
+        console.log data
+        console.log "=============-------"
+        id = data.data.id.$oid
+        $state.go("contestQuiz", { contest_id: id , template_id: $scope.contests.template_id})
+
 
 
   $scope.checkActive = (start) ->
@@ -231,10 +246,6 @@ angular.module 'clublootApp'
 
     tax = parseInt($scope.contests.fee) * parseInt($scope.contests.max_player) * 10 / 100
 
-    # $scope.contests.loot.prize = parseInt(parseInt($scope.contests.fee) * parseInt($scope.contests.max_player))
-
-    # $scope.contests.loot.prize = $scope.allPrize[$scope.gemIndex]
-
   $scope.calGem = (val) ->
     $scope.gemPrize = []
     prize = val
@@ -287,33 +298,33 @@ angular.module 'clublootApp'
     if $scope.contest.ques.length == $scope.qaSelection.length
       return true
 
-  window.onbeforeunload = (e) ->
-    unless $scope.checkAnswer
-      e.preventDefault()
-      $http.post("/api/contest/#{$scope.contest.id}/destroy", {}).success (data, status, headers, config) ->
+  # window.onbeforeunload = (e) ->
+  #   unless $scope.checkAnswer
+  #     e.preventDefault()
+  #     $http.post("/api/contest/#{$scope.contest.id}/destroy", {}).success (data, status, headers, config) ->
 
-  $scope.$on '$locationChangeStart', (event, next, current) ->
-    return if $scope.createNewStep == '1'
-    unless $scope.checkAnswer
-      event.preventDefault()
+  # $scope.$on '$locationChangeStart', (event, next, current) ->
+  #   return if $scope.createNewStep == '1'
+  #   unless $scope.checkAnswer
+  #     event.preventDefault()
 
-      swal {
-        title: 'Are you sure?'
-        text: 'Contest will not be create'
-        type: 'warning'
-        showCancelButton: true
-        confirmButtonColor: '#DD6B55'
-        confirmButtonText: 'yes'
-        cancelButtonText: 'No'
-        closeOnConfirm: false
-        closeOnCancel: true
-      }, (isConfirm) ->
-        if isConfirm
-          $http.post("/api/contest/#{$scope.contest.id}/destroy", {user_id: Auth.getCurrentUser()._id}).success (data, status, headers, config) ->
-            window.location.href = next
-        else
-          event.preventDefault()
-    return
+  #     swal {
+  #       title: 'Are you sure?'
+  #       text: 'Contest will not be create'
+  #       type: 'warning'
+  #       showCancelButton: true
+  #       confirmButtonColor: '#DD6B55'
+  #       confirmButtonText: 'yes'
+  #       cancelButtonText: 'No'
+  #       closeOnConfirm: false
+  #       closeOnCancel: true
+  #     }, (isConfirm) ->
+  #       if isConfirm
+  #         $http.post("/api/contest/#{$scope.contest.id}/destroy", {user_id: Auth.getCurrentUser()._id}).success (data, status, headers, config) ->
+  #           window.location.href = next
+  #       else
+  #         event.preventDefault()
+  #   return
 
   $scope.addScore = ->
     counter = 0

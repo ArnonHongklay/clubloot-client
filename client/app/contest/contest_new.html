@@ -37,7 +37,7 @@
                   <div class="box-right pull-right">
                     <select class="form-control" ng-model="contests.template_id">
                       <option value="">Template</option>
-                      <option ng-repeat="template in templates" name="{{template}}" value="{{template._id}}">{{template.name}}</option>
+                      <option ng-repeat="template in templates" name="{{template}}" value="{{template._id.$oid}}">{{template.name}}</option>
                     </select>
                   </div>
                 </td>

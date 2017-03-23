@@ -21,7 +21,8 @@
           </tr>
         </thead>
         <tbody>
-          <tr ng-repeat="contest in contests | orderBy: '-max_player-player.length'" ng-click="showContestDetails(contest)">
+          <tr ng-repeat="contest in contests | orderBy: '-max_player-player.length'" ng-click="showContestDetails(contest)"
+           ng-hide="contest.state!='upcoming'">
             <td ng-click="showContestDetails(contest)" class="text-blue">{{contest.fee}}
               <img class="money-bag" src="assets/images/money-bag-blue.png">
             </td>

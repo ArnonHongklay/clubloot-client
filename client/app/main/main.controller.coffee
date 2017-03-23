@@ -303,6 +303,17 @@ angular.module 'clublootApp'
       gemColor = "color: green;"
     return gemColor
 
+  $scope.checkGemColor = (gemType) ->
+    if gemType.toUpperCase() == "DIAMOND"
+      gemColor = "color: #dedede;"
+    if gemType.toUpperCase() == "RUBY"
+      gemColor = "color: red;"
+    if gemType.toUpperCase() == "SAPPHIRE"
+      gemColor = "color: blue;"
+    if gemType.toUpperCase() == "EMERALD"
+      gemColor = "color: green;"
+    return gemColor
+
   $scope.gemRepeat = (fee, player) ->
     prize = parseInt(fee) * parseInt(player)
     gemIndex = $scope.gemMatrix.list[parseInt(player)-2].fee.indexOf(parseInt(fee))

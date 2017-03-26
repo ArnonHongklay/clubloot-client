@@ -354,7 +354,7 @@ angular.module 'clublootApp'
       $scope.getAllContest()
       $scope.getWin()
       return
-    if data.page == "dashboard"
+    if data.page == "dashboard" || data.page == "contest_details"
       $scope.getAllContest()
       $scope.getWin()
       return

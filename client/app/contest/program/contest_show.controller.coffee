@@ -260,7 +260,7 @@ angular.module 'clublootApp'
     if typeof(data) == "undefined"
       $scope.setData()
       return
-    if data.page == "contest_details"
+    if data.page == "contest_details" || data.page == "all_contest"
       $scope.setData()
       return
     

@@ -352,9 +352,11 @@ angular.module 'clublootApp'
     console.log "SOcket in dashboard"
     if typeof(data) == "undefined"
       $scope.getAllContest()
+      $scope.getWin()
       return
     if data.page == "dashboard"
       $scope.getAllContest()
+      $scope.getWin()
       return
     
     return

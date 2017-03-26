@@ -16,13 +16,14 @@ angular.module 'clublootApp'
       type: 'GET'
       datatype: 'json'
       success: (data) ->
-        $scope.contest = null
+        contest = null
         if data.status != 'failure'
           for d in data.data
             if d.id.$oid == $stateParams.contest_id
+              contest = d
               $scope.contest = d
 
-        unless $scope.contest
+        unless contest
           # console.log '0000000000000099999999999999999999'
           # console.log $stateParams.contest_id
           $.ajax

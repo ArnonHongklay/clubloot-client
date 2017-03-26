@@ -22,8 +22,9 @@
     </div>
 
     <div ng-show="live == true">
-      <div  ng-repeat="contest in liveContests"
+      <div  ng-repeat="contest in allContests"
             class="col-lg-12"
+            ng-show="contest.state=='live'"
             style="border-bottom: 1px solid #ccc; line-height:50px; font-size: 18px; color: #42A3BE; cursor: pointer">
         <div class="row">
           <div style="width: 10%; display: inline-block; float:left;">
@@ -47,8 +48,9 @@
     </div>
 
     <div ng-show="upcoming == true">
-      <div  ng-repeat="contest in upcomingContests"
+      <div  ng-repeat="contest in allContests"
             class="col-lg-12"
+            ng-show="contest.state=='upcoming'"
             style="border-bottom: 1px solid #ccc; line-height:50px; font-size: 18px; color: #42A3BE; cursor: default;">
         <div class="row">
           <div style="width: 10%; display: inline-block; float:left;">
@@ -79,8 +81,9 @@
     </div>
 
     <div ng-show="past == true">
-        <div  ng-repeat="contest in endContests"
+        <div  ng-repeat="contest in allContests"
               class="col-xs-12"
+              ng-show="contest.state=='end' || contest.state=='cancel'"
               style="border-bottom: 1px solid #ccc; line-height:50px; font-size: 18px; color: #42A3BE; cursor: pointer">
           <div class="row">
             <div style="width: 10%; display: inline-block; float:left;">

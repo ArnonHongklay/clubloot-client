@@ -1,18 +1,18 @@
 'use strict'
 
 angular.module 'clublootApp'
-.controller 'MainCtrl', ($scope, $http, socket, $rootScope, Auth, contests, $window, broadcasts, $timeout) ->
+.controller 'MainCtrl', ($scope, $http, socket, $rootScope, $state, Auth, $cable, contests, $window, broadcasts, $timeout) ->
   $scope.socket = socket.socket
   $scope.user = Auth.getCurrentUser()
-  console.log "token"
-  console.log $scope.user.token
+  
+  # return if $state.current.templateUrl != "app/main/main.html"
+
   $rootScope.openMessage = "k"
   if $window.location.host == 'clubloot.com'
     $window.location.replace('http://clubloot.com/landing.html')
 
   $timeout ->
     $('#anoucebox').collapsible 'accordion-open', contentOpen: 1
-
   , 200
 
   $scope.broadcasts = broadcasts.data
@@ -63,6 +63,24 @@ angular.module 'clublootApp'
 
   }
 
+  $scope.getAllContest = () ->
+    # console.log "get all contests"
+    $.ajax
+      url: "http://api.clubloot.com/user/contests.json?token=#{$scope.user.token}&state=all"
+      type: 'GET'
+      datatype: 'json'
+      success: (data) ->
+        # console.log "user-contests"
+        $scope.allContests = data.data
+        # console.log $scope.allContests
+        $scope.$apply()
+      error: (jqXHR, textStatus, errorThrown) ->
+        $timeout ->
+          $scope.getAllContest()
+        , 2000
+
+
+
   $scope.getUpcoming = () ->
 
     $.ajax
@@ -70,10 +88,10 @@ angular.module 'clublootApp'
       type: 'GET'
       datatype: 'json'
       success: (data) ->
-        console.log $scope.user.token
-        console.log "user-contests"
+        #console.log $scope.user.token
+        #console.log "user-contests-upcoming"
         $scope.upcomingContests = data.data
-        console.log $scope.upcomingContests
+        #console.log $scope.upcomingContests
         $scope.$apply()
       error: (jqXHR, textStatus, errorThrown) ->
         $timeout ->
@@ -86,10 +104,10 @@ angular.module 'clublootApp'
       type: 'GET'
       datatype: 'json'
       success: (data) ->
-        console.log $scope.user.token
-        console.log "user-contests"
+        #console.log $scope.user.token
+        #console.log "user-contests"
         $scope.liveContests = data.data
-        console.log $scope.upcomingContests
+        #console.log $scope.upcomingContests
         $scope.$apply()
       error: (jqXHR, textStatus, errorThrown) ->
         $timeout ->
@@ -102,10 +120,10 @@ angular.module 'clublootApp'
       type: 'GET'
       datatype: 'json'
       success: (data) ->
-        console.log $scope.user.token
-        console.log "user-contests"
+        #console.log $scope.user.token
+        #console.log "user-contests"
         $scope.cancelContests = data.data
-        console.log $scope.cancelContests
+        #console.log $scope.cancelContests
         $scope.$apply()
       error: (jqXHR, textStatus, errorThrown) ->
         $timeout ->
@@ -118,10 +136,10 @@ angular.module 'clublootApp'
       type: 'GET'
       datatype: 'json'
       success: (data) ->
-        console.log $scope.user.token
-        console.log "user-contests"
+        #console.log $scope.user.token
+        #console.log "user-contests"
         $scope.endContests = data.data
-        console.log $scope.endContests
+        #console.log $scope.endContests
         $scope.$apply()
       error: (jqXHR, textStatus, errorThrown) ->
         $timeout ->
@@ -134,24 +152,26 @@ angular.module 'clublootApp'
       type: 'GET'
       datatype: 'json'
       success: (data) ->
-        console.log $scope.user.token
-        console.log "user-contestsขจจจจจจจจจจจจจจจจจจจจจจจจจจจจจ"
+        #console.log $scope.user.token
+        #console.log "user-oooooooooo"
         $scope.wonContests = data.data
         $rootScope.wonContests = data.data
-        console.log $scope.wonContests
+        #console.log $scope.wonContests
+
         $scope.$apply()
       error: (jqXHR, textStatus, errorThrown) ->
         $timeout ->
           $scope.getWin()
-        , 10000
+        , 2000
 
 
   $scope.getAll = () ->
-    $scope.getUpcoming()
-    $scope.getlive()
-    $scope.getCancel()
+    # $scope.getUpcoming()
+    # $scope.getlive()
+    # $scope.getCancel()
     $scope.getWin()
-    $scope.getEnd()
+    # $scope.getEnd()
+    # $scope.getAllContest()
 
 
 
@@ -207,7 +227,7 @@ angular.module 'clublootApp'
     i + 'th'
 
   $scope.checkPosition = (contest) ->
-    console.log contest
+    # console.log contest
     score = []
     cur_user = 0
     for p, k in contest.leaders
@@ -217,17 +237,17 @@ angular.module 'clublootApp'
     # index_score = score.sort().reverse()
     # user_score = contest.player[cur_user].score
     # rank = index_score.indexOf(user_score) + 1
-    console.log "position"
-    console.log cur_user.position
-    console.log $scope.ordinal_suffix_of(cur_user.position)
+    #console.log "position"
+    #console.log cur_user.position
+    #console.log $scope.ordinal_suffix_of(cur_user.position)
     return $scope.ordinal_suffix_of(cur_user.position)
 
 
   $scope.$on '$locationChangeStart', (event, next, current) ->
-    console.log "state change"
-    console.log event
-    console.log next
-    console.log current
+    #console.log "state change"
+    #console.log event
+    #console.log next
+    #console.log current
     if current.indexOf('quiz') >= 0 || current.indexOf('edit') >= 0 || current.indexOf('join') >= 0
       $scope.setFilter('upcoming')
 
@@ -325,6 +345,20 @@ angular.module 'clublootApp'
 
   $scope.goLive = (contest) ->
     window.location.href = "/contest/#{contest.template_id}/"
+
+
+  $scope.cable = $cable('ws://api.clubloot.com/cable')
+  $scope.channel = $scope.cable.subscribe('ContestChannel', received: (data) ->
+    console.log "SOcket in dashboard"
+    if typeof(data) == "undefined"
+      $scope.getAllContest()
+      return
+    if data.page == "dashboard"
+      $scope.getAllContest()
+      return
+    
+    return
+  )
 
 
 

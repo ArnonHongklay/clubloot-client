@@ -3,9 +3,9 @@
 angular.module 'clublootApp'
 .controller 'ContestTemplateCtrl', ($scope, $http, Auth, $state, $stateParams, $rootScope, $timeout) ->
   $scope.user = Auth.getCurrentUser()
+  console.log "ContestTemplateCtrl"
 
   $scope.setData = () ->
-
     $.ajax
       url: "http://api.clubloot.com/contests/templates.json?program_id=#{$stateParams.program_id}"
       type: 'GET'
@@ -15,7 +15,9 @@ angular.module 'clublootApp'
         $scope.templates = data.data
         $scope.$apply()
       error: (jqXHR, textStatus, errorThrown) ->
-        $scope.setData()
+        $timeout ->
+          $scope.setData()
+        , 2000
         return
 
     $.ajax
@@ -28,26 +30,10 @@ angular.module 'clublootApp'
         $scope.$apply()
         console.log $scope.programList
       error: (jqXHR, textStatus, errorThrown) ->
-        $scope.setData()
+        $timeout ->
+          $scope.setData()
+        , 2000
         return
-    # $.ajax(
-    #   method: 'GET'
-    #   url: "http://api.clubloot.com/contests/templates.json?program_id=#{$stateParams.program_id}"
-    #   ).done (data) ->
-    #   console.log data
-
-    #   $scope.templates = data.data
-    #   $scope.$apply()
-
-
-    # $.ajax(
-    #   method: 'GET'
-    #   url: 'http://api.clubloot.com/contests/programs.json'
-    #   ).done (data) ->
-    #   console.log data
-    #   $scope.programList = data.data
-    #   $scope.$apply()
-    #   console.log $scope.programList
 
   $scope.selectTemplate = (program) ->
     $state.go('programTemplate.template', {program_id: program._id.$oid})
@@ -61,7 +47,6 @@ angular.module 'clublootApp'
     , 30000
 
   $scope.setData()
-  # $scope.loopGetData()
 
 
 angular.module 'clublootApp'

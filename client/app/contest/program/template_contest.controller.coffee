@@ -1,10 +1,12 @@
 'use strict'
 
 angular.module 'clublootApp'
-.controller 'ContestTemplateShowCtrl', ($scope, $http, Auth, $state, $stateParams, $rootScope, $timeout) ->
+.controller 'ContestTemplateShowCtrl', ($scope, $http, Auth, $state, $cable, $stateParams, $rootScope, $timeout) ->
   $scope.user = Auth.getCurrentUser()
   console.log 'ContestTemplateShowCtrl'
   console.log $stateParams
+
+  # return if  $state.current.templateUrl != "app/contest/program/template_contest.html"
 
   $scope.gemMatrix = {
     list:[
@@ -64,7 +66,6 @@ angular.module 'clublootApp'
       type: 'GET'
       datatype: 'json'
       success: (data) ->
-        console.log "dsdsdsdkkkk"
         $scope.contests = []
         for templates in data.data
           for contest in templates.contests
@@ -76,7 +77,7 @@ angular.module 'clublootApp'
       error: (jqXHR, textStatus, errorThrown) ->
         $timeout ->
           $scope.setData()
-        , 10000
+        , 2000
         return
 
     $.ajax
@@ -93,33 +94,8 @@ angular.module 'clublootApp'
       error: (jqXHR, textStatus, errorThrown) ->
         $timeout ->
           $scope.setData()
-        , 10000
+        , 2000
         return
-
-
-
-
-
-
-    # $.ajax(
-    #   method: 'GET'
-    #   url: "http://api.clubloot.com/contests/program/#{$stateParams.program_id}.json"
-    #   ).done (data) ->
-    #   $scope.contests = data.data
-    #   console.log $scope.contests
-    #   $scope.$apply()
-    #   return
-
-    # $.ajax(
-    #   method: 'GET'
-    #   url: "http://api.clubloot.com/program/#{$stateParams.program_id}.json"
-    #   ).done (data) ->
-    #   console.log $stateParams
-    #   console.log "---------------ssssssssssssss--"
-
-    #   $rootScope.currentProgram = data.data
-    #   console.log $rootScope.currentProgram
-    #   $scope.$apply()
 
   $scope.loopGetData = () ->
     console.log "looCAll"
@@ -128,7 +104,7 @@ angular.module 'clublootApp'
       $scope.loopGetData()
     , 30000
 
-  $scope.setData()
+  # $scope.setData()
   # $scope.loopGetData()
 
   $scope.gemColor = (gemType) ->
@@ -157,3 +133,16 @@ angular.module 'clublootApp'
     prize = parseInt(fee) * parseInt(player)
     gemIndex = $scope.gemMatrix.list[parseInt(player)-2].fee.indexOf(fee)
     return $scope.gemMatrix.gem[gemIndex] || $scope.gemMatrix.gem[0]
+
+  $scope.cable = $cable('ws://api.clubloot.com/cable')
+  $scope.channel = $scope.cable.subscribe('ContestChannel', received: (data) ->
+    console.log "SOcket in template_contest"
+    if typeof(data) == "undefined"
+      $scope.setData()
+      return
+    if data.page == "all_contest" || data.page == "contest_details"
+      $scope.setData()
+      return
+    
+    return
+  )

@@ -2,7 +2,7 @@
 
 angular.module 'clublootApp'
 .controller 'ContestCtrl', ($scope, $http, socket, contests, $timeout) ->
-
+  console.log "ContestCtrl"
   $scope.setData = () ->
     $.ajax
       url: 'http://api.clubloot.com/contests/programs.json'
@@ -16,7 +16,7 @@ angular.module 'clublootApp'
       error: (jqXHR, textStatus, errorThrown) ->
         $timeout ->
           $scope.setData()
-        , 10000
+        , 2000
 
   $scope.loopGetData = () ->
     console.log "looCAll"
@@ -26,7 +26,7 @@ angular.module 'clublootApp'
     , 30000
 
   $scope.setData()
-  $scope.loopGetData()
+  # $scope.loopGetData()
 
   # $.ajax(
   #   method: 'GET'

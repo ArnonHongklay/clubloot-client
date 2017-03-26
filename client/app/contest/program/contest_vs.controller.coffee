@@ -57,6 +57,11 @@ angular.module 'clublootApp'
                     $scope.setData()
                   , 2000
                   return
+            error: (jqXHR, textStatus, errorThrown) ->
+              $timeout ->
+                $scope.setData()
+              , 2000
+              return
         else
           $scope.$apply()
           $scope.template_id = $scope.contest.template._id.$oid

@@ -289,17 +289,17 @@ angular.module 'clublootApp'
   $scope.setFilter = (value) ->
     switch value
       when 'live'
-        $scope.getlive()
+        # $scope.getlive()
         $scope.live = true
         $scope.upcoming = false
         $scope.past = false
       when 'upcoming'
-        $scope.getUpcoming()
+        # $scope.getUpcoming()
         $scope.live = false
         $scope.upcoming = true
         $scope.past = false
       when 'past'
-        $scope.getEnd()
+        # $scope.getEnd()
         $scope.live = false
         $scope.upcoming = false
         $scope.past = true

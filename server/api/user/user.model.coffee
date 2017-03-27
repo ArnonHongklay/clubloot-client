@@ -21,6 +21,7 @@ UserSchema = new Schema(
     type: String
     lowercase: true
   tokens: String
+  token: String
   created_at: Date
   first_name: String
   last_name: String

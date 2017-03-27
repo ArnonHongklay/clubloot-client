@@ -93,6 +93,8 @@ exports.create = (req, res, next) ->
   newUser.token = getToken()
   today = new Date()
   newUser.save (err, user) ->
+    console.log "0320390129301930219301290"
+    console.log user
     SigninLog.create {user_id: newUser._id, created_at: today}, (err, SigninLog) ->
       console.log SigninLog
     return validationError(res, err)  if err

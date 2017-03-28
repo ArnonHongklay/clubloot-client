@@ -47,15 +47,3 @@ angular.module 'clublootApp'
     , 30000
 
   $scope.setData()
-
-
-angular.module 'clublootApp'
-.directive 'gemRepeat', ($timeout, $state, $stateParams) ->
-  link: (scope, element, attrs, state) ->
-    theGem = scope.gemRepeat(attrs.fee, attrs.player)
-    color = scope.gemColor(theGem.type)
-    gem = "<i class='fa fa-diamond' style='"+color+"'></i>"
-    tmp = ""
-    for i in [1..theGem.count]
-      tmp += gem
-    element.html tmp

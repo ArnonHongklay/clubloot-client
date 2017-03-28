@@ -124,7 +124,7 @@ angular.module 'clublootApp'
         for templates in data.data
           for contest in templates.contests
             $scope.contests.push(contest)
-        $scope.contest = null
+        contest = null
         if data.status != 'failure'
           for d in $scope.contests
             if d.id.$oid == $stateParams.contest_id
@@ -173,8 +173,8 @@ angular.module 'clublootApp'
             datatype: 'json'
             success: (data) ->
               $scope.contest = data.data
-              #console.log "=-=-=-=-=-=-32-32-3=2-3=2-="
-              #console.log $scope.contest
+              console.log "213003901903910-39-109310-93-0"
+              console.log $scope.contest
               for player in $scope.contest.leaders
                 if player.id.$oid == $scope.user._id
                   $scope.alreadyJoin = true
@@ -266,7 +266,4 @@ angular.module 'clublootApp'
     
     return
   )
-
-
-
 

@@ -48,3 +48,4 @@ angular.module 'clublootApp', [
     Auth.isLoggedInAsync (loggedIn) ->
       $location.path "/login" if next.authenticate and not loggedIn
 
+

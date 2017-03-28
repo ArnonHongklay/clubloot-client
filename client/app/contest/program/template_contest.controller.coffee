@@ -70,7 +70,8 @@ angular.module 'clublootApp'
         for templates in data.data
           for contest in templates.contests
             $scope.contests.push(contest)
-
+        console.log "343-43-4304-304-3403-403-403-"
+        console.log $scope.contests
         console.log $scope.contests
         $scope.$apply()
         return
@@ -106,6 +107,17 @@ angular.module 'clublootApp'
 
   # $scope.setData()
   # $scope.loopGetData()
+  $scope.joinContest = (contest) ->
+    console.log contest
+    $.ajax(
+      method: 'POST'
+      data: {
+        'token': $scope.user.token,
+        'contest_id': contest.id.$oid,
+      }
+      url: "http://api.clubloot.com/user/contest/join.json"
+      ).done (data) ->
+        $state.go('contestQuizJoin', {contest_id: contest.id.$oid, template_id: contest.template._id.$oid})
 
   $scope.gemColor = (gemType) ->
     if gemType == "DIAMOND"

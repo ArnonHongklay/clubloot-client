@@ -79,6 +79,21 @@ angular.module 'clublootApp'
           $scope.getAllContest()
         , 2000
 
+  $scope.getUserProfile = () ->
+    $.ajax
+      url: "http://api.clubloot.com/user/profile.json?token=#{$scope.user.token}"
+      type: 'GET'
+      datatype: 'json'
+      success: (data) ->
+        # console.log "user-contests"
+        $scope.userProfile = data.data
+        # console.log $scope.allContests
+        $scope.$apply()
+      error: (jqXHR, textStatus, errorThrown) ->
+        $timeout ->
+          $scope.getUserProfile()
+        , 2000
+
 
 
   $scope.getUpcoming = () ->
@@ -353,10 +368,12 @@ angular.module 'clublootApp'
     if typeof(data) == "undefined"
       $scope.getAllContest()
       $scope.getWin()
+      $scope.getUserProfile()
       return
     if data.page == "dashboard" || data.page == "contest_details"
       $scope.getAllContest()
       $scope.getWin()
+      $scope.getUserProfile()
       return
     
     return

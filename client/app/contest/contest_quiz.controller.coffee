@@ -10,9 +10,16 @@ angular.module 'clublootApp'
   $.ajax(
     method: 'GET'
     url: "http://api.clubloot.com/contests/template.json?template_id=#{$stateParams.template_id}"
+    # url: "http://api.clubloot.com/contests/template.json?template_id=#{$stateParams.template_id}"
     ).done (data) ->
       $scope.question = data.data
+      console.log "question"
+      console.log $scope.question
       $scope.$apply()
+
+  $scope.selectInput = (q, a) ->
+    e = "#ans_#{q}_#{a}"
+    $scope.qaSelection[q] = $(e).val()
 
   $scope.unlessEmpty = () ->
     return false unless $scope.question

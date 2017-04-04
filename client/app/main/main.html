@@ -161,7 +161,7 @@
       </div>
 
       <div class="col-lg-12 in-tab-mobile" ng-show="mobileTab == 'Wins'">
-        <div ng-repeat="contest in allContests" class="col-lg-12" style="border-bottom: 1px solid #ccc; line-height:50px; font-size: 18px; color: #42A3BE; cursor: pointer;width: 100%;height: 51px;padding-top:0px;padding-bottom: 1px;">
+        <div ng-repeat="contest in wonContests" class="col-lg-12" style="border-bottom: 1px solid #ccc; line-height:50px; font-size: 18px; color: #42A3BE; cursor: pointer;width: 100%;height: 51px;padding-top:0px;padding-bottom: 1px;">
            <div class="row">
            <!--  <div style="width: 10%; display: inline-block; float:left;">
               {{contest.fee}} <img src="assets/images/money-bag-blue.png" width="24">
@@ -214,7 +214,7 @@
         </div>
         <div class="right-name">
           <div class="block-number sky">
-            {{liveContests.length}}
+            {{liveCount}}
           </div>
         </div>
       </div>
@@ -222,7 +222,8 @@
       <div class="col-lg-12 in-tab-mobile" ng-show="mobileTab == 'live'">
         <div  ng-repeat="contest in allContests"
             class="col-lg-12"
-            style="border-bottom: 1px solid #ccc; line-height:50px; font-size: 14px; color: #42A3BE; cursor: pointer">
+            style="border-bottom: 1px solid #ccc; line-height:50px; font-size: 14px; color: #42A3BE; cursor: pointer;"
+            ng-show="contest.state == 'live'">
          <div class="row">
            <!--  <div style="width: 10%; display: inline-block; float:left;">
               {{contest.fee}} <img src="assets/images/money-bag-blue.png" width="24">
@@ -258,13 +259,14 @@
         </div>
         <div class="right-name">
           <div class="block-number sky">
-            {{upcomingContests.length}}
+            {{upcomingCount}}
           </div>
         </div>
       </div>
 
       <div class="col-lg-12 in-tab-mobile" ng-show="mobileTab == 'Upcoming'">
         <div  ng-repeat="contest in allContests"
+          ng-show="contest.state == 'upcoming'"
             
             style="border-bottom: 1px solid #ccc; line-height:50px; font-size: 14px; color: #42A3BE; cursor: pointer">
           <div class="row">

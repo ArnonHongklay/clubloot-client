@@ -146,6 +146,8 @@ angular.module 'clublootApp'
     gemIndex = $scope.gemMatrix.list[parseInt(player)-2].fee.indexOf(fee)
     return $scope.gemMatrix.gem[gemIndex] || $scope.gemMatrix.gem[0]
 
+  $scope.setData()
+
   $scope.cable = $cable('ws://api.clubloot.com/cable')
   $scope.channel = $scope.cable.subscribe('ContestChannel', received: (data) ->
     console.log "SOcket in template_contest"

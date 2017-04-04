@@ -64,7 +64,7 @@ angular.module 'clublootApp'
   }
 
   $scope.getAllContest = () ->
-    # console.log "get all contests"
+    console.log "get all contests"
     $.ajax
       url: "http://api.clubloot.com/user/contests.json?token=#{$scope.user.token}&state=all"
       type: 'GET'
@@ -72,7 +72,14 @@ angular.module 'clublootApp'
       success: (data) ->
         # console.log "user-contests"
         $scope.allContests = data.data
-        # console.log $scope.allContests
+        console.log $scope.allContests
+        $scope.upcomingCount = 0
+        $scope.liveCount = 0
+        for c in $scope.allContests
+          if c.state == 'upcoming'
+            $scope.upcomingCount += 1
+          if c.state == 'live'
+            $scope.liveCount += 1
         $scope.$apply()
       error: (jqXHR, textStatus, errorThrown) ->
         $timeout ->
@@ -363,6 +370,7 @@ angular.module 'clublootApp'
 
 
   $scope.cable = $cable('ws://api.clubloot.com/cable')
+
   $scope.channel = $scope.cable.subscribe('ContestChannel', received: (data) ->
     console.log "SOcket in dashboard"
     if typeof(data) == "undefined"
@@ -378,8 +386,9 @@ angular.module 'clublootApp'
     
     return
   )
-
-
+  $scope.getUserProfile()
+  $scope.getAllContest()
+  $scope.getWin()
 
 angular.module 'clublootApp'
 .directive 'gemRepeat', ($timeout, $state, $stateParams) ->

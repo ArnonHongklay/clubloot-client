@@ -64,7 +64,7 @@ angular.module 'clublootApp'
   #   socket.syncUpdates 'thing', $scope.awesomeThings
   $scope.getWin = () ->
     $.ajax
-      url: "http://api.clubloot.com/user/contests.json?token=#{$scope.user.token}&state=winners"
+      url: "http://api.clubloot.com/v2/user/contests.json?token=#{$scope.user.token}&state=winners"
       type: 'GET'
       datatype: 'json'
       success: (data) ->

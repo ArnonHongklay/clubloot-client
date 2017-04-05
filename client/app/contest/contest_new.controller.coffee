@@ -10,7 +10,7 @@ angular.module 'clublootApp'
 
   $.ajax(
     method: 'GET'
-    url: 'http://api.clubloot.com/contests/programs.json'
+    url: 'http://api.clubloot.com/v2/contests/programs.json'
     ).done (data) ->
     console.log data
     $scope.programList = data.data
@@ -83,7 +83,7 @@ angular.module 'clublootApp'
     console.log $scope.contests.program_id
     $.ajax(
       method: 'GET'
-      url: "http://api.clubloot.com/contests/templates.json?program_id=#{$scope.contests.program_id}"
+      url: "http://api.clubloot.com/v2/contests/templates.json?program_id=#{$scope.contests.program_id}"
       ).done (data) ->
       console.log data
       $scope.templates = data.data
@@ -106,7 +106,7 @@ angular.module 'clublootApp'
         'details[player]': parseInt($scope.contests.max_player)+2,
         'details[fee]': $scope.contests.fee
       }
-      url: "http://api.clubloot.com/user/contest/new.json"
+      url: "http://api.clubloot.com/v2/user/contest/new.json"
       ).done (data) ->
         console.log data
         console.log "=============-------"

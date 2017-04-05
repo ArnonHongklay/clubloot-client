@@ -22,8 +22,9 @@
     </div>
 
     <div ng-show="live == true">
-      <div  ng-repeat="contest in liveContests"
+      <div  ng-repeat="contest in allContests"
             class="col-lg-12"
+            ng-show="contest.state=='live'"
             style="border-bottom: 1px solid #ccc; line-height:50px; font-size: 18px; color: #42A3BE; cursor: pointer">
         <div class="row">
           <div style="width: 10%; display: inline-block; float:left;">
@@ -47,8 +48,9 @@
     </div>
 
     <div ng-show="upcoming == true">
-      <div  ng-repeat="contest in upcomingContests"
+      <div  ng-repeat="contest in allContests"
             class="col-lg-12"
+            ng-show="contest.state=='upcoming'"
             style="border-bottom: 1px solid #ccc; line-height:50px; font-size: 18px; color: #42A3BE; cursor: default;">
         <div class="row">
           <div style="width: 10%; display: inline-block; float:left;">
@@ -79,8 +81,9 @@
     </div>
 
     <div ng-show="past == true">
-        <div  ng-repeat="contest in endContests"
+        <div  ng-repeat="contest in allContests"
               class="col-xs-12"
+              ng-show="contest.state=='end' || contest.state=='cancel'"
               style="border-bottom: 1px solid #ccc; line-height:50px; font-size: 18px; color: #42A3BE; cursor: pointer">
           <div class="row">
             <div style="width: 10%; display: inline-block; float:left;">
@@ -152,32 +155,55 @@
         </div>
         <div class="right-name">
           <div class="block-number purple">
-            <!-- {{winContests.length}} -->
+            {{userProfile.winners}}
           </div>
         </div>
       </div>
 
       <div class="col-lg-12 in-tab-mobile" ng-show="mobileTab == 'Wins'">
-        <div ng-repeat="contest in $root.currentUser.wonContest" class="col-lg-12" style="border-bottom: 1px solid #ccc; line-height:50px; font-size: 18px; color: #42A3BE; cursor: pointer;width: 100%;height: 51px;padding-top:0px;padding-bottom: 1px;">
-          <div style="width: 100px; display: inline-block; float:left; color: #912927">
-            <div ng-repeat="player in contest.player">
-              <span ng-repeat="prize in player.winPrize" ng-if="currentUser._id == player.uid">
+        <div ng-repeat="contest in wonContests" class="col-lg-12" style="border-bottom: 1px solid #ccc; line-height:50px; font-size: 18px; color: #42A3BE; cursor: pointer;width: 100%;height: 51px;padding-top:0px;padding-bottom: 1px;">
+           <div class="row">
+           <!--  <div style="width: 10%; display: inline-block; float:left;">
+              {{contest.fee}} <img src="assets/images/money-bag-blue.png" width="24">
+            </div> -->
+            <div style="width: 85px; display: inline-block; float:left; color: #912927;text-align:center;">
+              <span ng-repeat="prize in contest.loot_prize">
                 <i ng-show="prize.type!='coin'" class="fa fa-diamond" style="{{checkGemColor(prize.type)}}" aria-hidden="true"></i>
                 <i ng-if="prize.type!='coin' && prize.value>1" class="fa fa-diamond" style="{{checkGemColor(prize.type)}}" aria-hidden="true"></i>
                 <i ng-if="prize.type!='coin' && prize.value>2" class="fa fa-diamond" style="{{checkGemColor(prize.type)}}" aria-hidden="true"></i>
+                <i ng-if="prize.type!='coin' && prize.value>3" class="fa fa-diamond" style="{{checkGemColor(prize.type)}}" aria-hidden="true"></i>
+                <i ng-if="prize.type!='coin' && prize.value>4" class="fa fa-diamond" style="{{checkGemColor(prize.type)}}" aria-hidden="true"></i>
                 <span ng-show="prize.type == 'coin'" style="color:#999;">{{prize.value}} coins</span>
               </span>
             </div>
-          </div>
-          <div style="width: 145px; display: inline-block; float:left;overflow:hidden;white-space: nowrap;text-overflow:ellipsis;" ui-sref="contestshow({contest: contest._id, liveDashboard: true})">
-            <div ng-if="contest.owner == currentUser.email || contest.owner == currentUser.username" style="display: inline-block; width: 30px; height: 30px; border-radius: 15px; font-size: 16px; line-height: 30px; text-align: center; border: 1px solid">H</div>
-            {{contest.name}}
-          </div>
-          <!-- <div style="width: 20%; display: inline-block; float:left;">{{contest.program}}</div> -->
-          <div style="width: 60px; display: inline-block; float:right; text-align: center;">
-            <div style="color: #fff; background: #26AE58;" ui-sref="contestshow({contest: contest._id, liveDashboard: true, viewPlayer: true})">View</div>
+            <!-- <div style="width: 140px; display: inline-block; float:left;overflow:hidden;text-overflow:ellipsis;">
+              <div ng-if="checkHost(contest)" style="display: inline-block; width: 20px; height: 20px; border-radius: 15px; font-size: 12px; line-height: 20px; text-align: center; border: 1px solid">H</div>
+              <div ng-if="!checkHost(contest) && checkJoin(contest)" style="display: inline-block; width: 30px; height: 30px; border-radius: 15px; font-size: 16px; line-height: 30px; text-align: center; border: 1px solid">P</div>
+              {{contest.name}}
+            </div>
+ -->
+            <div style="width: 100px; display: inline-block; float:left;">{{contest.program.name}}</div>
+        
+            <div style="width: 15%; display: inline-block; float:left;">{{checkPosition(contest)}}</div>
+            <div style="width: 45px; display: inline-block; float:right; text-align: center;cursor:pointer;">
+              <div style="color: #fff; background: #26AE58;" ui-sref="programTemplate.template.contest.vs({contest_id: contest.id.$oid, program_id: contest.program._id.$oid,user_id: contest.leaders[0].id.$oid, template_id: contest.template._id.$oid})">View</div>
+            </div>
+            <div style="width: 45px; display: inline-block; float:right; text-align: center;margin-right:2px;cursor:pointer;">
+            </div>
           </div>
         </div>
+
+
+
+
+
+      
+
+
+
+
+
+
 
 
       </div>
@@ -196,22 +222,35 @@
       <div class="col-lg-12 in-tab-mobile" ng-show="mobileTab == 'live'">
         <div  ng-repeat="contest in liveContests"
             class="col-lg-12"
-            style="border-bottom: 1px solid #ccc; line-height:50px; font-size: 18px; color: #42A3BE; cursor: pointer">
-        <div class="row">
-          <div style="width: 30px; display: inline-block; float:left; color: #912927">
-            <div gem-repeat="" fee="{{contest.fee}}" player="{{contest.max_players}}" gemcount="{{calGem(contest.fee, contest.max_players).count}}"></div>
+            style="border-bottom: 1px solid #ccc; line-height:50px; font-size: 14px; color: #42A3BE; cursor: pointer">
+         <div class="row">
+           <!--  <div style="width: 10%; display: inline-block; float:left;">
+              {{contest.fee}} <img src="assets/images/money-bag-blue.png" width="24">
+            </div> -->
+            <div style="width: 85px; display: inline-block; float:left; color: #912927;text-align:center;">
+              <div gem-repeat="" fee="{{contest.fee}}" player="{{contest.max_players}}" gemcount="{{calGem(contest.fee, contest.max_players).count}}"></div>
+            </div>
+            <!-- <div style="width: 140px; display: inline-block; float:left;overflow:hidden;text-overflow:ellipsis;">
+              <div ng-if="checkHost(contest)" style="display: inline-block; width: 20px; height: 20px; border-radius: 15px; font-size: 12px; line-height: 20px; text-align: center; border: 1px solid">H</div>
+              <div ng-if="!checkHost(contest) && checkJoin(contest)" style="display: inline-block; width: 30px; height: 30px; border-radius: 15px; font-size: 16px; line-height: 30px; text-align: center; border: 1px solid">P</div>
+              {{contest.name}}
+            </div>
+ -->
+            <div style="width: 100px; display: inline-block; float:left;">{{contest.program.name}}</div>
+        
+            <div style="width: 15%; display: inline-block; float:left;">{{checkPosition(contest)}}</div>
+            <div style="width: 45px; display: inline-block; float:right; text-align: center;cursor:pointer;">
+              <div style="color: #fff; background: #26AE58;" ui-sref="programTemplate.template.contest.vs({contest_id: contest.id.$oid, program_id: contest.program._id.$oid,user_id: contest.leaders[0].id.$oid, template_id: contest.template._id.$oid})">View</div>
+            </div>
+            <div style="width: 45px; display: inline-block; float:right; text-align: center;margin-right:2px;cursor:pointer;">
+            </div>
           </div>
-       
-          <div style="max-width: 180px; display: inline-block; float:left;text-overflow:ellipsis;overflow:hidden;">{{contest.program.name}}</div>
-          <div style="width: 50px; float:right;display: inline-block; text-align: center;">
-            <div style="color: #fff; background: #26AE58;" ui-sref="programTemplate.template.contest.vs({contest_id: contest.id.$oid, program_id: contest.program._id.$oid,user_id: contest.leaders[0].id.$oid, template_id: contest.template._id.$oid})">View</div>
-          </div>
-          <div style="width: 60px; display: inline-block; float:right;">{{checkPosition(contest)}}</div>
-          
-        </div>
+
       </div>
 
       </div>
+
+      <!-- ui-sref="programTemplate.template.contest.vs({contest_id: contest.id.$oid, program_id: contest.program._id.$oid,user_id: contest.leaders[0].id.$oid, template_id: contest.template._id.$oid})" -->
 
       <div class="tab-list" ng-click="mobileTab = 'Upcoming'">
         <div class="left-name">
@@ -219,31 +258,38 @@
         </div>
         <div class="right-name">
           <div class="block-number sky">
-            {{upcomingCount()}}
+            {{upcomingContests.length}}
           </div>
         </div>
       </div>
 
       <div class="col-lg-12 in-tab-mobile" ng-show="mobileTab == 'Upcoming'">
-        <div  ng-repeat="contest in contests"
-            ng-if="contest.stage == 'upcoming' && checkJoin(contest)"
-            class="col-lg-12 upcoming-contest-el"
-            style="border-bottom: 1px solid #ccc; line-height:50px; font-size: 18px; color: #42A3BE; cursor: pointer">
+        <div  ng-repeat="contest in upcomingContests"
+            
+            style="border-bottom: 1px solid #ccc; line-height:50px; font-size: 14px; color: #42A3BE; cursor: pointer">
           <div class="row">
-            <div style="width: 70px; display: inline-block; float:left; color: #912927">
-              <div gem-repeat="" fee="{{contest.fee}}" player="{{contest.max_player}}" gemcount="{{calGem(contest.fee, contest.max_player).count}}"></div>
+           <!--  <div style="width: 10%; display: inline-block; float:left;">
+              {{contest.fee}} <img src="assets/images/money-bag-blue.png" width="24">
+            </div> -->
+            <div style="width: 85px; display: inline-block; float:left; color: #912927;text-align:center;">
+              <div gem-repeat="" fee="{{contest.fee}}" player="{{contest.max_players}}" gemcount="{{calGem(contest.fee, contest.max_players).count}}"></div>
             </div>
-            <div style="width: 45px; display: inline-block; float:left;overflow:hidden;white-space: nowrap;text-overflow:ellipsis;" ng-click="goContest(contest)">
-              <div style="display: inline-block; width: 30px; height: 30px; border-radius: 15px; font-size: 16px; line-height: 30px; text-align: center; border: 1px solid">H</div>
-            </div>
+            <!-- <div style="width: 140px; display: inline-block; float:left;overflow:hidden;text-overflow:ellipsis;">
+              <div ng-if="checkHost(contest)" style="display: inline-block; width: 20px; height: 20px; border-radius: 15px; font-size: 12px; line-height: 20px; text-align: center; border: 1px solid">H</div>
+              <div ng-if="!checkHost(contest) && checkJoin(contest)" style="display: inline-block; width: 30px; height: 30px; border-radius: 15px; font-size: 16px; line-height: 30px; text-align: center; border: 1px solid">P</div>
+              {{contest.name}}
+            </div> -->
 
-            <div style="width: 60px; display: inline-block; float:left;">{{contest.player.length}} / {{contest.max_player}} P</div>
-            <div style="width: 100px; display: inline-block; float:left; text-align: center;">
-              <div style="color: #BB0E0E;" count-down="{{contest.end_time}}"></div>
+            <div style="width: 100px; display: inline-block; float:left;">{{contest.program.name}}</div>
+            <div style="width: 50px; display: inline-block; float:left;">{{contest.players.length}} / {{contest.max_players}} P</div>
+            <div style="width: 7%; display: inline-block; float:left; text-align: center;">
+              <div style="color: #BB0E0E;" count-down="{{contest.upcoming_time}}"></div>
             </div>
-
-            <div style="width: 60px; display: inline-block; float:left; text-align: center;">
-              <div style="color: #fff; background: #26AE58;" ui-sref="contestshow({contest: contest._id, liveDashboard: true, viewPlayer: true})">View</div>
+            <div style="width: 45px; display: inline-block; float:right; text-align: center;cursor:pointer;">
+              <div style="color: #fff; background: #26AE58;" ui-sref="programTemplate.template.contest({contest_id: contest.id.$oid, program_id: contest.program._id.$oid, template_id: contest.template._id.$oid})">View</div>
+            </div>
+            <div style="width: 45px; display: inline-block; float:right; text-align: center;margin-right:2px;cursor:pointer;">
+              <div style="color: #fff; background: #26AE58;" ui-sref="contestQuizEdit({contest_id: contest.id.$oid, liveDashboard: true, template_id: contest.template._id.$oid})">Edit</div>
             </div>
           </div>
         </div>

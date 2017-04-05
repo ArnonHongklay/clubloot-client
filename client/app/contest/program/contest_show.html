@@ -7,6 +7,16 @@
     <div style="padding: 20px">
       <table class="table" style="border-radius: 0px;cursor: default;">
         <tbody>
+          
+          <tr ng-if="contest.state=='upcoming'">
+            <td class="text-grey" style="color:#999;width:100px;text-align:left;cursor: default;">
+              Contest will start in
+            </td>
+            <td class="loot gem-red" style="text-align:left;color:#999;width:230px;cursor: default;">
+              <div style="color: #BB0E0E;" count-down="{{contest.template.end_time}}"></div>
+            </td>
+          </tr>
+
           <tr>
             <td class="text-grey" style="color:#999;width:100px;text-align:left;cursor: default;">
               Entry fee

@@ -54,7 +54,7 @@
                 {{ prize.name }}
               </div>
               <div class="col-xs-12 prize-item" ng-click="showPrize(prize)">
-                <img ng-src="{{ prize.picture }}" style="max-height: 75px" class="col-xs-12" />
+                <img ng-src="{{ prize.attachment }}" style="max-height: 75px" class="col-xs-12" />
                 <div class="gem">
                   {{ prize.price }}
                   <i class="fa fa-diamond" aria-hidden="true"></i>
@@ -119,7 +119,7 @@
   <div class="modal-body">
     <div class="row">
       <div class="col-xs-5">
-        <img ng-src="{{prize.picture}}" width="100%">
+        <img ng-src="{{prize.attachment}}" width="100%">
       </div>
       <div class="col-xs-7">
         <p class="text-center">Item Description</p>

@@ -1,13 +1,13 @@
 'use strict'
 
 angular.module 'clublootApp'
-.controller 'ContestShowCtrl', ($scope, $http, Auth, $state, $stateParams, $rootScope, $timeout) ->
+.controller 'ContestShowCtrl', ($scope, $http, Auth, $state, $cable, $stateParams, $rootScope, $timeout) ->
+  console.log "ContestShowCtrl"
   $scope.user = Auth.getCurrentUser()
   $scope.alreadyJoin = false
-  console.log "user------------------"
-  console.log $rootScope
-  console.log $scope.user
   $scope.oldScore = 0
+  console.log $state.current.templateUrl
+  # return if  $state.current.templateUrl != "app/contest/program/contest_show.html"
 
   $scope.gemMatrix = {
     list:[
@@ -53,7 +53,7 @@ angular.module 'clublootApp'
   }
 
   $scope.compairPlayer = (player, index) ->
-    console.log player.id.$oid
+    #console.log player.id.$oid
     $state.go('programTemplate.template.contest.vs', {user_id: player.id.$oid})
 
   $scope.goBack = () ->
@@ -71,8 +71,8 @@ angular.module 'clublootApp'
     return gemColor
 
   $scope.renderGem = (fee, player) ->
-    console.log fee
-    console.log "dkdskdksdksdksk"
+    #console.log fee
+    #console.log "dkdskdksdksdksk"
     theGem = $scope.gemRepeat(fee, player)
     color = $scope.gemColor(theGem.type)
     gem = "<i class='fa fa-diamond' style='"+color+"'></i>"
@@ -91,8 +91,8 @@ angular.module 'clublootApp'
       }
       url: "http://api.clubloot.com/user/contest/join.json"
       ).done (data) ->
-        console.log "join"
-        console.log data
+        #console.log "join"
+        #console.log data
         $state.go('contestQuizJoin', {contest_id: $stateParams.contest_id, template_id: $scope.template_id})
 
   $scope.checkSameScore = (score) ->
@@ -109,8 +109,8 @@ angular.module 'clublootApp'
   #       if q.answer_id == tq.is_correct && q.question_id == tq._id.$oid
   #         score = score + 1
 
-  #   console.log "checkScore"
-  #   console.log score
+  #   #console.log "checkScore"
+  #   #console.log score
   #   console.log $scope.contest.leaders[index].score
   #   score
 
@@ -124,24 +124,24 @@ angular.module 'clublootApp'
         for templates in data.data
           for contest in templates.contests
             $scope.contests.push(contest)
-        $scope.contest = null
+        contest = null
         if data.status != 'failure'
           for d in $scope.contests
             if d.id.$oid == $stateParams.contest_id
               contest = d
-        console.log "ddsdsdksdksldksldksldksldksldksldksld"
-        console.log d
+        #console.log "ddsdsdksdksldksldksldksldksldksldksld"
+        #console.log d
         unless contest
-          console.log '0000000000000099999999999999999999'
-          console.log $stateParams.contest_id
+          #console.log '0000000000000099999999999999999999'
+          #console.log $stateParams.contest_id
           $.ajax
             url: "http://api.clubloot.com/user/contest/#{$stateParams.contest_id}.json?token=#{$scope.user.token}"
             type: 'GET'
             datatype: 'json'
             success: (data) ->
-              console.log "1234"
+              #console.log "1234"
               $scope.contest = data.data
-              console.log $scope.contest
+              #console.log $scope.contest
               $scope.contestPrize = data.data
               $scope.$apply()
               $scope.template_id = $scope.contest.template._id.$oid
@@ -152,8 +152,8 @@ angular.module 'clublootApp'
                 datatype: 'json'
                 success: (data) ->
                   $scope.contest = data.data
-                  console.log "45454545"
-                  console.log $scope.contest
+                  #console.log "45454545"
+                  #console.log $scope.contest
                   for player in $scope.contest.leaders
                     if player.id.$oid == $scope.user._id
                       $scope.alreadyJoin = true
@@ -161,7 +161,7 @@ angular.module 'clublootApp'
                 error: (jqXHR, textStatus, errorThrown) ->
                   $timeout ->
                     $scope.setData()
-                  , 10000
+                  , 2000
                   return
         else
           $scope.$apply()
@@ -173,7 +173,7 @@ angular.module 'clublootApp'
             datatype: 'json'
             success: (data) ->
               $scope.contest = data.data
-              console.log "=-=-=-=-=-=-32-32-3=2-3=2-="
+              console.log "213003901903910-39-109310-93-0"
               console.log $scope.contest
               for player in $scope.contest.leaders
                 if player.id.$oid == $scope.user._id
@@ -182,14 +182,14 @@ angular.module 'clublootApp'
             error: (jqXHR, textStatus, errorThrown) ->
               $timeout ->
                 $scope.setData()
-              , 10000
+              , 2000
               return
           $.ajax
             url: "http://api.clubloot.com/user/contest/#{$stateParams.contest_id}.json?token=#{$scope.user.token}"
             type: 'GET'
             datatype: 'json'
             success: (data) ->
-              console.log "lootprize"
+              #console.log "lootprize"
               $scope.contestPrize = data.data
               $scope.$apply()
 
@@ -197,35 +197,8 @@ angular.module 'clublootApp'
       error: (jqXHR, textStatus, errorThrown) ->
         $timeout ->
           $scope.setData()
-        , 10000
+        , 2000
         return
-
-
-    # $.ajax(
-    #   method: 'GET'
-    #   url: "http://api.clubloot.com/contests/program/#{$stateParams.program_id}.json"
-    #   ).done (data) ->
-    #   console.log "--------------"
-    #   console.log data.data
-    #   for d in data.data
-    #     if d.id.$oid == $stateParams.contest_id
-    #       $scope.contest = d
-
-    #   $scope.$apply()
-    #   $scope.template_id = $scope.contest.template._id.$oid
-    #   $rootScope.template_id = $scope.template_id
-    #   $.ajax(
-    #     method: 'GET'
-    #     url: "http://api.clubloot.com/contests/program/#{$stateParams.program_id}/template/#{$scope.template_id}/contest/#{$stateParams.contest_id}.json"
-    #     ).done (data) ->
-    #     $scope.contest = data.data
-    #     console.log $scope.contest
-    #     for player in $scope.contest.leaders
-    #       if player.id.$oid == $scope.user._id
-    #         $scope.alreadyJoin = true
-    #     $scope.$apply()
-
-    #   return
 
   $scope.calGem = (fee, player) ->
     prize = parseInt(fee) * parseInt(player)
@@ -256,36 +229,41 @@ angular.module 'clublootApp'
 
 
   $scope.gemRepeat = (fee, player) ->
-    console.log fee
+    #console.log fee
     prize = parseInt(fee) * parseInt(player)
     gemIndex = $scope.gemMatrix.list[parseInt(player)-2].fee.indexOf(parseInt(fee))
     $scope.gemMatrix.gem[gemIndex]
 
   $scope.checkWin = (player, contest) ->
-    console.log player
-    console.log '=-=-=-=-=-=000000'
-    console.log contest
     return unless contest
-    console.log '=-=-=-=-=-=000000'
-    console.log contest
     a = 1
     return unless contest.winners
     for w in contest.winners
       if w._id.$oid == player.id.$oid
-        console.log 'win'
+        #console.log 'win'
         a = 0
         return a
     return a
   $scope.loopGetData = () ->
-    console.log "looCAll"
+    #console.log "looCAll"
     $timeout ->
       $scope.setData()
       $scope.loopGetData()
     , 30000
 
-  $scope.setData()
-  $scope.loopGetData()
+  # $scope.setData()
+  # $scope.loopGetData()
 
-
-
+  $scope.cable = $cable('ws://api.clubloot.com/cable')
+  $scope.channel = $scope.cable.subscribe('ContestChannel', received: (data) ->
+    console.log "SOcket in contest_show"
+    if typeof(data) == "undefined"
+      $scope.setData()
+      return
+    if data.page == "contest_details" || data.page == "all_contest"
+      $scope.setData()
+      return
+    
+    return
+  )
 

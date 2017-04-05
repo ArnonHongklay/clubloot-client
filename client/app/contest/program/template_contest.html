@@ -17,36 +17,44 @@
             <td>Contest Name</td>
             <td style="width:100px;"></td>
             <td style="width: 50px;"></td>
+            <td style="width: 50px;"></td>
             <td style="width: 120px;padding-right:20px;text-align:center;">Players</td>
           </tr>
         </thead>
         <tbody>
-          <tr ng-repeat="contest in contests | orderBy: '-max_player-player.length'" ng-click="showContestDetails(contest)">
-            <td ng-click="showContestDetails(contest)" class="text-blue">{{contest.fee}}
+
+          <tr ng-repeat="contest in contests | orderBy: '-max_players-players.length'"
+           ng-hide="contest.state!='upcoming'" ng-class="{'bg-grey':contest.players.length == contest.max_players}">
+           <span ng-click="showContestDetails(contest)">
+            <td ng-click="showContestDetails(contest)" class="text-blue" style="line-height:31px;">{{contest.fee}}
               <img class="money-bag" src="assets/images/money-bag-blue.png">
             </td>
-            <td ng-click="showContestDetails(contest)" class="loot gem-red">
+            <td ng-click="showContestDetails(contest)" class="loot gem-red" style="line-height:31px;">
                <div gem-repeat="" fee="{{contest.fee}}" player="{{contest.max_players}}" gemcount="{{calGem(contest.fee, contest.max_players).count}}"></div>
             </td>
-            <td ng-click="showContestDetails(contest)">
-              <div class="circle blue" ng-show="checkHost(contest)">
+            <td ng-click="showContestDetails(contest)" style="line-height:31px;">
+              <div class="circle blue" ng-show="checkHost(contest)" style="margin-top:7px;">
                 <span>H</span>
               </div>
-              <div class="circle blue" ng-show="!checkHost(contest) && checkJoin(contest)">
+              <div class="circle blue" ng-show="!checkHost(contest) && checkJoin(contest)" style="margin-top:7px;">
                 <span>P</span>
               </div>
               <span class="text-contest text-blue">{{contest.name}}</span>
             </td>
-            <td ng-click="showContestDetails(contest)">
+            <td ng-click="showContestDetails(contest)" style="line-height:31px;">
               <!-- <div class="full-circle blue"></div> -->
             </td>
-            <td ng-if="!checkJoin(contest)">&nbsp;</td>
-            <td ui-sref="contestQuizEdit({contest_id: contest.id.$oid, liveDashboard: true, template_id: contest.template._id.$oid})" ng-if="checkJoin(contest)">
-              <div class="btn btn-default" style="color: #fff; background: #26AE58;">
+            <td style="line-height:31px;"><div style="color: #BB0E0E;" count-down="{{contest.template.end_time}}"></div></td>
+            <td style="line-height:31px;">
+              <div class="btn btn-default" style="color: #fff; background: #26AE58;" ui-sref="contestQuizEdit({contest_id: contest.id.$oid, liveDashboard: true, template_id: contest.template._id.$oid})" ng-if="checkJoin(contest)">
                 Edit
               </div>
+              <div class="btn btn-default" style="color: #fff; background: #50ACC4;" ng-if="!checkJoin(contest)" ng-click="joinContest(contest)">
+                Join
+              </div>
             </td>
-            <td ng-click="showContestDetails(contest)" class="text-blue text-right">{{contest.players.length}} / {{contest.max_players}} &nbsp<i class="fa fa-users" aria-hidden="true"></i></td>
+            </span>
+            <td ng-click="showContestDetails(contest)" class="text-blue text-right" style="line-height:31px;">{{contest.players.length}} / {{contest.max_players}} &nbsp<i class="fa fa-users" aria-hidden="true"></i></td>
           </tr>
         </tbody>
       </table>

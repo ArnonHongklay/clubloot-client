@@ -10,6 +10,7 @@ angular.module 'clublootApp', [
   'ngFileUpload',
   'nvd3',
   'checklist-model',
+  'ngCable',
   'angularMoment'
 ]
 .config ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) ->
@@ -46,3 +47,5 @@ angular.module 'clublootApp', [
   $rootScope.$on '$stateChangeStart', (event, next) ->
     Auth.isLoggedInAsync (loggedIn) ->
       $location.path "/login" if next.authenticate and not loggedIn
+
+

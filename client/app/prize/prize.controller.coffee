@@ -18,7 +18,7 @@ angular.module 'clublootApp'
 
   $scope.setData = () ->
     $.ajax
-      url: "http://api.clubloot.com/prizes.json"
+      url: "http://api.clubloot.com/v2/prizes.json"
       type: 'GET'
       datatype: 'json'
       success: (data) ->
@@ -66,7 +66,7 @@ angular.module 'clublootApp'
   $scope.getMyPrize = ->
     for prize in $scope.prize_select.selected
       $.ajax
-        url: "http://api.clubloot.com/user/prize.json"
+        url: "http://api.clubloot.com/v2/user/prize.json"
         type: 'POST'
         data: {
           token: $scope.user.token

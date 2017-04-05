@@ -66,7 +66,7 @@ angular.module 'clublootApp'
   $scope.getAllContest = () ->
     # console.log "get all contests"
     $.ajax
-      url: "http://api.clubloot.com/user/contests.json?token=#{$scope.user.token}&state=all"
+      url: "http://api.clubloot.com/v2/user/contests.json?token=#{$scope.user.token}&state=all"
       type: 'GET'
       datatype: 'json'
       success: (data) ->
@@ -81,7 +81,7 @@ angular.module 'clublootApp'
 
   $scope.getUserProfile = () ->
     $.ajax
-      url: "http://api.clubloot.com/user/profile.json?token=#{$scope.user.token}"
+      url: "http://api.clubloot.com/v2/user/profile.json?token=#{$scope.user.token}"
       type: 'GET'
       datatype: 'json'
       success: (data) ->
@@ -99,7 +99,7 @@ angular.module 'clublootApp'
   $scope.getUpcoming = () ->
 
     $.ajax
-      url: "http://api.clubloot.com/user/contests.json?token=#{$scope.user.token}&state=upcoming"
+      url: "http://api.clubloot.com/v2/user/contests.json?token=#{$scope.user.token}&state=upcoming"
       type: 'GET'
       datatype: 'json'
       success: (data) ->
@@ -115,7 +115,7 @@ angular.module 'clublootApp'
 
   $scope.getlive = () ->
     $.ajax
-      url: "http://api.clubloot.com/user/contests.json?token=#{$scope.user.token}&state=live"
+      url: "http://api.clubloot.com/v2/user/contests.json?token=#{$scope.user.token}&state=live"
       type: 'GET'
       datatype: 'json'
       success: (data) ->
@@ -131,7 +131,7 @@ angular.module 'clublootApp'
 
   $scope.getCancel = () ->
     $.ajax
-      url: "http://api.clubloot.com/user/contests.json?token=#{$scope.user.token}&state=cancel"
+      url: "http://api.clubloot.com/v2/user/contests.json?token=#{$scope.user.token}&state=cancel"
       type: 'GET'
       datatype: 'json'
       success: (data) ->
@@ -147,7 +147,7 @@ angular.module 'clublootApp'
 
   $scope.getEnd = () ->
     $.ajax
-      url: "http://api.clubloot.com/user/contests.json?token=#{$scope.user.token}&state=past"
+      url: "http://api.clubloot.com/v2/user/contests.json?token=#{$scope.user.token}&state=past"
       type: 'GET'
       datatype: 'json'
       success: (data) ->
@@ -163,7 +163,7 @@ angular.module 'clublootApp'
 
   $scope.getWin = () ->
     $.ajax
-      url: "http://api.clubloot.com/user/contests.json?token=#{$scope.user.token}&state=winners"
+      url: "http://api.clubloot.com/v2/user/contests.json?token=#{$scope.user.token}&state=winners"
       type: 'GET'
       datatype: 'json'
       success: (data) ->

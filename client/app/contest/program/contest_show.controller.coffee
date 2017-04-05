@@ -89,7 +89,7 @@ angular.module 'clublootApp'
         'token': $scope.user.token,
         'contest_id': $stateParams.contest_id,
       }
-      url: "http://api.clubloot.com/user/contest/join.json"
+      url: "http://api.clubloot.com/v2/user/contest/join.json"
       ).done (data) ->
         #console.log "join"
         #console.log data
@@ -116,7 +116,7 @@ angular.module 'clublootApp'
 
   $scope.setData = () ->
     $.ajax
-      url: "http://api.clubloot.com/contests/program/#{$stateParams.program_id}/all_contests.json"
+      url: "http://api.clubloot.com/v2/contests/program/#{$stateParams.program_id}/all_contests.json"
       type: 'GET'
       datatype: 'json'
       success: (data) ->
@@ -135,7 +135,7 @@ angular.module 'clublootApp'
           #console.log '0000000000000099999999999999999999'
           #console.log $stateParams.contest_id
           $.ajax
-            url: "http://api.clubloot.com/user/contest/#{$stateParams.contest_id}.json?token=#{$scope.user.token}"
+            url: "http://api.clubloot.com/v2/user/contest/#{$stateParams.contest_id}.json?token=#{$scope.user.token}"
             type: 'GET'
             datatype: 'json'
             success: (data) ->
@@ -147,7 +147,7 @@ angular.module 'clublootApp'
               $scope.template_id = $scope.contest.template._id.$oid
               $rootScope.template_id = $scope.template_id
               $.ajax
-                url: "http://api.clubloot.com/contests/program/#{$stateParams.program_id}/template/#{$scope.template_id}/contest/#{$stateParams.contest_id}.json"
+                url: "http://api.clubloot.com/v2/contests/program/#{$stateParams.program_id}/template/#{$scope.template_id}/contest/#{$stateParams.contest_id}.json"
                 type: 'GET'
                 datatype: 'json'
                 success: (data) ->
@@ -168,7 +168,7 @@ angular.module 'clublootApp'
           $scope.template_id = contest.template._id.$oid
           $rootScope.template_id = $scope.template_id
           $.ajax
-            url: "http://api.clubloot.com/contests/program/#{$stateParams.program_id}/template/#{$scope.template_id}/contest/#{$stateParams.contest_id}.json"
+            url: "http://api.clubloot.com/v2/contests/program/#{$stateParams.program_id}/template/#{$scope.template_id}/contest/#{$stateParams.contest_id}.json"
             type: 'GET'
             datatype: 'json'
             success: (data) ->
@@ -185,7 +185,7 @@ angular.module 'clublootApp'
               , 2000
               return
           $.ajax
-            url: "http://api.clubloot.com/user/contest/#{$stateParams.contest_id}.json?token=#{$scope.user.token}"
+            url: "http://api.clubloot.com/v2/user/contest/#{$stateParams.contest_id}.json?token=#{$scope.user.token}"
             type: 'GET'
             datatype: 'json'
             success: (data) ->

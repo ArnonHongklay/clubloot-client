@@ -51,6 +51,9 @@ angular.module 'clublootApp'
 
   }
 
+  $scope.goBack = () ->
+    $state.go('^')
+
   $scope.checkJoin = (contest) ->
     for p in contest.players
       if p._id.$oid == $scope.user._id
@@ -62,7 +65,7 @@ angular.module 'clublootApp'
 
   $scope.setData = () ->
     $.ajax
-      url: "http://api.clubloot.com/contests/program/#{$stateParams.program_id}/all_contests.json"
+      url: "http://api.clubloot.com/v1/contests/program/#{$stateParams.program_id}/all_contests.json"
       type: 'GET'
       datatype: 'json'
       success: (data) ->
@@ -82,7 +85,7 @@ angular.module 'clublootApp'
         return
 
     $.ajax
-      url: "http://api.clubloot.com/program/#{$stateParams.program_id}.json"
+      url: "http://api.clubloot.com/v1/program/#{$stateParams.program_id}.json"
       type: 'GET'
       datatype: 'json'
       success: (data) ->
@@ -115,7 +118,7 @@ angular.module 'clublootApp'
         'token': $scope.user.token,
         'contest_id': contest.id.$oid,
       }
-      url: "http://api.clubloot.com/user/contest/join.json"
+      url: "http://api.clubloot.com/v1/user/contest/join.json"
       ).done (data) ->
         $state.go('contestQuizJoin', {contest_id: contest.id.$oid, template_id: contest.template._id.$oid})
 

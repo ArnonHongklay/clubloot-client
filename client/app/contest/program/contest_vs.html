@@ -33,7 +33,7 @@
           </tr>
           <tr ng-repeat="ans in contest.template.questions">
             <td class="text-blue" style="text-align:left;width: 50%;">
-              Q <span style="width: 220px;display:inline-block;line-height: 10px;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;">{{ans.name}}</span>
+              Q <span style="width: 220px;max-width:90%;display:inline-block;line-height: 10px;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;">{{ans.name}}</span>
             </td>
             <td class="text-blue" style="text-align:left;width: 25%">
               {{checkIndex($index, 'me')}}

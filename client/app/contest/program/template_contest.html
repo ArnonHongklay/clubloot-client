@@ -1,8 +1,9 @@
-
+<div class="chanel-detail">
   <div class="row">
   <h3 style="font-weight: 300;">
+    <span class="pull-left smb" style="margin-right: 10px;color:rgb(128,102,160);" ng-click="goBack()"><i class="fa fa-chevron-left" aria-hidden="true"></i></span>
     <span class="pull-left" style="color:rgb(128,102,160)">{{$root.currentProgram.name}}</span>
-    <span class="pull-right btn" style="background:rgb(128,102,160);color:#fff;">{{contests[0].template.number_questions}} Q</span>
+    <span class="pull-right btn" style="display:none;background:rgb(128,102,160);color:#fff;">{{contests[0].template.number_questions}} Q</span>
   </h3>
   </div>
   <div class="row" style="padding-top: 20px">
@@ -12,11 +13,10 @@
       <table class="table" style="border-radius: 0px;">
         <thead style="background:#dedede;">
           <tr>
-            <td style="border-radius:0px;width:90px;">Entry Fee</td>
+            <td style="border-radius:0px;width:90px;"><span class="hmb">Entry</span> Fee</td>
             <td class="loot" style="width:90px;">Loot</td>
-            <td>Contest Name</td>
+            <td class="hmb">Contest Name</td>
             <td style="width:100px;"></td>
-            <td style="width: 50px;"></td>
             <td style="width: 50px;"></td>
             <td style="width: 120px;padding-right:20px;text-align:center;">Players</td>
           </tr>
@@ -27,12 +27,12 @@
            ng-hide="contest.state!='upcoming'" ng-class="{'bg-grey':contest.players.length == contest.max_players}">
            <span ng-click="showContestDetails(contest)">
             <td ng-click="showContestDetails(contest)" class="text-blue" style="line-height:31px;">{{contest.fee}}
-              <img class="money-bag" src="assets/images/money-bag-blue.png">
+              <img class="money-bag hmb" src="assets/images/money-bag-blue.png">
             </td>
             <td ng-click="showContestDetails(contest)" class="loot gem-red" style="line-height:31px;">
                <div gem-repeat="" fee="{{contest.fee}}" player="{{contest.max_players}}" gemcount="{{calGem(contest.fee, contest.max_players).count}}"></div>
             </td>
-            <td ng-click="showContestDetails(contest)" style="line-height:31px;">
+            <td ng-click="showContestDetails(contest)" style="line-height:31px;" class="hmb">
               <div class="circle blue" ng-show="checkHost(contest)" style="margin-top:7px;">
                 <span>H</span>
               </div>
@@ -41,10 +41,7 @@
               </div>
               <span class="text-contest text-blue">{{contest.name}}</span>
             </td>
-            <td ng-click="showContestDetails(contest)" style="line-height:31px;">
-              <!-- <div class="full-circle blue"></div> -->
-            </td>
-            <td style="line-height:31px;"><div style="color: #BB0E0E;" count-down="{{contest.template.end_time}}"></div></td>
+            <td style="line-height:31px;" ng-click="showContestDetails(contest)"><div style="color: #BB0E0E;" count-down="{{contest.template.end_time}}"></div></td>
             <td style="line-height:31px;">
               <div class="btn btn-default" style="color: #fff; background: #26AE58;" ui-sref="contestQuizEdit({contest_id: contest.id.$oid, liveDashboard: true, template_id: contest.template._id.$oid})" ng-if="checkJoin(contest)">
                 Edit
@@ -60,4 +57,6 @@
       </table>
     </div>
   </div>
+
 <ui-view></ui-view>
+</div>

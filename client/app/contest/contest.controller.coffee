@@ -5,7 +5,7 @@ angular.module 'clublootApp'
   console.log "ContestCtrl"
   $scope.setData = () ->
     $.ajax
-      url: 'http://api.clubloot.com/contests/programs.json'
+      url: 'http://api.clubloot.com/v1/contests/programs.json'
       type: 'GET'
       datatype: 'json'
       success: (data) ->
@@ -30,7 +30,7 @@ angular.module 'clublootApp'
 
   # $.ajax(
   #   method: 'GET'
-  #   url: 'http://api.clubloot.com/contests/programs.json'
+  #   url: 'http://api.clubloot.com/v1/contests/programs.json'
   #   ).done (data) ->
   #   console.log data
   #   $scope.programList = data.data

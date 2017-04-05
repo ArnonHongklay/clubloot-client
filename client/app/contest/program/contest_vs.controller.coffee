@@ -12,7 +12,7 @@ angular.module 'clublootApp'
 
   $scope.setData = () ->
     $.ajax
-      url: "http://api.clubloot.com/contests/program/#{$stateParams.program_id}.json"
+      url: "http://api.clubloot.com/v1/contests/program/#{$stateParams.program_id}.json"
       type: 'GET'
       datatype: 'json'
       success: (data) ->
@@ -27,7 +27,7 @@ angular.module 'clublootApp'
           # console.log '0000000000000099999999999999999999'
           # console.log $stateParams.contest_id
           $.ajax
-            url: "http://api.clubloot.com/user/contest/#{$stateParams.contest_id}.json?token=#{$scope.user.token}"
+            url: "http://api.clubloot.com/v1/user/contest/#{$stateParams.contest_id}.json?token=#{$scope.user.token}"
             type: 'GET'
             datatype: 'json'
             success: (data) ->
@@ -38,7 +38,7 @@ angular.module 'clublootApp'
               $scope.template_id = $scope.contest.template._id.$oid
               $rootScope.template_id = $scope.template_id
               $.ajax
-                url: "http://api.clubloot.com/contests/program/#{$stateParams.program_id}/template/#{$scope.template_id}/contest/#{$stateParams.contest_id}.json"
+                url: "http://api.clubloot.com/v1/contests/program/#{$stateParams.program_id}/template/#{$scope.template_id}/contest/#{$stateParams.contest_id}.json"
                 type: 'GET'
                 datatype: 'json'
                 success: (data) ->
@@ -68,7 +68,7 @@ angular.module 'clublootApp'
           $scope.template_id = $scope.contest.template._id.$oid
           $rootScope.template_id = $scope.template_id
           $.ajax
-            url: "http://api.clubloot.com/contests/program/#{$stateParams.program_id}/template/#{$scope.template_id}/contest/#{$stateParams.contest_id}.json"
+            url: "http://api.clubloot.com/v1/contests/program/#{$stateParams.program_id}/template/#{$scope.template_id}/contest/#{$stateParams.contest_id}.json"
             type: 'GET'
             datatype: 'json'
             success: (data) ->

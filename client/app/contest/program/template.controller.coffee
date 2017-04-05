@@ -7,7 +7,7 @@ angular.module 'clublootApp'
 
   $scope.setData = () ->
     $.ajax
-      url: "http://api.clubloot.com/contests/templates.json?program_id=#{$stateParams.program_id}"
+      url: "http://api.clubloot.com/v1/contests/templates.json?program_id=#{$stateParams.program_id}"
       type: 'GET'
       datatype: 'json'
       success: (data) ->
@@ -21,7 +21,7 @@ angular.module 'clublootApp'
         return
 
     $.ajax
-      url: 'http://api.clubloot.com/contests/programs.json'
+      url: 'http://api.clubloot.com/v1/contests/programs.json'
       type: 'GET'
       datatype: 'json'
       success: (data) ->

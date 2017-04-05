@@ -9,7 +9,7 @@ angular.module 'clublootApp'
   $scope.qaSelection = []
   $.ajax(
     method: 'GET'
-    url: "http://api.clubloot.com/contests/template.json?template_id=#{$stateParams.template_id}"
+    url: "http://api.clubloot.com/v1/contests/template.json?template_id=#{$stateParams.template_id}"
     ).done (data) ->
       $scope.question = data.data
       console.log "--------zzzzzzzzz-------"
@@ -17,7 +17,7 @@ angular.module 'clublootApp'
 
       $.ajax(
         method: 'POST'
-        url: "http://api.clubloot.com/user/contest/edit.json?token=#{$scope.user.token}&contest_id=#{$stateParams.contest_id}"
+        url: "http://api.clubloot.com/v1/user/contest/edit.json?token=#{$scope.user.token}&contest_id=#{$stateParams.contest_id}"
         ).done (data) ->
         console.log "-------5555555555555555-------"
         console.log data.data
@@ -61,7 +61,7 @@ angular.module 'clublootApp'
         'contest_id': $stateParams.contest_id,
         'details': $scope.getAnswer()
       }
-      url: "http://api.clubloot.com/user/contest/edit_quiz.json"
+      url: "http://api.clubloot.com/v1/user/contest/edit_quiz.json"
       ).done (data) ->
         console.log "submitAnswer"
         console.log data
@@ -79,7 +79,7 @@ angular.module 'clublootApp'
         'contest_id': $stateParams.contest_id,
         'details': $scope.getAnswer()
       }
-      url: "http://api.clubloot.com/user/contest/quiz.json"
+      url: "http://api.clubloot.com/v1/user/contest/quiz.json"
       ).done (data) ->
         console.log "submitAnswer"
         console.log data

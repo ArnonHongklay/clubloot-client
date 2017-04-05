@@ -1,3 +1,5 @@
+.program-show.mobile
+  display: none
 .place-no
   width: 30px
   display: inline-block
@@ -19,6 +21,7 @@ tr.max-room
   display: -webkit-flex
   display: flex
   width: 100%
+  min-width: 165px
   margin: 10px 0px
   .flex-item
     flex: 1
@@ -205,6 +208,32 @@ section.contest-show
     background: rgb(147, 205, 221)
 
 @media (max-width: 768px)
+  .desktop
+    display: none
+  .program-show.mobile
+    display: block
+    .flex-container
+      position: relative
+      max-width: 370px
+    .item-show
+      display: block!important
+      .text-box
+        z-index: 1
+        width: 50%
+        position: absolute
+        right: 0px
+        top: 0px
+        background: #fff
+        padding-top: 35px
+      img
+        position: absolute
+        width: 50%
+        height: 100%
+        top: 0px
+        left: 0px
+        z-index: -1
+
+
   section.contest-show.phone
     .contest-detail, .player-detail
       left: 0px

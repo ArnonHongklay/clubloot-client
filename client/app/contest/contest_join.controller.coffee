@@ -9,7 +9,7 @@ angular.module 'clublootApp'
   $scope.qaSelection = []
   $.ajax(
     method: 'GET'
-    url: "http://api.clubloot.com/contests/template.json?template_id=#{$stateParams.template_id}"
+    url: "http://api.clubloot.com/v1/contests/template.json?template_id=#{$stateParams.template_id}"
     ).done (data) ->
       $scope.question = data.data
       $scope.$apply()
@@ -33,7 +33,7 @@ angular.module 'clublootApp'
         'contest_id': $stateParams.contest_id,
         'details': $scope.getAnswer()
       }
-      url: "http://api.clubloot.com/user/contest/quiz.json"
+      url: "http://api.clubloot.com/v1/user/contest/quiz.json"
       ).done (data) ->
         console.log "submitAnswer"
         console.log data
@@ -51,7 +51,7 @@ angular.module 'clublootApp'
         'contest_id': $stateParams.contest_id,
         'details': $scope.getAnswer()
       }
-      url: "http://api.clubloot.com/user/contest/quiz.json"
+      url: "http://api.clubloot.com/v1/user/contest/quiz.json"
       ).done (data) ->
         console.log "submitAnswer"
         console.log data

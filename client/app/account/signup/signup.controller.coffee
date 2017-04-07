@@ -20,7 +20,7 @@ angular.module 'clublootApp'
       }
       ).done (data) ->
         console.log data
-        Auth.login
+        Auth.signin
           email: $scope.user.email
           password: $scope.user.password
 

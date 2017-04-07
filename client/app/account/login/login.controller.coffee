@@ -10,7 +10,7 @@ angular.module 'clublootApp'
 
     if form.$valid
       # Logged in, redirect to home
-      Auth.login
+      Auth.signin
         email: $scope.user.email
         password: $scope.user.password
 

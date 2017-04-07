@@ -49,3 +49,5 @@ angular.module 'clublootApp', [
       $location.path "/login" if next.authenticate and not loggedIn
 
 
+
+

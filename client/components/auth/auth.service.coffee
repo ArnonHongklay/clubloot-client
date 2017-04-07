@@ -97,6 +97,23 @@ angular.module 'clublootApp'
   getCurrentUser: ->
     currentUser
 
+  signin: (user, callback) ->
+    deferred = undefined
+    deferred = $q.defer()
+    $.ajax(
+      method: 'POST'
+      url: 'http://api.clubloot.com/v2/auth/sign_in.json'
+      data:
+        email: user.email
+        password: user.password).done (data) ->
+      console.log data
+      $cookieStore.put 'token', data.token
+      currentUser = User.get()
+      console.log currentUser
+      deferred.resolve data
+      if typeof callback == 'function' then callback() else undefined
+    return
+
 
   ###
   Check if a user is logged in synchronously

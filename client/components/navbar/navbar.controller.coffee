@@ -28,7 +28,7 @@ angular.module 'clublootApp'
   $scope.isCollapsed = true
   $scope.isLoggedIn = Auth.isLoggedIn
   $scope.isAdmin = Auth.isAdmin
-  $scope.getCurrentUser = Auth.getCurrentUser
+  $scope.getCurrentUser = Auth.getCurrentUser()
 
   $scope.CurrentUser =  Auth.getCurrentUser()
   $rootScope.currentUser = Auth.getCurrentUser()

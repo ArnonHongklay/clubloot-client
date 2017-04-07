@@ -24,8 +24,8 @@ angular.module 'clublootApp'
           email: $scope.user.email
           password: $scope.user.password
 
-        .then ->
-          $location.path '/'
+      
+        $location.path '/'
     # console.log "form"
     # $scope.submitted = true
 

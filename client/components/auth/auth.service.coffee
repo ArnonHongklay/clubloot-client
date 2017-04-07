@@ -2,7 +2,22 @@
 
 angular.module 'clublootApp'
 .factory 'Auth', ($location, $rootScope, $http, User, $cookieStore, $q) ->
-  currentUser = if $cookieStore.get 'token' then User.get() else {}
+  currentUser = {}
+  getUser = () ->
+    token = $cookieStore.get 'token'
+    $.ajax(
+      method: 'GET'
+      url: "http://api.clubloot.com/v2/user/profile.json?token=#{token}"
+      ).done (data) ->
+        console.log data
+        console.log "---------------Getuser000000000-----------=============="
+        currentUser = data.data
+        console.log currentUser
+        currentUser
+
+  if $cookieStore.get 'token'
+    getUser()
+
 
   ###
   Authenticate user and save token
@@ -97,6 +112,8 @@ angular.module 'clublootApp'
   getCurrentUser: ->
     currentUser
 
+        
+
   signin: (user, callback) ->
     deferred = undefined
     deferred = $q.defer()
@@ -106,12 +123,14 @@ angular.module 'clublootApp'
       data:
         email: user.email
         password: user.password).done (data) ->
-      console.log data
-      $cookieStore.put 'token', data.token
-      currentUser = User.get()
-      console.log currentUser
-      deferred.resolve data
-      if typeof callback == 'function' then callback() else undefined
+          console.log data
+          console.log "------------signin--------------"
+          $cookieStore.put 'token', data.token
+          getUser()
+          console.log $cookieStore.get 'token'
+          return window.location.href = "/"
+          deferred.resolve data
+          if typeof callback == 'function' then callback() else undefined
     return
 
 
@@ -121,7 +140,7 @@ angular.module 'clublootApp'
   @return {Boolean}
   ###
   isLoggedIn: ->
-    currentUser.hasOwnProperty 'role'
+    currentUser.hasOwnProperty 'email'
 
 
   ###

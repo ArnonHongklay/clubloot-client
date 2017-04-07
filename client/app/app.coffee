@@ -31,10 +31,10 @@ angular.module 'clublootApp', [
 
   # Intercept 401s and redirect you to login
   responseError: (response) ->
-    if response.status is 401
-      $location.path '/login'
+    # if response.status is 401
+      # $location.path '/login'
       # remove any stale tokens
-      $cookieStore.remove 'token'
+      # $cookieStore.remove 'token'
 
     $q.reject response
 

@@ -4,6 +4,9 @@ angular.module 'clublootApp'
 .controller 'MainCtrl', ($scope, $http, socket, $rootScope, $state, Auth, $cable, contests, $window, broadcasts, $timeout) ->
   $scope.socket = socket.socket
   $scope.user = Auth.getCurrentUser()
+
+  console.log $scope.user
+  console.log "scope user"
   
   # return if $state.current.templateUrl != "app/main/main.html"
 

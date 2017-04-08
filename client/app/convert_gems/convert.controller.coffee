@@ -1,15 +1,44 @@
 'use strict'
 
 angular.module 'clublootApp'
-.controller 'ConvertGemsCtrl', ($scope, $http, socket, $timeout, gems, $rootScope, Auth) ->
+.controller 'ConvertGemsCtrl', ($scope, $http, socket, $cookieStore, $timeout, gems, $rootScope, Auth) ->
   $scope.showModal = false
-  $scope.gems = gems.data[0]
-  user = $rootScope.currentUser || Auth.getCurrentUser()
-  return window.location.href = "/login" unless user
-  $scope.currentGem = {
-    diamonds: user.diamonds, emeralds: user.emeralds, sapphires: user.sapphires, rubies: user.rubies, coins: user.coins
-  }
-  $scope.mirorCurrent = $scope.currentGem
+
+  $.ajax
+    url: "http://api.clubloot.com/v2/user/gems.json"
+    type: 'GET'
+    datatype: 'json'
+    success: (data) ->
+      $scope.gems = data.data
+      console.log $scope.gems
+    error: (jqXHR, textStatus, errorThrown) ->
+      return
+
+  $scope.userToken = $cookieStore.get 'token'
+  $scope.getUserProfile = () ->
+    $.ajax
+      url: "http://api.clubloot.com/v2/user/profile.json?token=#{$scope.userToken}"
+      type: 'GET'
+      datatype: 'json'
+      success: (data) ->
+        $scope.user = data.data
+        console.log $scope.user
+        $scope.$apply()
+        $scope.currentGem = {
+          diamonds: $scope.user.diamonds, emeralds: $scope.user.emeralds, sapphires: $scope.user.sapphires, rubies: $scope.user.rubies, coins: $scope.user.coins
+        }
+        $scope.mirorCurrent = $scope.currentGem
+        
+      error: (jqXHR, textStatus, errorThrown) ->
+        $timeout ->
+          $scope.getUserProfile()
+        , 2000
+
+  if $scope.userToken
+    $scope.getUserProfile()
+
+
+  
   $scope.titleText = ""
   $scope.alertText = ""
 
@@ -67,7 +96,7 @@ angular.module 'clublootApp'
     subType = ''
     if type == "diamond"
       subType = "emerald"
-      coinFee = 30000
+      coinFee = $scope.gems.diamond.fee
       $scope.currentGem.diamonds = $scope.currentGem.diamonds + 1
       $scope.currentGem.emeralds = $scope.currentGem.emeralds - $scope.gems.diamond.rate
       $scope.currentGem.coins    = $scope.currentGem.coins - coinFee
@@ -75,7 +104,7 @@ angular.module 'clublootApp'
 
     else if type == "emerald"
       subType = "sapphire"
-      coinFee = 20000
+      coinFee = $scope.gems.emerald.fee
       $scope.currentGem.emeralds  = $scope.currentGem.emeralds + 1
       $scope.currentGem.sapphires = $scope.currentGem.sapphires - $scope.gems.emerald.rate
       $scope.currentGem.coins     = $scope.currentGem.coins - coinFee
@@ -83,11 +112,12 @@ angular.module 'clublootApp'
 
     else if type == "sapphire"
       subType = "ruby"
-      coinFee = 10000
+      coinFee = $scope.gems.sapphire.fee
       $scope.currentGem.sapphires = $scope.currentGem.sapphires + 1
       $scope.currentGem.rubies    = $scope.currentGem.rubies - $scope.gems.sapphire.rate
       $scope.currentGem.coins     = $scope.currentGem.coins - coinFee
       gemMinus = $scope.gems.sapphire.rate
+    console.log coinFee
     $scope.$apply()
     $(".value-box-added."+type+" .num-noti").html("+1")
     $(".value-box-added."+subType+" .num-noti").html("-"+gemMinus)
@@ -109,16 +139,19 @@ angular.module 'clublootApp'
       $(".value-box-added."+subType+" .num-noti").removeClass("minus show")
     , 2000
 
-    $http.post("/api/users/#{Auth.getCurrentUser()._id}/update_gem",
-      {
-        gem: $scope.currentGem
-        fee: coinFee
+    $.ajax
+      url: "http://api.clubloot.com/v2/user/convert_gem.json"
+      type: 'POST'
+      datatype: 'json'
+      data: {
+        token: $scope.userToken
+        type: type
       }
-    ).success((ok) ->
-
-    ).error((data, status, headers, config) ->
-      swal("Not Active")
-    )
+      success: (data) ->
+        console.log data
+        console.log $scope.gems
+      error: (jqXHR, textStatus, errorThrown) ->
+        return
 
   $scope.goDashboard = () ->
     window.location.href = "/dashboard"

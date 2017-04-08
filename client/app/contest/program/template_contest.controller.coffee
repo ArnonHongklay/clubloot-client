@@ -104,10 +104,11 @@ angular.module 'clublootApp'
   # $scope.setData()
   # $scope.loopGetData()
   $scope.joinContest = (contest) ->
+    console.log contest
     $.ajax(
       method: 'POST'
       data: {
-        'token': $scope.user.token,
+        'token': $scope.userToken,
         'contest_id': contest.id.$oid,
       }
       url: "http://api.clubloot.com/v2/user/contest/join.json"

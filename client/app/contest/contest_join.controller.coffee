@@ -47,7 +47,7 @@ angular.module 'clublootApp'
     $.ajax(
       method: 'POST'
       data: {
-        'token': $scope.user.token,
+        'token': $scope.userToken,
         'contest_id': $stateParams.contest_id,
         'details': $scope.getAnswer()
       }
@@ -65,7 +65,7 @@ angular.module 'clublootApp'
     $.ajax(
       method: 'POST'
       data: {
-        'token': $scope.user.token,
+        'token': $scope.userToken,
         'contest_id': $stateParams.contest_id,
         'details': $scope.getAnswer()
       }

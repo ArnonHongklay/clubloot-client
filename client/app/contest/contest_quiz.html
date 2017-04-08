@@ -17,7 +17,7 @@
             width: 50px;height: 50px;border: 2px solid #999;
             border-radius: 4px;
             margin-right: 20px;">
-            <input id="ans_{{i}}_{{x}}" type=radio ng-model="qaSelection[i]" value="{&quot;question_id&quot;:&quot;{{q._id.$oid}}&quot;,&quot;answer_id&quot;:&quot;{{a._id.$oid}}&quot;}" ng-click="openAns(i)"> {{a.name}}
+            <input id="ans_{{i}}_{{x}}" type=radio ng-model="qaSelection[i]" value="{&quot;question_id&quot;:&quot;{{q.id.$oid}}&quot;,&quot;answer_id&quot;:&quot;{{a._id.$oid}}&quot;}" ng-click="openAns(i)"> {{a.name}}
           </div>
 
         </div>

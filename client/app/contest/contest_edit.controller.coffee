@@ -25,11 +25,11 @@ angular.module 'clublootApp'
 
             $.ajax(
               method: 'POST'
-              url: "http://api.clubloot.com/v2/user/contest/edit.json?token=#{$scope.user.token}&contest_id=#{$stateParams.contest_id}"
+              url: "http://api.clubloot.com/v2/user/contest/edit.json?token=#{$scope.userToken}&contest_id=#{$stateParams.contest_id}"
               ).done (data) ->
-
+              console.log "------"
               answer = data.data
-
+              console.log answer
               for a in answer.quizes
                 $('#ans_'+a.answer_id).click()
                 $('#ans_'+a.answer_id).click()
@@ -57,6 +57,7 @@ angular.module 'clublootApp'
 
   $scope.submitAnswer = () ->
     # return
+    console.log $stateParams.contest_id
     $.ajax(
       method: 'POST'
       data: {

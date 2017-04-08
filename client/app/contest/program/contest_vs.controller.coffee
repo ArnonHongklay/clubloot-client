@@ -1,18 +1,13 @@
 'use strict'
 
 angular.module 'clublootApp'
-.controller 'ContestVsCtrl', ($scope, $http, Auth, $state, $cable, $stateParams, $rootScope, $timeout) ->
-  $scope.user = Auth.getCurrentUser()
+.controller 'ContestVsCtrl', ($scope, $http, Auth, $state, $cable, $stateParams, $rootScope, $timeout, $cookieStore) ->
   console.log "ContestVsCtrl"
-  console.log $stateParams
-  $scope.ansList = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M"]
-  # console.log $state.current.templateUrl
-  # return if  $state.current.templateUrl != "app/contest/program/contest_vs.html"
-  
+  $scope.ansList = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M"]  
 
   $scope.setData = () ->
     $.ajax
-      url: "http://api.clubloot.com/v1/contests/program/#{$stateParams.program_id}.json"
+      url: "http://api.clubloot.com/v2/contests/program/#{$stateParams.program_id}.json"
       type: 'GET'
       datatype: 'json'
       success: (data) ->
@@ -24,29 +19,25 @@ angular.module 'clublootApp'
               $scope.contest = d
 
         unless contest
-          # console.log '0000000000000099999999999999999999'
-          # console.log $stateParams.contest_id
           $.ajax
-            url: "http://api.clubloot.com/v1/user/contest/#{$stateParams.contest_id}.json?token=#{$scope.user.token}"
+            url: "http://api.clubloot.com/v2/user/contest/#{$stateParams.contest_id}.json?token=#{$scope.userToken}"
             type: 'GET'
             datatype: 'json'
             success: (data) ->
-              #console.log '812937812731289372189372189279'
               $scope.contest = data.data
-              #console.log $scope.contest
               $scope.$apply()
+              console.log "=-=-=--=000"
+              console.log $scope.contest
               $scope.template_id = $scope.contest.template._id.$oid
               $rootScope.template_id = $scope.template_id
               $.ajax
-                url: "http://api.clubloot.com/v1/contests/program/#{$stateParams.program_id}/template/#{$scope.template_id}/contest/#{$stateParams.contest_id}.json"
+                url: "http://api.clubloot.com/v2/contests/program/#{$stateParams.program_id}/template/#{$scope.template_id}/contest/#{$stateParams.contest_id}.json"
                 type: 'GET'
                 datatype: 'json'
                 success: (data) ->
                   $scope.contest = data.data
-                  #console.log "$scope.contest"
-                  #console.log $scope.contest
                   for player in $scope.contest.leaders
-                    if player.id.$oid == $scope.user._id
+                    if player.id.$oid == $scope.user.id.$oid
                       $scope.playerMe = player
                     if player.id.$oid == $stateParams.user_id
                       $scope.playerVs = player
@@ -65,18 +56,16 @@ angular.module 'clublootApp'
               return
         else
           $scope.$apply()
-          $scope.template_id = $scope.contest.template._id.$oid
+          $scope.template_id = $scope.contest.template.id.$oid
           $rootScope.template_id = $scope.template_id
           $.ajax
-            url: "http://api.clubloot.com/v1/contests/program/#{$stateParams.program_id}/template/#{$scope.template_id}/contest/#{$stateParams.contest_id}.json"
+            url: "http://api.clubloot.com/v2/contests/program/#{$stateParams.program_id}/template/#{$scope.template_id}/contest/#{$stateParams.contest_id}.json"
             type: 'GET'
             datatype: 'json'
             success: (data) ->
               $scope.contest = data.data
-              #console.log "$scope.contest"
-              #console.log $scope.contest
               for player in $scope.contest.leaders
-                if player.id.$oid == $scope.user._id
+                if player.id.$oid == $scope.user.id.$oid
                   $scope.playerMe = player
                 if player.id.$oid == $stateParams.user_id
                   $scope.playerVs = player
@@ -96,14 +85,10 @@ angular.module 'clublootApp'
 
 
   $scope.loopGetData = () ->
-    console.log "looCAll"
     $timeout ->
       $scope.setData()
       # $scope.loopGetData()
     , 30000
-
-  # $scope.setData()
-  # $scope.loopGetData()
 
   $scope.checkIndex = (index, user) ->
     answers = $scope.contest.template.questions[index].answers
@@ -125,15 +110,32 @@ angular.module 'clublootApp'
   $scope.cancelVs = () ->
     $state.go('^')
 
-  $scope.cable = $cable('ws://api.clubloot.com/cable')
-  $scope.channel = $scope.cable.subscribe('ContestChannel', received: (data) ->
-    console.log "SOcket in contest_vs"
-    if typeof(data) == "undefined"
-      $scope.setData()
-      return
-    if data.page == "contest_details"
-      $scope.setData()
-      return
-    
-    return
-  )
+  $scope.userToken = $cookieStore.get 'token'
+  $scope.getUserProfile = () ->
+    $.ajax
+      url: "http://api.clubloot.com/v2/user/profile.json?token=#{$scope.userToken}"
+      type: 'GET'
+      datatype: 'json'
+      success: (data) ->
+        $scope.user = data.data
+        $scope.$apply()
+        $scope.cable = $cable('ws://api.clubloot.com/cable')
+        $scope.channel = $scope.cable.subscribe('ContestChannel', received: (data) ->
+          if typeof(data) == "undefined"
+            $scope.setData()
+            return
+          if data.page == "contest_details"
+            $scope.setData()
+            return
+          
+          return
+        )
+      error: (jqXHR, textStatus, errorThrown) ->
+        $timeout ->
+          $scope.getUserProfile()
+        , 2000
+
+  if $scope.userToken
+    $scope.getUserProfile()
+
+  

@@ -10,7 +10,7 @@ angular.module 'clublootApp'
 
   $.ajax(
     method: 'GET'
-    url: 'http://api.clubloot.com/v1/contests/programs.json'
+    url: 'http://api.clubloot.com/v2/contests/programs.json'
     ).done (data) ->
     console.log data
     $scope.programList = data.data
@@ -83,7 +83,7 @@ angular.module 'clublootApp'
     console.log $scope.contests.program_id
     $.ajax(
       method: 'GET'
-      url: "http://api.clubloot.com/v1/contests/templates.json?program_id=#{$scope.contests.program_id}"
+      url: "http://api.clubloot.com/v2/contests/templates.json?program_id=#{$scope.contests.program_id}"
       ).done (data) ->
       console.log data
       $scope.templates = data.data
@@ -106,7 +106,7 @@ angular.module 'clublootApp'
         'details[player]': parseInt($scope.contests.max_player)+2,
         'details[fee]': $scope.contests.fee
       }
-      url: "http://api.clubloot.com/v1/user/contest/new.json"
+      url: "http://api.clubloot.com/v2/user/contest/new.json"
       ).done (data) ->
         console.log data
         console.log "=============-------"
@@ -298,33 +298,6 @@ angular.module 'clublootApp'
     if $scope.contest.ques.length == $scope.qaSelection.length
       return true
 
-  # window.onbeforeunload = (e) ->
-  #   unless $scope.checkAnswer
-  #     e.preventDefault()
-  #     $http.post("/api/contest/#{$scope.contest.id}/destroy", {}).success (data, status, headers, config) ->
-
-  # $scope.$on '$locationChangeStart', (event, next, current) ->
-  #   return if $scope.createNewStep == '1'
-  #   unless $scope.checkAnswer
-  #     event.preventDefault()
-
-  #     swal {
-  #       title: 'Are you sure?'
-  #       text: 'Contest will not be create'
-  #       type: 'warning'
-  #       showCancelButton: true
-  #       confirmButtonColor: '#DD6B55'
-  #       confirmButtonText: 'yes'
-  #       cancelButtonText: 'No'
-  #       closeOnConfirm: false
-  #       closeOnCancel: true
-  #     }, (isConfirm) ->
-  #       if isConfirm
-  #         $http.post("/api/contest/#{$scope.contest.id}/destroy", {user_id: Auth.getCurrentUser()._id}).success (data, status, headers, config) ->
-  #           window.location.href = next
-  #       else
-  #         event.preventDefault()
-  #   return
 
   $scope.addScore = ->
     counter = 0
@@ -332,7 +305,6 @@ angular.module 'clublootApp'
     for q,i in $scope.contest.ques
       for a in q.answers
         if a.title == $scope.qaSelection[i] && a.is_correct
-          # console.log "=============================================fuck"
           counter += 1
 
     $timeout ->

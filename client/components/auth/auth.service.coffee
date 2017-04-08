@@ -9,11 +9,11 @@ angular.module 'clublootApp'
       method: 'GET'
       url: "http://api.clubloot.com/v2/user/profile.json?token=#{token}"
       ).done (data) ->
-        console.log data
         console.log "---------------Getuser000000000-----------=============="
         currentUser = data.data
-        console.log currentUser
-        currentUser
+        $rootScope.user = data.data
+        $rootScope.$apply()
+        # deferred.resolve data.data
 
   if $cookieStore.get 'token'
     getUser()
@@ -33,10 +33,8 @@ angular.module 'clublootApp'
       password: user.password
 
     .success (data) ->
-      console.log data
       $cookieStore.put 'token', data.token
       currentUser = User.get()
-      console.log currentUser
       deferred.resolve data
       callback?()
 
@@ -110,8 +108,7 @@ angular.module 'clublootApp'
   @return {Object} user
   ###
   getCurrentUser: ->
-    currentUser
-
+    $rootScope.user
         
 
   signin: (user, callback) ->

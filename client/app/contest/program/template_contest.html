@@ -46,7 +46,7 @@
               <div class="btn btn-default" style="color: #fff; background: #26AE58;" ui-sref="contestQuizEdit({contest_id: contest.id.$oid, liveDashboard: true, template_id: contest.template._id.$oid})" ng-if="checkJoin(contest)">
                 Edit
               </div>
-              <div class="btn btn-default" style="color: #fff; background: #50ACC4;" ng-if="!checkJoin(contest)" ng-click="joinContest(contest)">
+              <div class="btn btn-default" style="color: #fff; background: #50ACC4;" ng-if="!checkJoin(contest) && contest.players.length != contest.max_players" ng-click="joinContest(contest)">
                 Join
               </div>
             </td>

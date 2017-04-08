@@ -155,7 +155,7 @@
         </div>
         <div class="right-name">
           <div class="block-number purple">
-            {{userProfile.winners}}
+            {{user.winners}}
           </div>
         </div>
       </div>
@@ -298,7 +298,7 @@
         <img src="assets/images/Piggy Bank Icon.png" width="44">
       </div>
       <div class="loot-right">
-         {{$root.currentUser.coins | currency:"":0}}
+         {{user.coins | currency:"":0}}
       </div>
     </div>
 
@@ -307,7 +307,7 @@
         <i class="fa fa-diamond" style="color: #9F9B93" aria-hidden="true"></i>
       </div>
       <div class="loot-right">
-         {{$root.currentUser.diamonds}}
+         {{user.diamonds}}
       </div>
     </div>
 
@@ -316,7 +316,7 @@
         <i class="fa fa-diamond" style="color: #758F42" aria-hidden="true"></i>
       </div>
       <div class="loot-right">
-         {{$root.currentUser.emeralds}}
+         {{user.emeralds}}
       </div>
     </div>
 
@@ -325,7 +325,7 @@
         <i class="fa fa-diamond" style="color: #2A4C7A" aria-hidden="true"></i>
       </div>
       <div class="loot-right">
-        {{$root.currentUser.sapphires}}
+        {{user.sapphires}}
       </div>
     </div>
 
@@ -334,7 +334,7 @@
         <i class="fa fa-diamond"  style="color: #951111" aria-hidden="true"></i>
       </div>
       <div class="loot-right">
-         {{$root.currentUser.rubies}}
+         {{user.rubies}}
       </div>
     </div>
 

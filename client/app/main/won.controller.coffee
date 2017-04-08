@@ -1,10 +1,11 @@
 'use strict'
 
 angular.module 'clublootApp'
-.controller 'WonCtrl', ($scope, $http, socket, $rootScope, Auth, contests) ->
-  $scope.currentUser = Auth.getCurrentUser()
-  $scope.user = Auth.getCurrentUser()
-  $scope.contests = Auth.getCurrentUser().wonContest
+.controller 'WonCtrl', ($scope, $http, socket, $cookieStore, $rootScope, Auth, contests) ->
+  # $scope.currentUser = Auth.getCurrentUser()
+  # $scope.user = Auth.getCurrentUser()
+  # $scope.contests = Auth.getCurrentUser().wonContest
+  $scope.userToken = $cookieStore.get 'token'
   $scope.id_logs = []
 
   $scope.gemMatrix = {
@@ -64,7 +65,7 @@ angular.module 'clublootApp'
   #   socket.syncUpdates 'thing', $scope.awesomeThings
   $scope.getWin = () ->
     $.ajax
-      url: "http://api.clubloot.com/v1/user/contests.json?token=#{$scope.user.token}&state=winners"
+      url: "http://api.clubloot.com/v2/user/contests.json?token=#{$scope.user.token}&state=winners"
       type: 'GET'
       datatype: 'json'
       success: (data) ->

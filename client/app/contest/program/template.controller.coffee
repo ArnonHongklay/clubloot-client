@@ -33,7 +33,7 @@ angular.module 'clublootApp'
         return
 
   $scope.selectTemplate = (program) ->
-    $state.go('programTemplate.template', {program_id: program._id.$oid})
+    $state.go('programTemplate.template', {program_id: program.id.$oid})
 
 
   $scope.loopGetData = () ->

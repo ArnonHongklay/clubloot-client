@@ -1,13 +1,27 @@
 'use strict'
 
 angular.module 'clublootApp'
-.controller 'NewContestCtrl', ($scope, $http, socket, $timeout, Auth, $state) ->
+.controller 'NewContestCtrl', ($scope, $http, socket, $timeout, $cookieStore, Auth, $state) ->
   # $scope.programList = programs.data.data
   # console.log programs
   $scope.templates = []
-  $scope.user = Auth.getCurrentUser()
-  console.log $scope.user
+  $scope.userToken = $cookieStore.get 'token'
+  $scope.getUserProfile = () ->
+    $.ajax
+      url: "http://api.clubloot.com/v2/user/profile.json?token=#{$scope.userToken}"
+      type: 'GET'
+      datatype: 'json'
+      success: (data) ->
+        $scope.user = data.data
+        $scope.$apply()
+       
+      error: (jqXHR, textStatus, errorThrown) ->
+        $timeout ->
+          $scope.getUserProfile()
+        , 2000
 
+  if $scope.userToken
+    $scope.getUserProfile()
   $.ajax(
     method: 'GET'
     url: 'http://api.clubloot.com/v2/contests/programs.json'
@@ -80,11 +94,14 @@ angular.module 'clublootApp'
   }
 
   $scope.selectProgram = () ->
+    console.log $scope.contests
     console.log $scope.contests.program_id
+    console.log "1212121212"
     $.ajax(
       method: 'GET'
       url: "http://api.clubloot.com/v2/contests/templates.json?program_id=#{$scope.contests.program_id}"
       ).done (data) ->
+
       console.log data
       $scope.templates = data.data
       $scope.$apply()
@@ -92,7 +109,7 @@ angular.module 'clublootApp'
   $scope.createNewContest = () ->
     console.log "createNewContest"
     console.log "template_id:"+$scope.contests.template_id
-    console.log "token:"+$scope.user.token
+    console.log "token:"+$scope.userToken
     console.log "details[name]:"+$scope.contests.name
     console.log "details[player]:"+parseInt($scope.contests.max_player)+2
     console.log "details[fee]:"+$scope.contests.fee
@@ -100,7 +117,7 @@ angular.module 'clublootApp'
     $.ajax(
       method: 'POST'
       data: {
-        'token': $scope.user.token,
+        'token': $scope.userToken,
         'template_id': $scope.contests.template_id,
         'details[name]': $scope.contests.name,
         'details[player]': parseInt($scope.contests.max_player)+2,

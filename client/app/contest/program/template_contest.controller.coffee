@@ -4,6 +4,7 @@ angular.module 'clublootApp'
 .controller 'ContestTemplateShowCtrl', ($scope, $http, Auth, $state, $cable, $cookieStore, $stateParams, $rootScope, $timeout) ->
   # $scope.user = Auth.getCurrentUser()
   console.log 'ContestTemplateShowCtrl'
+  console.log $stateParams
   $scope.userToken = $cookieStore.get 'token'
 
   # return if  $state.current.templateUrl != "app/contest/program/template_contest.html"

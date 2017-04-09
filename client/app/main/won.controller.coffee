@@ -6,6 +6,7 @@ angular.module 'clublootApp'
   # $scope.user = Auth.getCurrentUser()
   # $scope.contests = Auth.getCurrentUser().wonContest
   $scope.userToken = $cookieStore.get 'token'
+  
   $scope.id_logs = []
 
   $scope.gemMatrix = {

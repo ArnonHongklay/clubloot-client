@@ -48,14 +48,13 @@
   <div class="daily-loot-bg" ng-click="$root.showPromocode=false"></div>
   <div class="daily-loot-content">
     <div class="close-dl" ng-click="$root.showPromocode=false"><i class="fa fa-times" aria-hidden="true"></i></div>
-    <h3>Daily Loot</h3>
+    <h3>Promo code reward</h3>
     <div class="g-text content-text">
-      Sign in everyday to claim your free daily loot. Get even more free loot when you sign five consecutive days and more.
+      
     </div>
-    <img src="assets/images/pp-bag.png" class="bag-img">
-    <div class="g-text" style="text-align: center;margin-bottom: 10px;">Your daily loot today is</div>
-    <div class="coins-box">2000 coins</div>
-    <div class="btm-text p-text">Sign in tomorrow to get more free loot!</div>
+    <div class="g-text" style="text-align: center;margin-bottom: 10px;">You got </div>
+    <div class="coins-box">{{user.promo_value}} {{user.promo_currency}}</div>
+    <div class="btm-text p-text">Welcome to clubloot</div>
   </div>
 </div>
 

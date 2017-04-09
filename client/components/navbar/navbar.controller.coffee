@@ -45,6 +45,7 @@ angular.module 'clublootApp'
   $scope.userToken = $cookieStore.get 'token'
   unless $scope.userToken
     window.location.href = '/login'
+
   $scope.getUserProfile = () ->
     $.ajax
       url: "http://api.clubloot.com/v2/user/profile.json?token=#{$scope.userToken}"

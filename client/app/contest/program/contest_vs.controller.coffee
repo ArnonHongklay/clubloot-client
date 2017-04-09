@@ -3,7 +3,7 @@
 angular.module 'clublootApp'
 .controller 'ContestVsCtrl', ($scope, $http, Auth, $state, $cable, $stateParams, $rootScope, $timeout, $cookieStore) ->
   console.log "ContestVsCtrl"
-  $scope.ansList = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M"]  
+  $scope.ansList = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M"]
 
   $scope.setData = () ->
     $.ajax

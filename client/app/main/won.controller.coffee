@@ -6,7 +6,25 @@ angular.module 'clublootApp'
   # $scope.user = Auth.getCurrentUser()
   # $scope.contests = Auth.getCurrentUser().wonContest
   $scope.userToken = $cookieStore.get 'token'
-  
+  $scope.getUserProfile = () ->
+    console.log "get all contests"
+    $.ajax
+      url: "http://api.clubloot.com/v2/user/profile.json?token=#{$scope.userToken}"
+      type: 'GET'
+      datatype: 'json'
+      success: (data) ->
+        $scope.user = data.data
+        $scope.$apply()
+        
+      error: (jqXHR, textStatus, errorThrown) ->
+        $timeout ->
+          console.log "error"
+          $scope.getUserProfile()
+        , 2000
+
+  if $scope.userToken
+    $scope.getUserProfile()
+
   $scope.id_logs = []
 
   $scope.gemMatrix = {

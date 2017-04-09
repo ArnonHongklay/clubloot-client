@@ -56,7 +56,7 @@ angular.module 'clublootApp'
               return
         else
           $scope.$apply()
-          $scope.template_id = $scope.contest.template.id.$oid
+          $scope.template_id = $scope.contest.template._id.$oid
           $rootScope.template_id = $scope.template_id
           $.ajax
             url: "http://api.clubloot.com/v2/contests/program/#{$stateParams.program_id}/template/#{$scope.template_id}/contest/#{$stateParams.contest_id}.json"

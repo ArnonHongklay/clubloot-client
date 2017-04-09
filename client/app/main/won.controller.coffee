@@ -51,21 +51,21 @@ angular.module 'clublootApp'
 
   }
 
-  socket.syncUpdates 'contest', $scope.contests
+  # socket.syncUpdates 'contest', $scope.contests
 
   $('body').css({background: '#fff'})
 
-  $http.get("/api/users/#{Auth.getCurrentUser()._id}").success (data) ->
-    $rootScope.currentUser = data
+  # $http.get("/api/users/#{Auth.getCurrentUser()._id}").success (data) ->
+  #   $rootScope.currentUser = data
 
-  $scope.awesomeThings = []
+  # $scope.awesomeThings = []
 
   # $http.get('/api/things').success (awesomeThings) ->
   #   $scope.awesomeThings = awesomeThings
   #   socket.syncUpdates 'thing', $scope.awesomeThings
   $scope.getWin = () ->
     $.ajax
-      url: "http://api.clubloot.com/v2/user/contests.json?token=#{$scope.user.token}&state=winners"
+      url: "http://api.clubloot.com/v2/user/contests.json?token=#{$scope.userToken}&state=winners"
       type: 'GET'
       datatype: 'json'
       success: (data) ->

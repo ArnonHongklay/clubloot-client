@@ -82,7 +82,7 @@ angular.module 'clublootApp'
     $.ajax(
       method: 'POST'
       data: {
-        'token': $scope.user.token,
+        'token': $scope.userToken,
         'contest_id': $stateParams.contest_id,
       }
       url: "http://api.clubloot.com/v2/user/contest/join.json"
@@ -113,7 +113,7 @@ angular.module 'clublootApp'
               contest = d
         unless contest
           $.ajax
-            url: "http://api.clubloot.com/v2/user/contest/#{$stateParams.contest_id}.json?token=#{$scope.user.token}"
+            url: "http://api.clubloot.com/v2/user/contest/#{$stateParams.contest_id}.json?token=#{$scope.userToken}"
             type: 'GET'
             datatype: 'json'
             success: (data) ->
@@ -157,7 +157,7 @@ angular.module 'clublootApp'
               , 2000
               return
           $.ajax
-            url: "http://api.clubloot.com/v2/user/contest/#{$stateParams.contest_id}.json?token=#{$scope.user.token}"
+            url: "http://api.clubloot.com/v2/user/contest/#{$stateParams.contest_id}.json?token=#{$scope.userToken}"
             type: 'GET'
             datatype: 'json'
             success: (data) ->

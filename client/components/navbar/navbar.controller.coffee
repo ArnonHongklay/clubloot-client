@@ -53,6 +53,8 @@ angular.module 'clublootApp'
       datatype: 'json'
       success: (data) ->
         $scope.user = data.data
+        unless $scope.user.email
+          window.location.href = "/login"
         $rootScope.currentUser = $scope.user
         $scope.$apply()
         if $scope.user.free_loot

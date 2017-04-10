@@ -28,7 +28,7 @@
       </div>
     </div>
 
-    <div class="row">
+    <div class="row hmb">
       <div class="col-xs-12">
         <div class="catelog-item-box">
           <div class="catelog-item"
@@ -66,9 +66,37 @@
       </div>
     </div>
 
+    <div class="row smb">
+      <div class="col-xs-12">
+        <div class="catelog-item-box">
+          <div class="catelog-item"
+               ng-repeat="prize in prizes"
+               ng-show="cateFilter == 'all' || cateFilter == prize.tier"
+               ng-click="clickPrize(prize)"
+               >
+
+            <div class="box defaultItem defaultItem-{{ prize._id }}" ng-click="showPrize(prize)">
+              <div class="col-xs-12 prize-name">
+              <input type="checkbox" id="{{prize._id}}" name="prize" checklist-model="prize_select.selected" checklist-value="prize">
+                Prize {{ alphabets[$index] }}
+              </div>
+              <div class="col-xs-12 prize-item">
+                <img ng-src="{{ prize.attachment }}" style="max-height: 75px" class="col-xs-12" />
+                <div class="gem">
+                  {{ prize.price }}
+                  <i class="fa fa-diamond" aria-hidden="true"></i>
+                </div>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="row">
       <div class="col-xs-12">
-        <div class="terms hmb" style="margin-top: 20px">
+        <div class="terms" style="margin-top: 20px">
           <div class="term-text"><input type="checkbox" ng-model="agree"> I agree to the
             <a href="#">
               <span class="b-text">terms of purchase</span>
@@ -79,7 +107,7 @@
       </div>
     </div>
 
-    <div class="row hmb" style="margin-top: 10px;">
+    <div class="row" style="margin-top: 10px;">
       <div class="btn get-prize" ng-disabled="!agree" ng-click="getMyPrize()">GET MY PRIZE</div>
     </div>
   </div>

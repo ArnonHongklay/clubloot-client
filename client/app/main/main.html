@@ -155,13 +155,13 @@
         </div>
         <div class="right-name">
           <div class="block-number purple">
-            {{userProfile.winners}}
+            {{user.winners}}
           </div>
         </div>
       </div>
 
       <div class="col-lg-12 in-tab-mobile" ng-show="mobileTab == 'Wins'">
-        <div ng-repeat="contest in wonContests" class="col-lg-12" style="border-bottom: 1px solid #ccc; line-height:50px; font-size: 18px; color: #42A3BE; cursor: pointer;width: 100%;height: 51px;padding-top:0px;padding-bottom: 1px;">
+        <div ng-repeat="contest in wonContests" class="col-lg-12" style="border-bottom: 1px solid #ccc; line-height:50px; font-size: 14px; color: #42A3BE; cursor: pointer;">
            <div class="row">
            <!--  <div style="width: 10%; display: inline-block; float:left;">
               {{contest.fee}} <img src="assets/images/money-bag-blue.png" width="24">
@@ -192,20 +192,6 @@
             </div>
           </div>
         </div>
-
-
-
-
-
-      
-
-
-
-
-
-
-
-
       </div>
 
       <div class="tab-list" ng-click="mobileTab = 'live'">
@@ -214,15 +200,16 @@
         </div>
         <div class="right-name">
           <div class="block-number sky">
-            {{liveContests.length}}
+            {{liveCount}}
           </div>
         </div>
       </div>
 
       <div class="col-lg-12 in-tab-mobile" ng-show="mobileTab == 'live'">
-        <div  ng-repeat="contest in liveContests"
+        <div  ng-repeat="contest in allContests"
             class="col-lg-12"
-            style="border-bottom: 1px solid #ccc; line-height:50px; font-size: 14px; color: #42A3BE; cursor: pointer">
+            style="border-bottom: 1px solid #ccc; line-height:50px; font-size: 14px; color: #42A3BE; cursor: pointer;"
+            ng-show="contest.state == 'live'">
          <div class="row">
            <!--  <div style="width: 10%; display: inline-block; float:left;">
               {{contest.fee}} <img src="assets/images/money-bag-blue.png" width="24">
@@ -258,13 +245,14 @@
         </div>
         <div class="right-name">
           <div class="block-number sky">
-            {{upcomingContests.length}}
+            {{upcomingCount}}
           </div>
         </div>
       </div>
 
       <div class="col-lg-12 in-tab-mobile" ng-show="mobileTab == 'Upcoming'">
-        <div  ng-repeat="contest in upcomingContests"
+        <div  ng-repeat="contest in allContests"
+          ng-show="contest.state == 'upcoming'"
             
             style="border-bottom: 1px solid #ccc; line-height:50px; font-size: 14px; color: #42A3BE; cursor: pointer">
           <div class="row">
@@ -310,7 +298,7 @@
         <img src="assets/images/Piggy Bank Icon.png" width="44">
       </div>
       <div class="loot-right">
-         {{$root.currentUser.coins | currency:"":0}}
+         {{user.coins | currency:"":0}}
       </div>
     </div>
 
@@ -319,7 +307,7 @@
         <i class="fa fa-diamond" style="color: #9F9B93" aria-hidden="true"></i>
       </div>
       <div class="loot-right">
-         {{$root.currentUser.diamonds}}
+         {{user.diamonds}}
       </div>
     </div>
 
@@ -328,7 +316,7 @@
         <i class="fa fa-diamond" style="color: #758F42" aria-hidden="true"></i>
       </div>
       <div class="loot-right">
-         {{$root.currentUser.emeralds}}
+         {{user.emeralds}}
       </div>
     </div>
 
@@ -337,7 +325,7 @@
         <i class="fa fa-diamond" style="color: #2A4C7A" aria-hidden="true"></i>
       </div>
       <div class="loot-right">
-        {{$root.currentUser.sapphires}}
+        {{user.sapphires}}
       </div>
     </div>
 
@@ -346,7 +334,7 @@
         <i class="fa fa-diamond"  style="color: #951111" aria-hidden="true"></i>
       </div>
       <div class="loot-right">
-         {{$root.currentUser.rubies}}
+         {{user.rubies}}
       </div>
     </div>
 

@@ -1,9 +1,8 @@
 'use strict'
 
 angular.module 'clublootApp'
-.controller 'NavbarCtrl', ($scope, $location, Auth, $http, $rootScope, $timeout, socket) ->
+.controller 'NavbarCtrl', ($scope, $location, Auth, $http, $rootScope, $cookieStore, $timeout, socket, $cable) ->
   $scope.socket = socket.socket
-  $scope.user = Auth.getCurrentUser()
   $scope.socket.on 'message', (data) ->
     return
 
@@ -28,10 +27,9 @@ angular.module 'clublootApp'
   $scope.isCollapsed = true
   $scope.isLoggedIn = Auth.isLoggedIn
   $scope.isAdmin = Auth.isAdmin
-  $scope.getCurrentUser = Auth.getCurrentUser
+  # $scope.getCurrentUser = Auth.getCurrentUser()
 
-  $scope.CurrentUser =  Auth.getCurrentUser()
-  $rootScope.currentUser = Auth.getCurrentUser()
+  # $scope.CurrentUser =  Auth.getCurrentUser()
 
   $scope.logout = ->
     Auth.logout()
@@ -41,21 +39,69 @@ angular.module 'clublootApp'
     route is $location.path()
 
   $scope.getFreeLoot = () ->
-    id = $scope.CurrentUser._id
-    $http.put("/api/daily_loot/#{id}/getfreeloot",
-      id: id
-    ).success((data, status, headers, config) ->
-      $rootScope.freeLootToday = data.freeCoins
-      $rootScope.showDailyLoot = true
-      $scope.CurrentUser = data.user
-      $rootScope.currentUser = data.user
-      Auth.user = $rootScope.currentUser
-    ).error((data, status, headers, config) ->
-      # console.log status
-    )
-  $timeout ->
-    if Auth.getCurrentUser()
-      $http.get("/api/users/#{Auth.getCurrentUser()._id}").success (data) ->
-        # console.log data
-        $scope.getFreeLoot() if data.free_loot
-  , 300
+    $rootScope.showDailyLoot = true
+    $scope.$apply()
+  
+  $scope.userToken = $cookieStore.get 'token'
+  unless $scope.userToken
+    window.location.href = '/login'
+
+  $scope.getUserProfile = () ->
+    $.ajax
+      url: "http://api.clubloot.com/v2/user/profile.json?token=#{$scope.userToken}"
+      type: 'GET'
+      datatype: 'json'
+      success: (data) ->
+        $scope.user = data.data
+        unless $scope.user.email
+          window.location.href = "/login"
+        $rootScope.currentUser = $scope.user
+        $scope.$apply()
+        if $scope.user.free_loot
+          $rootScope.showDailyLoot = true
+          $.ajax
+            url: "http://api.clubloot.com/v2/user/daily_loot.json?token=#{$scope.userToken}"
+            type: 'GET'
+            datatype: 'json'
+            success: (data) ->
+              console.log "dailyloot"
+              console.log data
+              return
+            error: (jqXHR, textStatus, errorThrown) ->
+              console.log "error"
+              return
+
+        if $scope.user.promo_code
+          $rootScope.showPromocode = true
+          $.ajax
+            url: "http://api.clubloot.com/v2/user/promo_code.json?token=#{$scope.userToken}"
+            type: 'GET'
+            datatype: 'json'
+            success: (data) ->
+              console.log "promocode"
+              console.log data
+              return
+            error: (jqXHR, textStatus, errorThrown) ->
+              console.log "error"
+              return
+       
+      error: (jqXHR, textStatus, errorThrown) ->
+        $timeout ->
+          $scope.getUserProfile()
+        , 2000
+
+  if $scope.userToken
+    $scope.getUserProfile()
+
+
+  
+
+
+
+        
+  # $timeout ->
+  #   if Auth.getCurrentUser()
+  #     $http.get("/api/users/#{Auth.getCurrentUser()._id}").success (data) ->
+  #       # console.log data
+  #       $scope.getFreeLoot() if data.free_loot
+  # , 300

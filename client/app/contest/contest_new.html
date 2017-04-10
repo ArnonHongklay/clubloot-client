@@ -25,7 +25,7 @@
                   <div class="box-right pull-right">
                     <select class="form-control" ng-model="contests.program_id" ng-change="selectProgram()">
                       <option value="">Program</option>
-                      <option ng-repeat="program in programList" value="{{program._id.$oid}}" name="{{program.program}}">{{program.name}}</option>
+                      <option ng-repeat="program in programList" value="{{program.id.$oid}}" name="{{program.program}}">{{program.name}}</option>
                     </select>
                   </div>
                 </td>
@@ -37,7 +37,7 @@
                   <div class="box-right pull-right">
                     <select class="form-control" ng-model="contests.template_id">
                       <option value="">Template</option>
-                      <option ng-repeat="template in templates" name="{{template}}" value="{{template._id.$oid}}">{{template.name}}</option>
+                      <option ng-repeat="template in templates" name="{{template}}" value="{{template.id.$oid}}">{{template.name}}</option>
                     </select>
                   </div>
                 </td>
@@ -97,14 +97,14 @@
           </table>
         </div>
       </div>
-      <div class="row terms hmb" style="margin-top: 60px">
+      <div class="row terms hmb">
         <div class="term-text">
         By continuing you agree to the <span class="b-text">terms and conditions</span> governing Clubloot tournaments
         <div class="btn get-prize" ng-click="createNewContest()">CONTINUE</div>
         </div>
 
       </div>
-      <div class="btn get-prize smb" ng-click="createNewStep='2'">CONTINUE</div>
+      <div class="btn get-prize smb" ng-click="createNewContest()">CONTINUE</div>
 
 
     </div>

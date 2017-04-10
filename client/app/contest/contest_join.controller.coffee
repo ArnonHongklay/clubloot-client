@@ -1,15 +1,33 @@
 'use strict'
 
 angular.module 'clublootApp'
-.controller 'ContestJoinCtrl', ($scope, $http, socket, $timeout, Auth, $state, $stateParams) ->
+.controller 'ContestJoinCtrl', ($scope, $http, socket, $timeout, $cookieStore, Auth, $state, $stateParams) ->
   console.log $stateParams
-  $scope.user = Auth.getCurrentUser()
   $scope.selectQues = null
   $scope.checkAnswer = false
   $scope.qaSelection = []
+
+  $scope.userToken = $cookieStore.get 'token'
+  $scope.getUserProfile = () ->
+    $.ajax
+      url: "http://api.clubloot.com/v2/user/profile.json?token=#{$scope.userToken}"
+      type: 'GET'
+      datatype: 'json'
+      success: (data) ->
+        $scope.user = data.data
+        $scope.$apply()
+       
+      error: (jqXHR, textStatus, errorThrown) ->
+        $timeout ->
+          $scope.getUserProfile()
+        , 2000
+
+  if $scope.userToken
+    $scope.getUserProfile()
+
   $.ajax(
     method: 'GET'
-    url: "http://api.clubloot.com/contests/template.json?template_id=#{$stateParams.template_id}"
+    url: "http://api.clubloot.com/v2/contests/template.json?template_id=#{$stateParams.template_id}"
     ).done (data) ->
       $scope.question = data.data
       $scope.$apply()
@@ -29,11 +47,11 @@ angular.module 'clublootApp'
     $.ajax(
       method: 'POST'
       data: {
-        'token': $scope.user.token,
+        'token': $scope.userToken,
         'contest_id': $stateParams.contest_id,
         'details': $scope.getAnswer()
       }
-      url: "http://api.clubloot.com/user/contest/quiz.json"
+      url: "http://api.clubloot.com/v2/user/contest/quiz.json"
       ).done (data) ->
         console.log "submitAnswer"
         console.log data
@@ -47,11 +65,11 @@ angular.module 'clublootApp'
     $.ajax(
       method: 'POST'
       data: {
-        'token': $scope.user.token,
+        'token': $scope.userToken,
         'contest_id': $stateParams.contest_id,
         'details': $scope.getAnswer()
       }
-      url: "http://api.clubloot.com/user/contest/quiz.json"
+      url: "http://api.clubloot.com/v2/user/contest/quiz.json"
       ).done (data) ->
         console.log "submitAnswer"
         console.log data

@@ -1,9 +1,30 @@
 'use strict'
 
 angular.module 'clublootApp'
-.controller 'WonCtrl', ($scope, $http, socket, $rootScope, Auth, contests) ->
-  $scope.currentUser = Auth.getCurrentUser()
-  $scope.contests = Auth.getCurrentUser().wonContest
+.controller 'WonCtrl', ($scope, $http, socket, $cookieStore, $rootScope, Auth, contests) ->
+  # $scope.currentUser = Auth.getCurrentUser()
+  # $scope.user = Auth.getCurrentUser()
+  # $scope.contests = Auth.getCurrentUser().wonContest
+  $scope.userToken = $cookieStore.get 'token'
+  $scope.getUserProfile = () ->
+    console.log "get all contests"
+    $.ajax
+      url: "http://api.clubloot.com/v2/user/profile.json?token=#{$scope.userToken}"
+      type: 'GET'
+      datatype: 'json'
+      success: (data) ->
+        $scope.user = data.data
+        $scope.$apply()
+        
+      error: (jqXHR, textStatus, errorThrown) ->
+        $timeout ->
+          console.log "error"
+          $scope.getUserProfile()
+        , 2000
+
+  if $scope.userToken
+    $scope.getUserProfile()
+
   $scope.id_logs = []
 
   $scope.gemMatrix = {
@@ -49,18 +70,34 @@ angular.module 'clublootApp'
 
   }
 
-  socket.syncUpdates 'contest', $scope.contests
+  # socket.syncUpdates 'contest', $scope.contests
 
   $('body').css({background: '#fff'})
 
-  $http.get("/api/users/#{Auth.getCurrentUser()._id}").success (data) ->
-    $rootScope.currentUser = data
+  # $http.get("/api/users/#{Auth.getCurrentUser()._id}").success (data) ->
+  #   $rootScope.currentUser = data
 
-  $scope.awesomeThings = []
+  # $scope.awesomeThings = []
 
-  $http.get('/api/things').success (awesomeThings) ->
-    $scope.awesomeThings = awesomeThings
-    socket.syncUpdates 'thing', $scope.awesomeThings
+  # $http.get('/api/things').success (awesomeThings) ->
+  #   $scope.awesomeThings = awesomeThings
+  #   socket.syncUpdates 'thing', $scope.awesomeThings
+  $scope.getWin = () ->
+    $.ajax
+      url: "http://api.clubloot.com/v2/user/contests.json?token=#{$scope.userToken}&state=winners"
+      type: 'GET'
+      datatype: 'json'
+      success: (data) ->
+        console.log $scope.user.token
+        console.log "user-contestsขจจจจจจจจจจจจจจจจจจจจจจจจจจจจจ"
+        $scope.wonContests = data.data
+        $rootScope.wonContests = data.data
+        console.log $scope.wonContests
+        $scope.$apply()
+      error: (jqXHR, textStatus, errorThrown) ->
+        $scope.getWin()
+        return
+  $scope.getWin()
 
 
   $scope.checkJoin = (contest) ->
@@ -99,21 +136,26 @@ angular.module 'clublootApp'
     return $scope.gemMatrix.gem[gemIndex] || $scope.gemMatrix.gem[0]
 
   $scope.gemColor = (gemType) ->
-    if gemType == "DIAMOND"
+    if gemType.toUpperCase() == "DIAMOND"
       gemColor = "color: #dedede;"
-    if gemType == "RUBY"
+    if gemType.toUpperCase() == "RUBY"
       gemColor = "color: red;"
-    if gemType == "SAPPHIRE"
+    if gemType.toUpperCase() == "SAPPHIRE"
       gemColor = "color: blue;"
-    if gemType == "EMERALD"
+    if gemType.toUpperCase() == "EMERALD"
       gemColor = "color: green;"
     return gemColor
 
-  $scope.checkGemColor = (type) ->
-    return "color:red;!important"     if type == "ruby"
-    return "color:blue;!important"    if type == "sapphire"
-    return "color:green;!important"   if type == "emerald"
-    return "color:grey;!important" if type == "diamond"
+  $scope.checkGemColor = (gemType) ->
+    if gemType.toUpperCase() == "DIAMOND"
+      gemColor = "color: #dedede;"
+    if gemType.toUpperCase() == "RUBY"
+      gemColor = "color: red;"
+    if gemType.toUpperCase() == "SAPPHIRE"
+      gemColor = "color: blue;"
+    if gemType.toUpperCase() == "EMERALD"
+      gemColor = "color: green;"
+    return gemColor
 
 
   $scope.gemRepeat = (fee, player) ->

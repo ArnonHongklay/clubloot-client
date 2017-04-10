@@ -1,0 +1,62 @@
+<div class="compair-modal">
+  <div class="bg"></div>
+  <div class="content-box">
+    <i class="fa fa-times close-btn" ng-click="cancelVs()"></i>
+    <h3>{{playerMe.username}} VS {{playerVs.username}}</h3>
+    <div class="row">
+      <table class="table" style="border-radius: 0px;">
+        <tbody>
+          <tr>
+            <td class="text-blue" style="text-align:left;width: 50%">
+            </td>
+            <td class="text-blue" style="text-align:left;width: 25%">
+              <div style="width: 90%;background:#999;color:#fff;height:100%;text-align: center;line-height: 30px;">
+                {{playerMe.score}}
+              </div>
+            </td>
+            <td class="text-blue" style="text-align:left;width: 25%">
+              <div style="width: 90%;background:#50ACC4;color:#fff;height:100%;text-align: center;line-height: 30px;">
+                {{playerVs.score}}
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="text-blue" style="text-align:left;width: 50%">
+              question
+            </td>
+            <td class="text-blue" style="text-align:left;width: 25%">
+              {{playerMe.username}}
+            </td>
+            <td class="text-blue" style="text-align:left;width: 25%">
+              {{playerVs.username}}
+            </td>
+          </tr>
+          <tr ng-repeat="ans in contest.template.questions">
+            <td class="text-blue" style="text-align:left;width: 50%;">
+              Q <span style="width: 220px;max-width:90%;display:inline-block;line-height: 10px;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;">{{ans.name}}</span>
+            </td>
+            <td class="text-blue" style="text-align:left;width: 25%">
+              {{checkIndex($index, 'me')}}
+              <span ng-show="ans.is_correct!='false'">
+              <span ng-hide="contest.state=='upcoming'">
+                <i class="check-ans fa" ng-class="{'fa-check': playerMe.quizes[$index].correct==1, 'fa-times': playerMe.quizes[$index].correct==0}"></i>
+              </span>
+              </span>
+            </td>
+            <td class="text-blue" style="text-align:left;width: 25%">
+              
+              <span ng-show="contest.state=='live' || contest.state=='end'">
+              {{checkIndex($index, 'vs')}}
+              <span ng-hide="contest.state=='upcoming'">
+              <span ng-show="ans.is_correct!='false'">
+              <i class="check-ans fa" ng-class="{'fa-check': playerVs.quizes[$index].correct==1, 'fa-times': playerVs.quizes[$index].correct==0}"></i>
+              </span>
+              </span>
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

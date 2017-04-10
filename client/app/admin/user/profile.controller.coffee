@@ -4,7 +4,7 @@ angular.module 'clublootApp'
   $scope.menuActive = 'Profile'
 
   $scope.update = ->
-    $http.put("/api/users/#{$scope.user._id}/profile",
+    $http.put("/api/users/#{$scope.user.id.$oid}/profile",
       $scope.user
     ).success((data, status, headers, config) ->
 

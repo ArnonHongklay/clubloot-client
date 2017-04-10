@@ -7,8 +7,9 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <base href="/">
-    <title></title>
+    <title>Clubloot</title>
     <meta name="description" content="">
+    <meta name="action-cable-url" content="ws://api.clubloot.com/cable"/>
     <meta name="viewport" content="width=device-width">
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!-- build:css(client) app/vendor.css -->
@@ -81,6 +82,8 @@
       <script src="bower_components/collapsible.js/jquery.collapsible.js"></script>
       <script src="bower_components/twitter-bootstrap-wizard/jquery.bootstrap.wizard.min.js"></script>
       <script src="bower_components/checklist-model/checklist-model.js"></script>
+      <script src="bower_components/ngCable/src/action-cable.js"></script>
+      <script src="bower_components/ngCable/src/ngCable.js"></script>
       <!-- endbower -->
       <script src="socket.io-client/socket.io.js"></script>
     <!-- endbuild -->
@@ -125,9 +128,16 @@
           <script src="app/admin/user/transactions.js"></script>
           <script src="app/admin/user/user.js"></script>
           <script src="app/contest/contest.js"></script>
+          <script src="app/contest/contest_edit.js"></script>
+          <script src="app/contest/contest_join.js"></script>
           <script src="app/contest/contest_new.js"></script>
           <script src="app/contest/contest_question.js"></script>
+          <script src="app/contest/contest_quiz.js"></script>
           <script src="app/contest/contest_show.js"></script>
+          <script src="app/contest/program/contest_show.js"></script>
+          <script src="app/contest/program/contest_vs.js"></script>
+          <script src="app/contest/program/template.js"></script>
+          <script src="app/contest/program/template_contest.js"></script>
           <script src="app/convert_gems/convert.js"></script>
           <script src="app/main/joined.js"></script>
           <script src="app/main/main.js"></script>

@@ -13,6 +13,20 @@ config    = require '../../config/environment'
 SigninLog = require '../signin_log/signin_log.model'
 jwt       = require 'jsonwebtoken'
 
+stringLength = 20
+stringArray = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '!', '?']
+
+
+getToken = ->
+  rndString = ''
+  # build a string with random characters
+  i = 1
+  while i < stringLength
+    rndNum = Math.ceil(Math.random() * stringArray.length) - 1
+    rndString = rndString + stringArray[rndNum]
+    i++
+  return rndString
+
 DateDiff =
   inDays: (d1, d2) ->
     t2 = d2.getTime()
@@ -76,8 +90,11 @@ exports.create = (req, res, next) ->
   newUser.created_at = new Date()
   newUser.last_seen = new Date()
   newUser.messages = []
+  newUser.token = getToken()
   today = new Date()
   newUser.save (err, user) ->
+    console.log "0320390129301930219301290"
+    console.log user
     SigninLog.create {user_id: newUser._id, created_at: today}, (err, SigninLog) ->
       console.log SigninLog
     return validationError(res, err)  if err

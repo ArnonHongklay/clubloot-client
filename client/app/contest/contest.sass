@@ -1,3 +1,5 @@
+.program-show.mobile
+  display: none
 .place-no
   width: 30px
   display: inline-block
@@ -5,6 +7,8 @@
   background: #999
   color: #fff
   margin-right: 10px
+.bg-grey
+  background: rgba(190, 190, 190, 0.2)
 tr.max-room
   td, .text-contest, .circle
     color: #999!important
@@ -17,6 +21,7 @@ tr.max-room
   display: -webkit-flex
   display: flex
   width: 100%
+  min-width: 165px
   margin: 10px 0px
   .flex-item
     flex: 1
@@ -106,10 +111,10 @@ section.contest-show
 
   .contest-detail, .player-detail
     position: absolute
-    left: 260px
+    left: 0px
     box-sizing: border-box
     width: 400px
-    top: 50px
+    top: 0px
     bottom: 0px
     overflow-y: auto
     background: #fff
@@ -118,10 +123,10 @@ section.contest-show
 
   .room-detail
     position: absolute
-    left: 670px
+    left: 410px
     box-sizing: border-box
     right: 0px
-    top: 50px
+    top: 00px
     bottom: 0px
     overflow-y: auto
     background: #fff
@@ -203,6 +208,32 @@ section.contest-show
     background: rgb(147, 205, 221)
 
 @media (max-width: 768px)
+  .desktop
+    display: none
+  .program-show.mobile
+    display: block
+    .flex-container
+      position: relative
+      max-width: 370px
+    .item-show
+      display: block!important
+      .text-box
+        z-index: 1
+        width: 50%
+        position: absolute
+        right: 0px
+        top: 0px
+        background: #fff
+        padding-top: 35px
+      img
+        position: absolute
+        width: 50%
+        height: 100%
+        top: 0px
+        left: 0px
+        z-index: -1
+
+
   section.contest-show.phone
     .contest-detail, .player-detail
       left: 0px
@@ -222,6 +253,14 @@ section.contest-show
       font-size: 20px
 
 section.contest-new
+  .main-q-box
+    .q-box.question-title
+      background: #fafafa
+      box-shadow: 0px 1px 3px -1px #444
+      margin-top: 5px
+    .q-box.ans
+      text-indent: 20px
+      
   .smb
     display: none
   .term-text
@@ -250,6 +289,7 @@ section.contest-new
     line-height: 25px!important
     border: 1px solid #dedede
     padding-left: 10px
+    margin-top: 60px
   .btn
     border-radius: 0px
   .q-box

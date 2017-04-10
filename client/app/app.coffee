@@ -10,6 +10,7 @@ angular.module 'clublootApp', [
   'ngFileUpload',
   'nvd3',
   'checklist-model',
+  'ngCable',
   'angularMoment'
 ]
 .config ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) ->
@@ -30,10 +31,10 @@ angular.module 'clublootApp', [
 
   # Intercept 401s and redirect you to login
   responseError: (response) ->
-    if response.status is 401
-      $location.path '/login'
+    # if response.status is 401
+      # $location.path '/login'
       # remove any stale tokens
-      $cookieStore.remove 'token'
+      # $cookieStore.remove 'token'
 
     $q.reject response
 
@@ -46,3 +47,7 @@ angular.module 'clublootApp', [
   $rootScope.$on '$stateChangeStart', (event, next) ->
     Auth.isLoggedInAsync (loggedIn) ->
       $location.path "/login" if next.authenticate and not loggedIn
+
+
+
+

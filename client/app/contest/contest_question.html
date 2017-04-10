@@ -13,7 +13,7 @@
           <div ng-repeat="player in contests.player" ng-if="player.uid==current_user._id">
             <div ng-repeat="(i, q) in contest.ques track by i" class="g-text">
               <i class="fa fa-check-circle checked-icon" aria-hidden="true" ng-show="qaSelection[i]"></i>
-              <div class="q-box" ng-click="openAns(i)">Question {{q.title}}</div>
+              <div class="q-box question-title" ng-click="openAns(i)">Question {{q.title}}</div>
               <div class="q-box ans" ng-repeat="(x,a) in q.answers track by x" >
                 <input type=radio id="rad{{i}}{{x}}" ng-model="qaSelection[i]" value="{{x}}" ng-checked="x == player.answers[i]">{{a.title}}
               </div>

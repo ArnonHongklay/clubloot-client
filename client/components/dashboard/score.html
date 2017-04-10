@@ -1,7 +1,7 @@
 <div class="row">
   <div class="col-lg-12">
     <h2 style="color: #8066A0; cursor: pointer" ui-sref="main">
-      {{$root.currentUser.username}} Dashboard
+      {{user.username}} Dashboard
     </h2>
   </div>
 </div>
@@ -33,27 +33,27 @@
     </div>
     <div class="flex-main-container">
       <div class="flex-main-item" ui-sref="won" style="background: #8066A0; border: 0px; padding-top: 25px; color: #fff; font-size: 35px; cursor: pointer;">
-        {{$root.currentUser.wonContest.length}}
+        {{user.winners}}
       </div>
       <div style="width: 50px"></div>
       <div class="flex-main-item">
-        {{$root.currentUser.coins | currency:"":0}}<br>
+        {{user.coins | currency:"":0}}<br>
         <img src="assets/images/Piggy Bank Icon.png" width="44">
       </div>
       <div class="flex-main-item" style="color: #951111">
-        {{$root.currentUser.rubies}} <br>
+        {{user.rubies}} <br>
         <i class="fa fa-diamond" aria-hidden="true"></i>
       </div>
       <div class="flex-main-item" style="color: #2A4C7A">
-        {{$root.currentUser.sapphires}} <br>
+        {{user.sapphires}} <br>
         <i class="fa fa-diamond" aria-hidden="true"></i>
       </div>
       <div class="flex-main-item" style="color: #758F42">
-        {{$root.currentUser.emeralds}} <br>
+        {{user.emeralds}} <br>
         <i class="fa fa-diamond" aria-hidden="true"></i>
       </div>
       <div class="flex-main-item" style="color: #9F9B93">
-        {{$root.currentUser.diamonds}} <br>
+        {{user.diamonds}} <br>
         <i class="fa fa-diamond" aria-hidden="true"></i>
       </div>
     </div>

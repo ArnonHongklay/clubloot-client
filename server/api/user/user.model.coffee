@@ -21,6 +21,7 @@ UserSchema = new Schema(
     type: String
     lowercase: true
   tokens: String
+  token: String
   created_at: Date
   first_name: String
   last_name: String
@@ -82,7 +83,7 @@ UserSchema.virtual('profile').get ->
   role: @role
 
 # Non-sensitive info we'll be putting in the token
-UserSchema.virtual('token').get ->
+UserSchema.virtual('accesstoken').get ->
   _id: @_id
   role: @role
 

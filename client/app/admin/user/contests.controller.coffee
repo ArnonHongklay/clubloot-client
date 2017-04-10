@@ -8,7 +8,7 @@ angular.module 'clublootApp'
   $scope.menu = (status) ->
     $scope.menuActiveContest = status
     $scope.contests = []
-    $http.get("/api/users/#{$scope.user._id}/contests/#{status}").success (data) ->
+    $http.get("/api/users/#{$scope.user.id.$oid}/contests/#{status}").success (data) ->
       $scope.contests = data
 
       $.each $scope.program, (x, p) ->

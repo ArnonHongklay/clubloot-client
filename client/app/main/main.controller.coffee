@@ -91,25 +91,6 @@ angular.module 'clublootApp'
           $scope.getAllContest()
         , 2000
 
-  # $scope.getUserProfile = () ->
-  #   token = $cookieStore.get 'token'
-  #   $.ajax
-  #     url: "http://api.clubloot.com/v2/user/profile.json?token=#{$scope.userToken}"
-  #     type: 'GET'
-  #     datatype: 'json'
-  #     success: (data) ->
-  #       console.log "user-contests profile"
-  #       $scope.userProfile = data.data
-  #       console.log $scope.userProfile
-  #       # console.log $scope.allContests
-  #       $scope.$apply()
-  #     error: (jqXHR, textStatus, errorThrown) ->
-  #       $timeout ->
-  #         $scope.getUserProfile()
-  #       , 2000
-
-
-
   $scope.getUpcoming = () ->
 
     $.ajax
@@ -280,7 +261,6 @@ angular.module 'clublootApp'
     if current.indexOf('quiz') >= 0 || current.indexOf('edit') >= 0 || current.indexOf('join') >= 0
       $scope.setFilter('upcoming')
 
-
   # $scope.currentUser = Auth.getCurrentUser()
   $('body').css({background: '#fff'})
 
@@ -390,9 +370,6 @@ angular.module 'clublootApp'
 
   if $scope.userToken
     $scope.getUserProfile()
-
-
-  
 
 angular.module 'clublootApp'
 .directive 'gemRepeat', ($timeout, $state, $stateParams) ->

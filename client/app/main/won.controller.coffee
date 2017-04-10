@@ -99,7 +99,6 @@ angular.module 'clublootApp'
         return
   $scope.getWin()
 
-
   $scope.checkJoin = (contest) ->
     alreadyJoin = false
     for p in contest.player
@@ -156,7 +155,6 @@ angular.module 'clublootApp'
     if gemType.toUpperCase() == "EMERALD"
       gemColor = "color: green;"
     return gemColor
-
 
   $scope.gemRepeat = (fee, player) ->
     prize = parseInt(fee) * parseInt(player)

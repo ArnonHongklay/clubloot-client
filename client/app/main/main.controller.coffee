@@ -1,9 +1,13 @@
 'use strict'
 
 angular.module 'clublootApp'
-.controller 'MainCtrl', ($scope, $http, socket, $rootScope, $state, Auth, $cable, contests, $window, broadcasts, $timeout) ->
+.controller 'MainCtrl', ($scope, $http, socket, $rootScope, $state, Auth, $cable, $cookieStore, contests, $window, broadcasts, $timeout) ->
   $scope.socket = socket.socket
-  $scope.user = Auth.getCurrentUser()
+  # $scope.user = Auth.getCurrentUser()
+  $scope.userToken = $cookieStore.get 'token'
+
+  # console.log $scope.user
+  console.log "scope user"
   
   # return if $state.current.templateUrl != "app/main/main.html"
 
@@ -64,37 +68,28 @@ angular.module 'clublootApp'
   }
 
   $scope.getAllContest = () ->
-    # console.log "get all contests"
+    console.log "get all contests"
     $.ajax
-      url: "http://api.clubloot.com/v2/user/contests.json?token=#{$scope.user.token}&state=all"
+      url: "http://api.clubloot.com/v2/user/contests.json?token=#{$scope.userToken}&state=all"
       type: 'GET'
       datatype: 'json'
       success: (data) ->
         # console.log "user-contests"
         $scope.allContests = data.data
-        # console.log $scope.allContests
+        console.log "all contest"
+        console.log $scope.allContests
+        $scope.upcomingCount = 0
+        $scope.liveCount = 0
+        for c in $scope.allContests
+          if c.state == 'upcoming'
+            $scope.upcomingCount += 1
+          if c.state == 'live'
+            $scope.liveCount += 1
         $scope.$apply()
       error: (jqXHR, textStatus, errorThrown) ->
         $timeout ->
           $scope.getAllContest()
         , 2000
-
-  $scope.getUserProfile = () ->
-    $.ajax
-      url: "http://api.clubloot.com/v2/user/profile.json?token=#{$scope.user.token}"
-      type: 'GET'
-      datatype: 'json'
-      success: (data) ->
-        # console.log "user-contests"
-        $scope.userProfile = data.data
-        # console.log $scope.allContests
-        $scope.$apply()
-      error: (jqXHR, textStatus, errorThrown) ->
-        $timeout ->
-          $scope.getUserProfile()
-        , 2000
-
-
 
   $scope.getUpcoming = () ->
 
@@ -180,24 +175,24 @@ angular.module 'clublootApp'
         , 2000
 
 
-  $scope.getAll = () ->
+  # $scope.getAll = () ->
     # $scope.getUpcoming()
     # $scope.getlive()
     # $scope.getCancel()
-    $scope.getWin()
+    # $scope.getWin()
     # $scope.getEnd()
     # $scope.getAllContest()
 
 
 
-  $scope.loopGetData = () ->
-    console.log "looCAll"
-    $timeout ->
-      $scope.getAll()
-      $scope.loopGetData()
-    , 30000
+  # $scope.loopGetData = () ->
+  #   console.log "looCAll"
+  #   $timeout ->
+  #     $scope.getAll()
+  #     $scope.loopGetData()
+  #   , 30000
 
-  $scope.getAll()
+  # $scope.getAll()
   # $scope.loopGetData()
 
 
@@ -246,7 +241,7 @@ angular.module 'clublootApp'
     score = []
     cur_user = 0
     for p, k in contest.leaders
-      if p.id.$oid == $scope.user._id
+      if p.id.$oid == $scope.user.id.$oid
         cur_user = p
       # score.push p.score
     # index_score = score.sort().reverse()
@@ -266,40 +261,17 @@ angular.module 'clublootApp'
     if current.indexOf('quiz') >= 0 || current.indexOf('edit') >= 0 || current.indexOf('join') >= 0
       $scope.setFilter('upcoming')
 
-
   # $scope.currentUser = Auth.getCurrentUser()
   $('body').css({background: '#fff'})
 
-  $http.get("/api/users/#{Auth.getCurrentUser()._id}").success (data) ->
-    $rootScope.currentUser = data
-
-  $scope.awesomeThings = []
-
   $scope.checkJoin = (contest) ->
     for p in contest.players
-      if p._id.$oid == $scope.user._id
+      if p._id.$oid == $scope.user.id.$oid
         return true
     return false
 
   $scope.checkHost = (contest) ->
-    contest.host._id.$oid == $scope.user._id
-
-  $http.get('/api/things').success (awesomeThings) ->
-    $scope.awesomeThings = awesomeThings
-    socket.syncUpdates 'thing', $scope.awesomeThings
-
-  $scope.addThing = ->
-    return if $scope.newThing is ''
-    $http.post '/api/things',
-      name: $scope.newThing
-
-    $scope.newThing = ''
-
-  $scope.deleteThing = (thing) ->
-    $http.delete '/api/things/' + thing._id
-
-  $scope.$on '$destroy', ->
-    socket.unsyncUpdates 'thing'
+    contest.host._id.$oid == $scope.user.id.$oid
 
   $scope.setFilter = (value) ->
     switch value
@@ -362,24 +334,42 @@ angular.module 'clublootApp'
     window.location.href = "/contest/#{contest.template_id}/"
 
 
-  $scope.cable = $cable('ws://api.clubloot.com/cable')
-  $scope.channel = $scope.cable.subscribe('ContestChannel', received: (data) ->
-    console.log "SOcket in dashboard"
-    if typeof(data) == "undefined"
-      $scope.getAllContest()
-      $scope.getWin()
-      $scope.getUserProfile()
-      return
-    if data.page == "dashboard" || data.page == "contest_details"
-      $scope.getAllContest()
-      $scope.getWin()
-      $scope.getUserProfile()
-      return
-    
-    return
-  )
+  $scope.getUserProfile = () ->
+    console.log "get all contests"
+    $.ajax
+      url: "http://api.clubloot.com/v2/user/profile.json?token=#{$scope.userToken}"
+      type: 'GET'
+      datatype: 'json'
+      success: (data) ->
+        $scope.user = data.data
+        console.log "getuserprofile SUccess"
+        console.log $scope.user
+        $scope.$apply()
+        $scope.cable = $cable('ws://api.clubloot.com/cable')
 
+        $scope.channel = $scope.cable.subscribe('ContestChannel', received: (data) ->
+          console.log "SOcket in dashboard"
+          if typeof(data) == "undefined"
+            $scope.getAllContest()
+            $scope.getWin()
+            # $scope.getUserProfile()
+            return
+          if data.page == "dashboard" || data.page == "contest_details"
+            $scope.getAllContest()
+            $scope.getWin()
+            # $scope.getUserProfile()
+            return
+          
+          return
+        )
+      error: (jqXHR, textStatus, errorThrown) ->
+        $timeout ->
+          console.log "error"
+          $scope.getUserProfile()
+        , 2000
 
+  if $scope.userToken
+    $scope.getUserProfile()
 
 angular.module 'clublootApp'
 .directive 'gemRepeat', ($timeout, $state, $stateParams) ->

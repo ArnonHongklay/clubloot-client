@@ -1,9 +1,27 @@
 'use strict'
 
 angular.module 'clublootApp'
-.controller 'PrizeCtrl', ($scope, $http, socket, prizes, Auth, $modal, $timeout) ->
+.controller 'PrizeCtrl', ($scope, $http, socket, prizes, $cookieStore, Auth, $modal, $timeout) ->
   $scope.prizes = prizes.data
-  $scope.user = Auth.getCurrentUser()
+
+  $scope.userToken = $cookieStore.get 'token'
+  $scope.getUserProfile = () ->
+    $.ajax
+      url: "http://api.clubloot.com/v2/user/profile.json?token=#{$scope.userToken}"
+      type: 'GET'
+      datatype: 'json'
+      success: (data) ->
+        $scope.user = data.data
+        $scope.$apply()
+       
+      error: (jqXHR, textStatus, errorThrown) ->
+        $timeout ->
+          $scope.getUserProfile()
+        , 2000
+
+  if $scope.userToken
+    $scope.getUserProfile()
+
 
   $scope.alphabets = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
 
@@ -24,6 +42,7 @@ angular.module 'clublootApp'
       success: (data) ->
         console.log data
         $scope.prizes = data.data
+        $scope.$apply()
         for prize in $scope.prizes
           if prize.price >= 0 && prize.price <= 10
             prize.tier = 1
@@ -69,7 +88,7 @@ angular.module 'clublootApp'
         url: "http://api.clubloot.com/v2/user/prize.json"
         type: 'POST'
         data: {
-          token: $scope.user.token
+          token: $scope.userToken
           prize_id: prize.id.$oid
         }
         datatype: 'json'

@@ -98,78 +98,97 @@ angular.module 'clublootApp'
 
   $scope.setData = () ->
     $.ajax
-      url: "http://api.clubloot.com/v2/contests/program/#{$stateParams.program_id}/all_contests.json"
+      url: "http://api.clubloot.com/v2/user/contest/#{$stateParams.contest_id}.json?token=#{$scope.userToken}"
       type: 'GET'
       datatype: 'json'
       success: (data) ->
-        $scope.contests = []
-        for templates in data.data
-          for contest in templates.contests
-            $scope.contests.push(contest)
-        contest = null
-        if data.status != 'failure'
-          for d in $scope.contests
-            if d.id.$oid == $stateParams.contest_id
-              contest = d
-        unless contest
-          $.ajax
-            url: "http://api.clubloot.com/v2/user/contest/#{$stateParams.contest_id}.json?token=#{$scope.userToken}"
-            type: 'GET'
-            datatype: 'json'
-            success: (data) ->
-              $scope.contest = data.data
-              $scope.contestPrize = data.data
-              $scope.$apply()
-              $scope.template_id = $scope.contest.template._id.$oid
-              $rootScope.template_id = $scope.template_id
-              $.ajax
-                url: "http://api.clubloot.com/v2/contests/program/#{$stateParams.program_id}/template/#{$scope.template_id}/contest/#{$stateParams.contest_id}.json"
-                type: 'GET'
-                datatype: 'json'
-                success: (data) ->
-                  $scope.contest = data.data
-                  for player in $scope.contest.leaders
-                    if player.id.$oid == $scope.user.id.$oid
-                      $scope.alreadyJoin = true
-                  $scope.$apply()
-                error: (jqXHR, textStatus, errorThrown) ->
-                  $timeout ->
-                    $scope.setData()
-                  , 2000
-                  return
-        else
-          $scope.$apply()
-          $scope.template_id = contest.template._id.$oid
-          $rootScope.template_id = $scope.template_id
-          $.ajax
-            url: "http://api.clubloot.com/v2/contests/program/#{$stateParams.program_id}/template/#{$scope.template_id}/contest/#{$stateParams.contest_id}.json"
-            type: 'GET'
-            datatype: 'json'
-            success: (data) ->
-              $scope.contest = data.data
-              for player in $scope.contest.leaders
-                if player.id.$oid == $scope.user.id.$oid
-                  $scope.alreadyJoin = true
-              $scope.$apply()
-            error: (jqXHR, textStatus, errorThrown) ->
-              $timeout ->
-                $scope.setData()
-              , 2000
-              return
-          $.ajax
-            url: "http://api.clubloot.com/v2/user/contest/#{$stateParams.contest_id}.json?token=#{$scope.userToken}"
-            type: 'GET'
-            datatype: 'json'
-            success: (data) ->
-              $scope.contestPrize = data.data
-              $scope.$apply()
-
-
+        $scope.contest = data.data
+        $scope.contestPrize = data.data
+        for player in $scope.contest.leaders
+          if player.id.$oid == $scope.user.id.$oid
+            $scope.alreadyJoin = true
+        $scope.$apply()
       error: (jqXHR, textStatus, errorThrown) ->
         $timeout ->
           $scope.setData()
         , 2000
         return
+
+
+  # $scope.setData = () ->
+  #   $.ajax
+  #     url: "http://api.clubloot.com/v2/contests/program/#{$stateParams.program_id}/all_contests.json"
+  #     type: 'GET'
+  #     datatype: 'json'
+  #     success: (data) ->
+  #       $scope.contests = []
+  #       for templates in data.data
+  #         for contest in templates.contests
+  #           $scope.contests.push(contest)
+  #       contest = null
+  #       if data.status != 'failure'
+  #         for d in $scope.contests
+  #           if d.id.$oid == $stateParams.contest_id
+  #             contest = d
+  #       unless contest
+  #         $.ajax
+  #           url: "http://api.clubloot.com/v2/user/contest/#{$stateParams.contest_id}.json?token=#{$scope.userToken}"
+  #           type: 'GET'
+  #           datatype: 'json'
+  #           success: (data) ->
+  #             $scope.contest = data.data
+  #             $scope.contestPrize = data.data
+  #             $scope.$apply()
+  #             $scope.template_id = $scope.contest.template._id.$oid
+  #             $rootScope.template_id = $scope.template_id
+  #             $.ajax
+  #               url: "http://api.clubloot.com/v2/contests/program/#{$stateParams.program_id}/template/#{$scope.template_id}/contest/#{$stateParams.contest_id}.json"
+  #               type: 'GET'
+  #               datatype: 'json'
+  #               success: (data) ->
+  #                 $scope.contest = data.data
+  #                 for player in $scope.contest.leaders
+  #                   if player.id.$oid == $scope.user.id.$oid
+  #                     $scope.alreadyJoin = true
+  #                 $scope.$apply()
+  #               error: (jqXHR, textStatus, errorThrown) ->
+  #                 $timeout ->
+  #                   $scope.setData()
+  #                 , 2000
+  #                 return
+  #       else
+  #         $scope.$apply()
+  #         $scope.template_id = contest.template._id.$oid
+  #         $rootScope.template_id = $scope.template_id
+  #         $.ajax
+  #           url: "http://api.clubloot.com/v2/contests/program/#{$stateParams.program_id}/template/#{$scope.template_id}/contest/#{$stateParams.contest_id}.json"
+  #           type: 'GET'
+  #           datatype: 'json'
+  #           success: (data) ->
+  #             $scope.contest = data.data
+  #             for player in $scope.contest.leaders
+  #               if player.id.$oid == $scope.user.id.$oid
+  #                 $scope.alreadyJoin = true
+  #             $scope.$apply()
+  #           error: (jqXHR, textStatus, errorThrown) ->
+  #             $timeout ->
+  #               $scope.setData()
+  #             , 2000
+  #             return
+  #         $.ajax
+  #           url: "http://api.clubloot.com/v2/user/contest/#{$stateParams.contest_id}.json?token=#{$scope.userToken}"
+  #           type: 'GET'
+  #           datatype: 'json'
+  #           success: (data) ->
+  #             $scope.contestPrize = data.data
+  #             $scope.$apply()
+
+
+  #     error: (jqXHR, textStatus, errorThrown) ->
+  #       $timeout ->
+  #         $scope.setData()
+  #       , 2000
+  #       return
 
   $scope.calGem = (fee, player) ->
     prize = parseInt(fee) * parseInt(player)

@@ -68,13 +68,13 @@ angular.module 'clublootApp'
   }
 
   $scope.getAllContest = () ->
-    console.log "get all contests"
+    console.log "get all contests111"
     $.ajax
       url: "http://api.clubloot.com/v2/user/contests.json?token=#{$scope.userToken}&state=all"
       type: 'GET'
       datatype: 'json'
       success: (data) ->
-        # console.log "user-contests"
+        console.log "user-contests"
         $scope.allContests = data.data
         console.log "all contest"
         console.log $scope.allContests
@@ -91,22 +91,22 @@ angular.module 'clublootApp'
           $scope.getAllContest()
         , 2000
 
-  # $scope.getUserProfile = () ->
-  #   token = $cookieStore.get 'token'
-  #   $.ajax
-  #     url: "http://api.clubloot.com/v2/user/profile.json?token=#{$scope.userToken}"
-  #     type: 'GET'
-  #     datatype: 'json'
-  #     success: (data) ->
-  #       console.log "user-contests profile"
-  #       $scope.userProfile = data.data
-  #       console.log $scope.userProfile
-  #       # console.log $scope.allContests
-  #       $scope.$apply()
-  #     error: (jqXHR, textStatus, errorThrown) ->
-  #       $timeout ->
-  #         $scope.getUserProfile()
-  #       , 2000
+  $scope.getUserProfile = () ->
+    token = $cookieStore.get 'token'
+    $.ajax
+      url: "http://api.clubloot.com/v2/user/profile.json?token=#{$scope.userToken}"
+      type: 'GET'
+      datatype: 'json'
+      success: (data) ->
+        console.log "user-contests profile"
+        $scope.userProfile = data.data
+        console.log $scope.userProfile
+        # console.log $scope.allContests
+        $scope.$apply()
+      error: (jqXHR, textStatus, errorThrown) ->
+        $timeout ->
+          $scope.getUserProfile()
+        , 2000
 
 
 

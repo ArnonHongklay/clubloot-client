@@ -232,7 +232,6 @@ angular.module 'clublootApp'
         a = 0
         return a
     return a
-  
 
   $scope.userToken = $cookieStore.get 'token'
   $scope.getUserProfile = () ->
@@ -261,6 +260,3 @@ angular.module 'clublootApp'
 
   if $scope.userToken
     $scope.getUserProfile()
-
-  
-

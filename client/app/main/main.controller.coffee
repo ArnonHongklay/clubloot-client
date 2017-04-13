@@ -108,8 +108,6 @@ angular.module 'clublootApp'
           $scope.getUserProfile()
         , 2000
 
-
-
   $scope.getUpcoming = () ->
 
     $.ajax
@@ -280,7 +278,6 @@ angular.module 'clublootApp'
     if current.indexOf('quiz') >= 0 || current.indexOf('edit') >= 0 || current.indexOf('join') >= 0
       $scope.setFilter('upcoming')
 
-
   # $scope.currentUser = Auth.getCurrentUser()
   $('body').css({background: '#fff'})
 
@@ -390,9 +387,6 @@ angular.module 'clublootApp'
 
   if $scope.userToken
     $scope.getUserProfile()
-
-
-  
 
 angular.module 'clublootApp'
 .directive 'gemRepeat', ($timeout, $state, $stateParams) ->

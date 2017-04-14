@@ -3,15 +3,9 @@
 angular.module 'clublootApp'
 .controller 'MainCtrl', ($scope, $http, socket, $rootScope, $state, Auth, $cable, $cookieStore, contests, $window, broadcasts, $timeout) ->
   $scope.socket = socket.socket
-  # $scope.user = Auth.getCurrentUser()
-  $scope.userToken = $cookieStore.get 'token'
-
-  # console.log $scope.user
-  console.log "scope user"
-  
-  # return if $state.current.templateUrl != "app/main/main.html"
-
+  $scope.userToken = $cookieStore.get 'token'  
   $rootScope.openMessage = "k"
+
   if $window.location.host == 'clubloot.com'
     $window.location.replace('http://clubloot.com/landing.html')
 
@@ -68,16 +62,12 @@ angular.module 'clublootApp'
   }
 
   $scope.getAllContest = () ->
-    console.log "get all contests111"
     $.ajax
       url: "http://api.clubloot.com/v2/user/contests.json?token=#{$scope.userToken}&state=all"
       type: 'GET'
       datatype: 'json'
       success: (data) ->
-        console.log "user-contests"
         $scope.allContests = data.data
-        console.log "all contest"
-        console.log $scope.allContests
         $scope.upcomingCount = 0
         $scope.liveCount = 0
         for c in $scope.allContests
@@ -98,10 +88,7 @@ angular.module 'clublootApp'
       type: 'GET'
       datatype: 'json'
       success: (data) ->
-        console.log "user-contests profile"
         $scope.userProfile = data.data
-        console.log $scope.userProfile
-        # console.log $scope.allContests
         $scope.$apply()
       error: (jqXHR, textStatus, errorThrown) ->
         $timeout ->
@@ -115,10 +102,7 @@ angular.module 'clublootApp'
       type: 'GET'
       datatype: 'json'
       success: (data) ->
-        #console.log $scope.user.token
-        #console.log "user-contests-upcoming"
         $scope.upcomingContests = data.data
-        #console.log $scope.upcomingContests
         $scope.$apply()
       error: (jqXHR, textStatus, errorThrown) ->
         $timeout ->
@@ -131,10 +115,7 @@ angular.module 'clublootApp'
       type: 'GET'
       datatype: 'json'
       success: (data) ->
-        #console.log $scope.user.token
-        #console.log "user-contests"
         $scope.liveContests = data.data
-        #console.log $scope.upcomingContests
         $scope.$apply()
       error: (jqXHR, textStatus, errorThrown) ->
         $timeout ->
@@ -147,10 +128,7 @@ angular.module 'clublootApp'
       type: 'GET'
       datatype: 'json'
       success: (data) ->
-        #console.log $scope.user.token
-        #console.log "user-contests"
         $scope.cancelContests = data.data
-        #console.log $scope.cancelContests
         $scope.$apply()
       error: (jqXHR, textStatus, errorThrown) ->
         $timeout ->
@@ -163,10 +141,7 @@ angular.module 'clublootApp'
       type: 'GET'
       datatype: 'json'
       success: (data) ->
-        #console.log $scope.user.token
-        #console.log "user-contests"
         $scope.endContests = data.data
-        #console.log $scope.endContests
         $scope.$apply()
       error: (jqXHR, textStatus, errorThrown) ->
         $timeout ->
@@ -179,39 +154,13 @@ angular.module 'clublootApp'
       type: 'GET'
       datatype: 'json'
       success: (data) ->
-        #console.log $scope.user.token
-        #console.log "user-oooooooooo"
         $scope.wonContests = data.data
         $rootScope.wonContests = data.data
-        #console.log $scope.wonContests
-
         $scope.$apply()
       error: (jqXHR, textStatus, errorThrown) ->
         $timeout ->
           $scope.getWin()
         , 2000
-
-
-  # $scope.getAll = () ->
-    # $scope.getUpcoming()
-    # $scope.getlive()
-    # $scope.getCancel()
-    # $scope.getWin()
-    # $scope.getEnd()
-    # $scope.getAllContest()
-
-
-
-  # $scope.loopGetData = () ->
-  #   console.log "looCAll"
-  #   $timeout ->
-  #     $scope.getAll()
-  #     $scope.loopGetData()
-  #   , 30000
-
-  # $scope.getAll()
-  # $scope.loopGetData()
-
 
   $scope.liveCount = () ->
     $('.live-contest-el').length
@@ -254,31 +203,18 @@ angular.module 'clublootApp'
     i + 'th'
 
   $scope.checkPosition = (contest) ->
-    # console.log contest
     score = []
     cur_user = 0
     for p, k in contest.leaders
       if p.id.$oid == $scope.user.id.$oid
         cur_user = p
-      # score.push p.score
-    # index_score = score.sort().reverse()
-    # user_score = contest.player[cur_user].score
-    # rank = index_score.indexOf(user_score) + 1
-    #console.log "position"
-    #console.log cur_user.position
-    #console.log $scope.ordinal_suffix_of(cur_user.position)
     return $scope.ordinal_suffix_of(cur_user.position)
 
 
   $scope.$on '$locationChangeStart', (event, next, current) ->
-    #console.log "state change"
-    #console.log event
-    #console.log next
-    #console.log current
     if current.indexOf('quiz') >= 0 || current.indexOf('edit') >= 0 || current.indexOf('join') >= 0
       $scope.setFilter('upcoming')
 
-  # $scope.currentUser = Auth.getCurrentUser()
   $('body').css({background: '#fff'})
 
   $scope.checkJoin = (contest) ->
@@ -293,17 +229,14 @@ angular.module 'clublootApp'
   $scope.setFilter = (value) ->
     switch value
       when 'live'
-        # $scope.getlive()
         $scope.live = true
         $scope.upcoming = false
         $scope.past = false
       when 'upcoming'
-        # $scope.getUpcoming()
         $scope.live = false
         $scope.upcoming = true
         $scope.past = false
       when 'past'
-        # $scope.getEnd()
         $scope.live = false
         $scope.upcoming = false
         $scope.past = true
@@ -352,36 +285,29 @@ angular.module 'clublootApp'
 
 
   $scope.getUserProfile = () ->
-    console.log "get all contests"
     $.ajax
       url: "http://api.clubloot.com/v2/user/profile.json?token=#{$scope.userToken}"
       type: 'GET'
       datatype: 'json'
       success: (data) ->
         $scope.user = data.data
-        console.log "getuserprofile SUccess"
-        console.log $scope.user
         $scope.$apply()
         $scope.cable = $cable('ws://api.clubloot.com/cable')
 
         $scope.channel = $scope.cable.subscribe('ContestChannel', received: (data) ->
-          console.log "SOcket in dashboard"
           if typeof(data) == "undefined"
             $scope.getAllContest()
             $scope.getWin()
-            # $scope.getUserProfile()
             return
           if data.page == "dashboard" || data.page == "contest_details"
             $scope.getAllContest()
             $scope.getWin()
-            # $scope.getUserProfile()
             return
           
           return
         )
       error: (jqXHR, textStatus, errorThrown) ->
         $timeout ->
-          console.log "error"
           $scope.getUserProfile()
         , 2000
 

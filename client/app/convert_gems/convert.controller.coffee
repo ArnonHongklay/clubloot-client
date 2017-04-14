@@ -10,7 +10,6 @@ angular.module 'clublootApp'
     datatype: 'json'
     success: (data) ->
       $scope.gems = data.data
-      console.log $scope.gems
     error: (jqXHR, textStatus, errorThrown) ->
       return
 
@@ -22,7 +21,6 @@ angular.module 'clublootApp'
       datatype: 'json'
       success: (data) ->
         $scope.user = data.data
-        console.log $scope.user
         $scope.$apply()
         $scope.currentGem = {
           diamonds: $scope.user.diamonds, emeralds: $scope.user.emeralds, sapphires: $scope.user.sapphires, rubies: $scope.user.rubies, coins: $scope.user.coins
@@ -117,7 +115,6 @@ angular.module 'clublootApp'
       $scope.currentGem.rubies    = $scope.currentGem.rubies - $scope.gems.sapphire.rate
       $scope.currentGem.coins     = $scope.currentGem.coins - coinFee
       gemMinus = $scope.gems.sapphire.rate
-    console.log coinFee
     $scope.$apply()
     $(".value-box-added."+type+" .num-noti").html("+1")
     $(".value-box-added."+subType+" .num-noti").html("-"+gemMinus)
@@ -148,8 +145,7 @@ angular.module 'clublootApp'
         type: type
       }
       success: (data) ->
-        console.log data
-        console.log $scope.gems
+        return
       error: (jqXHR, textStatus, errorThrown) ->
         return
 

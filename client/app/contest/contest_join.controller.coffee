@@ -2,7 +2,6 @@
 
 angular.module 'clublootApp'
 .controller 'ContestJoinCtrl', ($scope, $http, socket, $timeout, $cookieStore, Auth, $state, $stateParams) ->
-  console.log $stateParams
   $scope.selectQues = null
   $scope.checkAnswer = false
   $scope.qaSelection = []
@@ -53,14 +52,8 @@ angular.module 'clublootApp'
       }
       url: "http://api.clubloot.com/v2/user/contest/quiz.json"
       ).done (data) ->
-        console.log "submitAnswer"
-        console.log data
         $state.go('main')
-        # console.log data
-      # console.log data
-    # console.log data
-    # return
-
+      
   $scope.justSubmit = (next) ->
     $.ajax(
       method: 'POST'
@@ -71,8 +64,6 @@ angular.module 'clublootApp'
       }
       url: "http://api.clubloot.com/v2/user/contest/quiz.json"
       ).done (data) ->
-        console.log "submitAnswer"
-        console.log data
         window.location.href = next
 
   $scope.getAnswer = () ->
@@ -91,11 +82,6 @@ angular.module 'clublootApp'
       # $http.post("/api/contest/#{$scope.contest.id}/destroy", {}).success (data, status, headers, config) ->
 
   $scope.$on '$locationChangeStart', (event, next, current) ->
-
-    console.log "location change"
-    console.log current
-    console.log next
-
     return if next.indexOf("join") >=0
     return if current.indexOf("contest/new") >=0
     return if $scope.createNewStep == '1'

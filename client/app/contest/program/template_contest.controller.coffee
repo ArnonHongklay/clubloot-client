@@ -2,13 +2,7 @@
 
 angular.module 'clublootApp'
 .controller 'ContestTemplateShowCtrl', ($scope, $http, Auth, $state, $cable, $cookieStore, $stateParams, $rootScope, $timeout) ->
-  # $scope.user = Auth.getCurrentUser()
-  console.log 'ContestTemplateShowCtrl'
-  console.log $stateParams
   $scope.userToken = $cookieStore.get 'token'
-
-  # return if  $state.current.templateUrl != "app/contest/program/template_contest.html"
-
   $scope.gemMatrix = {
     list:[
       { player: 2  , fee: [55, 110, 165, 220, 275, 550, 825, 1100, 1375, 2750, 4125, 5500, 6875] },
@@ -95,16 +89,7 @@ angular.module 'clublootApp'
         , 2000
         return
 
-  $scope.loopGetData = () ->
-    $timeout ->
-      $scope.setData()
-      $scope.loopGetData()
-    , 30000
-
-  # $scope.setData()
-  # $scope.loopGetData()
   $scope.joinContest = (contest) ->
-    console.log contest
     $.ajax(
       method: 'POST'
       data: {
@@ -166,6 +151,3 @@ angular.module 'clublootApp'
 
   if $scope.userToken
     $scope.getUserProfile()
-  
-
-  

@@ -2,12 +2,8 @@
 
 angular.module 'clublootApp'
 .controller 'WonCtrl', ($scope, $http, socket, $cookieStore, $rootScope, Auth, contests) ->
-  # $scope.currentUser = Auth.getCurrentUser()
-  # $scope.user = Auth.getCurrentUser()
-  # $scope.contests = Auth.getCurrentUser().wonContest
   $scope.userToken = $cookieStore.get 'token'
   $scope.getUserProfile = () ->
-    console.log "get all contests"
     $.ajax
       url: "http://api.clubloot.com/v2/user/profile.json?token=#{$scope.userToken}"
       type: 'GET'
@@ -18,7 +14,6 @@ angular.module 'clublootApp'
         
       error: (jqXHR, textStatus, errorThrown) ->
         $timeout ->
-          console.log "error"
           $scope.getUserProfile()
         , 2000
 
@@ -70,29 +65,17 @@ angular.module 'clublootApp'
 
   }
 
-  # socket.syncUpdates 'contest', $scope.contests
 
   $('body').css({background: '#fff'})
 
-  # $http.get("/api/users/#{Auth.getCurrentUser()._id}").success (data) ->
-  #   $rootScope.currentUser = data
-
-  # $scope.awesomeThings = []
-
-  # $http.get('/api/things').success (awesomeThings) ->
-  #   $scope.awesomeThings = awesomeThings
-  #   socket.syncUpdates 'thing', $scope.awesomeThings
   $scope.getWin = () ->
     $.ajax
       url: "http://api.clubloot.com/v2/user/contests.json?token=#{$scope.userToken}&state=winners"
       type: 'GET'
       datatype: 'json'
       success: (data) ->
-        console.log $scope.user.token
-        console.log "user-contestsขจจจจจจจจจจจจจจจจจจจจจจจจจจจจจ"
         $scope.wonContests = data.data
         $rootScope.wonContests = data.data
-        console.log $scope.wonContests
         $scope.$apply()
       error: (jqXHR, textStatus, errorThrown) ->
         $scope.getWin()

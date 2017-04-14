@@ -22,10 +22,7 @@ angular.module 'clublootApp'
   if $scope.userToken
     $scope.getUserProfile()
 
-
   $scope.alphabets = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
-
-  
 
   $scope.$watch 'prize_select.selected.length', ->
     $('[class*="defaultItem"]').removeClass('hide-display')
@@ -40,7 +37,6 @@ angular.module 'clublootApp'
       type: 'GET'
       datatype: 'json'
       success: (data) ->
-        console.log data
         $scope.prizes = data.data
         $scope.$apply()
         for prize in $scope.prizes
@@ -93,7 +89,6 @@ angular.module 'clublootApp'
         }
         datatype: 'json'
         success: (data) ->
-          console.log data
           if data.status == "failure"
             swal(data.data)
           else

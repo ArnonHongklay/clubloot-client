@@ -2,8 +2,6 @@
 
 angular.module 'clublootApp'
 .controller 'ContestTemplateCtrl', ($scope, $http, Auth, $state, $stateParams, $cookieStore, $rootScope, $timeout) ->
-  # $scope.user = Auth.getCurrentUser()
-  console.log "ContestTemplateCtrl"
 
   $scope.setData = () ->
     $.ajax
@@ -34,13 +32,6 @@ angular.module 'clublootApp'
 
   $scope.selectTemplate = (program) ->
     $state.go('programTemplate.template', {program_id: program.id.$oid})
-
-
-  $scope.loopGetData = () ->
-    $timeout ->
-      $scope.setData()
-      $scope.loopGetData()
-    , 30000
 
   $scope.userToken = $cookieStore.get 'token'
   $scope.getUserProfile = () ->

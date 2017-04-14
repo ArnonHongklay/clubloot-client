@@ -16,7 +16,6 @@ angular.module 'clublootApp'
       if player.name != $scope.current_user.name
         $scope.newPlayer = true
 
-
   for player in $scope.contests.player
     $scope.currentPlayer = player if player.uid == $scope.current_user._id
 
@@ -95,9 +94,7 @@ angular.module 'clublootApp'
           window.location.href = "/"
       )
 
-
   $scope.addScore = ->
-    # window.location.href = "/contest"
     counter = 0
     for q,i in $scope.contest.ques
       for a in q.answers

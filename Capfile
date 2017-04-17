@@ -1,6 +1,13 @@
-Dir.chdir(File.dirname(__FILE__))
+require "capistrano/setup"
+require "capistrano/deploy"
+require 'capistrano/bundler'
+require "capistrano/scm/git"
+install_plugin Capistrano::SCM::Git
 
-load 'deploy' if respond_to?(:namespace) # cap2 differentiator
-Dir['vendor/plugins/*/recipes/*.rb'].each { |plugin| load(plugin) }
+# Load custom tasks from `lib/capistrano/tasks` if you have any defined
+Dir.glob("lib/capistrano/tasks/*.rake").each { |r| import r }
 
-load 'config/deploy' # remove this line to skip loading any of the default tasks
+set :rbenv_type, :user # or :system, depends on your rbenv setup
+set :rbenv_ruby, '2.4.0'
+
+# invoke :production

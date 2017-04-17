@@ -1,3 +1,6 @@
+require 'capistrano/ext/multistage'
+
+set :default_stage, "staging"
 set :application, 'clubloot'
 set :repo_url,    'git@github.com:abovelab/clubloot.git'
 

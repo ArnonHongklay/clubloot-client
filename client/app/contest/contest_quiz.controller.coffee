@@ -101,6 +101,7 @@ angular.module 'clublootApp'
         closeOnCancel: true
       }, (isConfirm) ->
         if isConfirm
+          console.log "comf"
           $scope.justSubmit(next)
         else
           event.preventDefault()

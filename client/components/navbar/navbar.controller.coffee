@@ -53,10 +53,11 @@ angular.module 'clublootApp'
 
   $scope.getUserProfile = () ->
     $.ajax
-      url: "#http://api.clubloot.com/v2/user/profile.json?token=#{$scope.userToken}"
+      url: "#{window.apiLink}/v2/user/profile.json?token=#{$scope.userToken}"
       type: 'GET'
       datatype: 'json'
       success: (data) ->
+        console.log data
         $scope.user = data.data
         console.log $scope.user
         console.log "-0-0-0-0-0-00-"
@@ -65,7 +66,7 @@ angular.module 'clublootApp'
         $rootScope.currentUser = $scope.user
         $scope.$apply()
         $.ajax
-          url: "http://api.clubloot.com/v2/adverts"
+          url: "#{window.apiLink}/v2/adverts"
           type: 'GET'
           datatype: 'json'
           success: (data) ->
@@ -81,7 +82,7 @@ angular.module 'clublootApp'
             if $scope.user.free_loot
               $rootScope.showDailyLoot = true
               $.ajax
-                url: "http://api.clubloot.com/v2/user/daily_loot.json?token=#{$scope.userToken}"
+                url: "#{window.apiLink}/v2/user/daily_loot.json?token=#{$scope.userToken}"
                 type: 'GET'
                 datatype: 'json'
                 success: (data) ->
@@ -102,7 +103,7 @@ angular.module 'clublootApp'
         if $scope.user.promo_code
           $rootScope.showPromocode = true
           $.ajax
-            url: "http://api.clubloot.com/v2/user/promo_code.json?token=#{$scope.userToken}"
+            url: "#{window.apiLink}/v2/user/promo_code.json?token=#{$scope.userToken}"
             type: 'GET'
             datatype: 'json'
             success: (data) ->

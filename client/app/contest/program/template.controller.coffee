@@ -18,7 +18,7 @@ angular.module 'clublootApp'
         return
 
     $.ajax
-      url: '#{window.apiLink}/v2/contests/programs.json'
+      url: "#{window.apiLink}/v2/contests/programs.json"
       type: 'GET'
       datatype: 'json'
       success: (data) ->

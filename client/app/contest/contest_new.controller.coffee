@@ -24,9 +24,9 @@ angular.module 'clublootApp'
     
   $.ajax(
     method: 'GET'
-    url: '#{window.apiLink}/v2/contests/programs.json'
+    url: "#{window.apiLink}/v2/contests/programs.json"
     ).done (data) ->
-    $scope.programList = data.data
+      $scope.programList = data.data
 
   $scope.selectQues = null
   $scope.currentPrize = 0

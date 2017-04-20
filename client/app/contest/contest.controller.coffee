@@ -4,7 +4,7 @@ angular.module 'clublootApp'
 .controller 'ContestCtrl', ($scope, $http, socket, contests, $timeout) ->
   $scope.setData = () ->
     $.ajax
-      url: '#{window.apiLink}/v2/contests/programs.json'
+      url: "#{window.apiLink}/v2/contests/programs.json"
       type: 'GET'
       datatype: 'json'
       success: (data) ->

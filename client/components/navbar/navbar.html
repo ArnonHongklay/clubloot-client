@@ -45,9 +45,8 @@
 
 
 <div class="daily-loot-modal" ng-show="$root.showPromocode">
-  <div class="daily-loot-bg" ng-click="$root.showPromocode=false"></div>
+  <div class="daily-loot-bg"></div>
   <div class="daily-loot-content">
-    <div class="close-dl" ng-click="$root.showPromocode=false"><i class="fa fa-times" aria-hidden="true"></i></div>
     <h3>Promo code reward</h3>
     <div class="g-text content-text">
       
@@ -55,13 +54,13 @@
     <div class="g-text" style="text-align: center;margin-bottom: 10px;">You got </div>
     <div class="coins-box">{{user.promo_value}} {{user.promo_currency}}</div>
     <div class="btm-text p-text">Welcome to clubloot</div>
+    <div class="btn btn-success comfirm" ng-click="$root.showPromocode=false">Confirm</div>
   </div>
 </div>
 
 <div class="daily-loot-modal" ng-show="$root.showDailyLoot">
-  <div class="daily-loot-bg" ng-click="$root.showDailyLoot=false"></div>
+  <div class="daily-loot-bg"></div>
   <div class="daily-loot-content">
-    <div class="close-dl" ng-click="$root.showDailyLoot=false"><i class="fa fa-times" aria-hidden="true"></i></div>
     <h3>Daily Loot</h3>
     <div class="g-text content-text">
       Sign in everyday to claim your free daily loot. Get even more free loot when you sign five consecutive days and more.
@@ -69,6 +68,21 @@
     <img src="assets/images/pp-bag.png" class="bag-img">
     <div class="g-text" style="text-align: center;margin-bottom: 10px;">Your daily loot today is</div>
     <div class="coins-box">2000 coins</div>
-    <div class="btm-text p-text">Sign in tomorrow to get more free loot!</div>
+    <div class="g-text">Sign in tomorrow to get more free loot!</div>
+    <div class="btn btn-success comfirm" ng-click="$root.showDailyLoot=false">Confirm</div>
+
+    <div ng-show="$root.showAds">
+      <hr>
+      <h3>Win prizes</h3>
+      <div class="g-text content-text">
+      Lucky person who signin today will get.
+      </div>
+      
+      <div class="g-text" style="text-align: center;margin-bottom: 10px;"></div>
+      <img src="{{$root.ads.attachment}}" class="ads-img">
+      <div class="g-text">{{$root.ads.description}}</div>
+    </div>
+
+    <div class="btn btn-success comfirm" ng-click="$root.showDailyLoot=false">Confirm</div>
   </div>
 </div>

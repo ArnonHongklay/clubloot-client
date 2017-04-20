@@ -7,7 +7,7 @@ angular.module 'clublootApp'
     token = $cookieStore.get 'token'
     $.ajax(
       method: 'GET'
-      url: "http://api.clubloot.com/v2/user/profile.json?token=#{token}"
+      url: "#{window.apiLink}/v2/user/profile.json?token=#{token}"
       ).done (data) ->
         console.log "---------------Getuser000000000-----------=============="
         currentUser = data.data
@@ -114,9 +114,10 @@ angular.module 'clublootApp'
   signin: (user, callback) ->
     deferred = undefined
     deferred = $q.defer()
+    console.log window.apiLink
     $.ajax(
       method: 'POST'
-      url: 'http://api.clubloot.com/v2/auth/sign_in.json'
+      url: "#{window.apiLink}/v2/auth/sign_in.json"
       data:
         email: user.email
         password: user.password).done (data) ->

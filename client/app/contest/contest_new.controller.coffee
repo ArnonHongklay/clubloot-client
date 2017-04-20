@@ -7,7 +7,7 @@ angular.module 'clublootApp'
   $scope.userToken = $cookieStore.get 'token'
   $scope.getUserProfile = () ->
     $.ajax
-      url: "http://api.clubloot.com/v2/user/profile.json?token=#{$scope.userToken}"
+      url: "#{window.apiLink}/v2/user/profile.json?token=#{$scope.userToken}"
       type: 'GET'
       datatype: 'json'
       success: (data) ->
@@ -24,7 +24,7 @@ angular.module 'clublootApp'
     
   $.ajax(
     method: 'GET'
-    url: 'http://api.clubloot.com/v2/contests/programs.json'
+    url: '#{window.apiLink}/v2/contests/programs.json'
     ).done (data) ->
     $scope.programList = data.data
 
@@ -81,7 +81,7 @@ angular.module 'clublootApp'
   $scope.selectProgram = () ->
     $.ajax(
       method: 'GET'
-      url: "http://api.clubloot.com/v2/contests/templates.json?program_id=#{$scope.contests.program_id}"
+      url: "#{window.apiLink}/v2/contests/templates.json?program_id=#{$scope.contests.program_id}"
       ).done (data) ->
         $scope.templates = data.data
         $scope.$apply()
@@ -96,7 +96,7 @@ angular.module 'clublootApp'
         'details[player]': parseInt($scope.contests.max_player)+2,
         'details[fee]': $scope.contests.fee
       }
-      url: "http://api.clubloot.com/v2/user/contest/new.json"
+      url: "#{window.apiLink}/v2/user/contest/new.json"
       ).done (data) ->
         id = data.data.id.$oid
         $state.go("contestQuiz", { contest_id: id , template_id: $scope.contests.template_id})

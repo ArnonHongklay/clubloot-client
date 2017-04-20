@@ -5,6 +5,7 @@ angular.module 'clublootApp'
   $scope.socket = socket.socket
   $scope.userToken = $cookieStore.get 'token'  
   $rootScope.openMessage = "k"
+  console.log $scope.userToken
 
   if $window.location.host == 'clubloot.com'
     $window.location.replace('http://clubloot.com/landing.html')
@@ -63,7 +64,7 @@ angular.module 'clublootApp'
 
   $scope.getAllContest = () ->
     $.ajax
-      url: "http://api.clubloot.com/v2/user/contests.json?token=#{$scope.userToken}&state=all"
+      url: "#{window.apiLink}/v2/user/contests.json?token=#{$scope.userToken}&state=all"
       type: 'GET'
       datatype: 'json'
       success: (data) ->
@@ -84,7 +85,7 @@ angular.module 'clublootApp'
   $scope.getUserProfile = () ->
     token = $cookieStore.get 'token'
     $.ajax
-      url: "http://api.clubloot.com/v2/user/profile.json?token=#{$scope.userToken}"
+      url: "#{window.apiLink}/v2/user/profile.json?token=#{$scope.userToken}"
       type: 'GET'
       datatype: 'json'
       success: (data) ->
@@ -98,7 +99,7 @@ angular.module 'clublootApp'
   $scope.getUpcoming = () ->
 
     $.ajax
-      url: "http://api.clubloot.com/v2/user/contests.json?token=#{$scope.user.token}&state=upcoming"
+      url: "#{window.apiLink}/v2/user/contests.json?token=#{$scope.user.token}&state=upcoming"
       type: 'GET'
       datatype: 'json'
       success: (data) ->
@@ -111,7 +112,7 @@ angular.module 'clublootApp'
 
   $scope.getlive = () ->
     $.ajax
-      url: "http://api.clubloot.com/v2/user/contests.json?token=#{$scope.user.token}&state=live"
+      url: "#{window.apiLink}/v2/user/contests.json?token=#{$scope.user.token}&state=live"
       type: 'GET'
       datatype: 'json'
       success: (data) ->
@@ -124,7 +125,7 @@ angular.module 'clublootApp'
 
   $scope.getCancel = () ->
     $.ajax
-      url: "http://api.clubloot.com/v2/user/contests.json?token=#{$scope.user.token}&state=cancel"
+      url: "#{window.apiLink}/v2/user/contests.json?token=#{$scope.user.token}&state=cancel"
       type: 'GET'
       datatype: 'json'
       success: (data) ->
@@ -137,7 +138,7 @@ angular.module 'clublootApp'
 
   $scope.getEnd = () ->
     $.ajax
-      url: "http://api.clubloot.com/v2/user/contests.json?token=#{$scope.user.token}&state=past"
+      url: "#{window.apiLink}/v2/user/contests.json?token=#{$scope.user.token}&state=past"
       type: 'GET'
       datatype: 'json'
       success: (data) ->
@@ -150,7 +151,7 @@ angular.module 'clublootApp'
 
   $scope.getWin = () ->
     $.ajax
-      url: "http://api.clubloot.com/v2/user/contests.json?token=#{$scope.user.token}&state=winners"
+      url: "#{window.apiLink}/v2/user/contests.json?token=#{$scope.user.token}&state=winners"
       type: 'GET'
       datatype: 'json'
       success: (data) ->
@@ -286,7 +287,7 @@ angular.module 'clublootApp'
 
   $scope.getUserProfile = () ->
     $.ajax
-      url: "http://api.clubloot.com/v2/user/profile.json?token=#{$scope.userToken}"
+      url: "#{window.apiLink}/v2/user/profile.json?token=#{$scope.userToken}"
       type: 'GET'
       datatype: 'json'
       success: (data) ->

@@ -60,7 +60,7 @@ angular.module 'clublootApp'
 
   $scope.setData = () ->
     $.ajax
-      url: "http://api.clubloot.com/v2/contests/program/#{$stateParams.program_id}/all_contests.json"
+      url: "#{window.apiLink}/v2/contests/program/#{$stateParams.program_id}/all_contests.json"
       type: 'GET'
       datatype: 'json'
       success: (data) ->
@@ -77,7 +77,7 @@ angular.module 'clublootApp'
         return
 
     $.ajax
-      url: "http://api.clubloot.com/v2/program/#{$stateParams.program_id}.json"
+      url: "#{window.apiLink}/v2/program/#{$stateParams.program_id}.json"
       type: 'GET'
       datatype: 'json'
       success: (data) ->
@@ -96,7 +96,7 @@ angular.module 'clublootApp'
         'token': $scope.userToken,
         'contest_id': contest.id.$oid,
       }
-      url: "http://api.clubloot.com/v2/user/contest/join.json"
+      url: "#{window.apiLink}/v2/user/contest/join.json"
       ).done (data) ->
         $state.go('contestQuizJoin', {contest_id: contest.id.$oid, template_id: contest.template._id.$oid})
 
@@ -127,7 +127,7 @@ angular.module 'clublootApp'
 
   $scope.getUserProfile = () ->
     $.ajax
-      url: "http://api.clubloot.com/v2/user/profile.json?token=#{$scope.userToken}"
+      url: "#{window.apiLink}/v2/user/profile.json?token=#{$scope.userToken}"
       type: 'GET'
       datatype: 'json'
       success: (data) ->

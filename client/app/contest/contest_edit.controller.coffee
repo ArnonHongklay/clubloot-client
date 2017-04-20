@@ -9,7 +9,7 @@ angular.module 'clublootApp'
   $scope.userToken = $cookieStore.get 'token'
   $scope.getUserProfile = () ->
     $.ajax
-      url: "http://api.clubloot.com/v2/user/profile.json?token=#{$scope.userToken}"
+      url: "#{window.apiLink}/v2/user/profile.json?token=#{$scope.userToken}"
       type: 'GET'
       datatype: 'json'
       success: (data) ->
@@ -17,14 +17,14 @@ angular.module 'clublootApp'
         $scope.$apply()
         $.ajax(
           method: 'GET'
-          url: "http://api.clubloot.com/v2/contests/template.json?template_id=#{$stateParams.template_id}"
+          url: "#{window.apiLink}/v2/contests/template.json?template_id=#{$stateParams.template_id}"
           ).done (data) ->
             $scope.question = data.data
             $scope.$apply()
 
             $.ajax(
               method: 'POST'
-              url: "http://api.clubloot.com/v2/user/contest/edit.json?token=#{$scope.userToken}&contest_id=#{$stateParams.contest_id}"
+              url: "#{window.apiLink}/v2/user/contest/edit.json?token=#{$scope.userToken}&contest_id=#{$stateParams.contest_id}"
               ).done (data) ->
               answer = data.data
               for a in answer.quizes
@@ -59,7 +59,7 @@ angular.module 'clublootApp'
         'contest_id': $stateParams.contest_id,
         'details': $scope.getAnswer()
       }
-      url: "http://api.clubloot.com/v2/user/contest/edit_quiz.json"
+      url: "#{window.apiLink}/v2/user/contest/edit_quiz.json"
       ).done (data) ->
       
         $state.go('main')
@@ -72,7 +72,7 @@ angular.module 'clublootApp'
         'contest_id': $stateParams.contest_id,
         'details': $scope.getAnswer()
       }
-      url: "http://api.clubloot.com/v2/user/contest/quiz.json"
+      url: "#{window.apiLink}/v2/user/contest/quiz.json"
       ).done (data) ->
         window.location.href = next
 

@@ -5,7 +5,7 @@ angular.module 'clublootApp'
   $scope.showModal = false
 
   $.ajax
-    url: "http://api.clubloot.com/v2/user/gems.json"
+    url: "#{window.apiLink}/v2/user/gems.json"
     type: 'GET'
     datatype: 'json'
     success: (data) ->
@@ -16,7 +16,7 @@ angular.module 'clublootApp'
   $scope.userToken = $cookieStore.get 'token'
   $scope.getUserProfile = () ->
     $.ajax
-      url: "http://api.clubloot.com/v2/user/profile.json?token=#{$scope.userToken}"
+      url: "#{window.apiLink}/v2/user/profile.json?token=#{$scope.userToken}"
       type: 'GET'
       datatype: 'json'
       success: (data) ->
@@ -137,7 +137,7 @@ angular.module 'clublootApp'
     , 2000
 
     $.ajax
-      url: "http://api.clubloot.com/v2/user/convert_gem.json"
+      url: "#{window.apiLink}/v2/user/convert_gem.json"
       type: 'POST'
       datatype: 'json'
       data: {

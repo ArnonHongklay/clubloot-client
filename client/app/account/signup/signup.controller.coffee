@@ -9,7 +9,7 @@ angular.module 'clublootApp'
 
 
     $.ajax
-      url: "http://api.clubloot.com/v2/auth/sign_up.json"
+      url: "#{window.apiLink}/v2/auth/sign_up.json"
       type: 'POST'
       datatype: 'json'
       data: {
@@ -42,7 +42,7 @@ angular.module 'clublootApp'
     # console.log $scope.user
     # $.ajax(
     #   method: 'POST'
-    #   url: "http://api.clubloot.com/v2/auth/sign_up.json"
+    #   url: "#{window.apiLink}/v2/auth/sign_up.json"
     #   data: {
     #     email: $scope.user.email
     #     password: $scope.user.password

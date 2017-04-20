@@ -56,7 +56,7 @@ angular.module 'clublootApp'
       success: (data) ->
         $scope.user = data.data
         $scope.$apply()
-        $scope.cable = $cable('ws://api.clubloot.com/cable')
+        $scope.cable = $cable(window.socketLink)
         $scope.channel = $scope.cable.subscribe('ContestChannel', received: (data) ->
           if typeof(data) == "undefined"
             $scope.setData()

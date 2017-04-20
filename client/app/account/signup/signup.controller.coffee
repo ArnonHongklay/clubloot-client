@@ -6,7 +6,7 @@ angular.module 'clublootApp'
   $scope.user = {}
   $scope.errors = {}
   $scope.register = (form) ->
-
+    console.log "#{window.apiLink}/v2/auth/sign_up.json"
 
     $.ajax
       url: "#{window.apiLink}/v2/auth/sign_up.json"

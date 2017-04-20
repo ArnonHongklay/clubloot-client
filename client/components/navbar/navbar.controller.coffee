@@ -49,7 +49,7 @@ angular.module 'clublootApp'
   unless $scope.userToken
     window.location.href = '/login'
   
-  
+
 
   $scope.getUserProfile = () ->
     $.ajax
@@ -59,6 +59,7 @@ angular.module 'clublootApp'
       success: (data) ->
         $scope.user = data.data
         console.log $scope.user
+        console.log "-0-0-0-0-0-00-"
         unless $scope.user.email
           window.location.href = "/login"
         $rootScope.currentUser = $scope.user

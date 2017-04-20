@@ -49,7 +49,6 @@ angular.module 'clublootApp', [
       $location.path "/login" if next.authenticate and not loggedIn
 
 # window.apiLink = "http://api.clubloot.com/"
-
 window.apiLink = "http://staging-api.clubloot.com"
   
  

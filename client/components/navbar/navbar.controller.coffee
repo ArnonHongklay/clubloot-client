@@ -76,11 +76,11 @@ angular.module 'clublootApp'
               $rootScope.ads = data.data[0]
               console.log "---==="
               $rootScope.showAds = true
-              $scope.$apply()
               console.log data
 
             if $scope.user.free_loot
               $rootScope.showDailyLoot = true
+              $scope.$apply()
               $.ajax
                 url: "#{window.apiLink}/v2/user/daily_loot.json?token=#{$scope.userToken}"
                 type: 'GET'

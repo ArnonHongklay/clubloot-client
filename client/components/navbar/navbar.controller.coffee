@@ -6,6 +6,9 @@ angular.module 'clublootApp'
   $scope.socket.on 'message', (data) ->
     return
 
+  console.log window.apiLink
+  console.log "link"
+
   $scope.reAfterLoot = () ->
     location.reload()
 
@@ -49,7 +52,7 @@ angular.module 'clublootApp'
 
   $scope.getUserProfile = () ->
     $.ajax
-      url: "http://staging-api.clubloot.com/v2/user/profile.json?token=#{$scope.userToken}"
+      url: "http://api.clubloot.com/v2/user/profile.json?token=#{$scope.userToken}"
       type: 'GET'
       datatype: 'json'
       success: (data) ->
@@ -60,17 +63,19 @@ angular.module 'clublootApp'
         $rootScope.currentUser = $scope.user
         $scope.$apply()
         $.ajax
-          url: "http://staging-api.clubloot.com/v2/adverts"
+          url: "http://api.clubloot.com/v2/adverts"
           type: 'GET'
           datatype: 'json'
           success: (data) ->
             console.log "adword"
-            if data.data[0]
+            console.log data
+            if data.data.length > 0
               $rootScope.ads = data.data[0]
               console.log "---==="
               $rootScope.showAds = true
               $scope.$apply()
               console.log data
+
             if $scope.user.free_loot
               $rootScope.showDailyLoot = true
               $.ajax

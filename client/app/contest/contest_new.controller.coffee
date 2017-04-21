@@ -2,7 +2,7 @@
 
 angular.module 'clublootApp'
 .controller 'NewContestCtrl', ($scope, $http, socket, $timeout, $cookieStore, Auth, $state) ->
-
+  $scope.currentFee = null
   $scope.templates = []
   $scope.userToken = $cookieStore.get 'token'
   $scope.getUserProfile = () ->
@@ -87,6 +87,22 @@ angular.module 'clublootApp'
         $scope.$apply()
 
   $scope.createNewContest = () ->
+    console.log $scope.contests.fee
+    console.log $scope.user.coins
+    console.log $scope.currentFee
+    if $scope.user.coins < $scope.currentFee
+      swal {
+        title: 'Need more coins !'
+        text: "You have #{$scope.user.coins} Coins"
+        type: 'warning'
+        confirmButtonColor: '#DD6B55'
+        confirmButtonText: 'yes'
+        cancelButtonText: 'No'
+        closeOnConfirm: true
+      }
+
+      return
+
     $.ajax(
       method: 'POST'
       data: {
@@ -211,6 +227,7 @@ angular.module 'clublootApp'
   $scope.calPrize = (index) ->
 
     v = parseInt($scope.gemMatrix.list[$scope.contests.max_player].fee[index])
+    $scope.currentFee = v
     $scope.gemIndex = $scope.gemMatrix.list[$scope.contests.max_player].fee.indexOf(v)
 
     gemType = $scope.gemMatrix.gem[$scope.gemIndex].type

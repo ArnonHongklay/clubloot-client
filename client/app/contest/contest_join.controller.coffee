@@ -28,6 +28,8 @@ angular.module 'clublootApp'
     method: 'GET'
     url: "#{window.apiLink}/v2/contests/template.json?template_id=#{$stateParams.template_id}"
     ).done (data) ->
+      console.log data
+      console.log "=-=-=-=-=-=-=-=-=-=-=99999999"
       $scope.question = data.data
       $scope.$apply()
 

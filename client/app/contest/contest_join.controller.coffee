@@ -90,7 +90,7 @@ angular.module 'clublootApp'
 
       swal {
         title: 'Are you sure?'
-        text: 'Contest will not be create'
+        text: 'you will not be join this contest'
         type: 'warning'
         showCancelButton: true
         confirmButtonColor: '#DD6B55'

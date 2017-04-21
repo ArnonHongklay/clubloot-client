@@ -90,6 +90,19 @@ angular.module 'clublootApp'
         return
 
   $scope.joinContest = (contest) ->
+    if $scope.user.coins < contest.fee
+      swal {
+        title: 'Need more coins !'
+        text: "You have #{$scope.user.coins} Coins"
+        type: 'warning'
+        confirmButtonColor: '#DD6B55'
+        confirmButtonText: 'yes'
+        cancelButtonText: 'No'
+        closeOnConfirm: true
+      }
+
+      return
+
     $.ajax(
       method: 'POST'
       data: {

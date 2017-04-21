@@ -76,6 +76,19 @@ angular.module 'clublootApp'
     return tmp
 
   $scope.joinContest = () ->
+
+    if $scope.user.coins < $scope.contest.fee
+      swal {
+        title: 'Need more coins !'
+        text: "You have #{$scope.user.coins} Coins"
+        type: 'warning'
+        confirmButtonColor: '#DD6B55'
+        confirmButtonText: 'yes'
+        cancelButtonText: 'No'
+        closeOnConfirm: true
+      }
+
+      return
     $.ajax(
       method: 'POST'
       data: {
@@ -94,13 +107,19 @@ angular.module 'clublootApp'
       return 0
 
   $scope.setData = () ->
+
     $.ajax
-      url: "#{window.apiLink}/v2/user/contest/#{$stateParams.contest_id}.json?token=#{$scope.userToken}"
+      url: "#{window.apiLink}/v2/contests/contest.json?contest_id=#{$stateParams.contest_id}"
       type: 'GET'
       datatype: 'json'
       success: (data) ->
         $scope.contest = data.data
         $scope.contestPrize = data.data
+        console.log $scope.contest
+        console.log data
+        console.log $scope.userToken
+        console.log $stateParams.contest_id
+        console.log "========================================="
         for player in $scope.contest.leaders
           if player.id.$oid == $scope.user.id.$oid
             $scope.alreadyJoin = true

@@ -87,9 +87,6 @@ angular.module 'clublootApp'
         $scope.$apply()
 
   $scope.createNewContest = () ->
-    console.log $scope.contests.fee
-    console.log $scope.user.coins
-    console.log $scope.currentFee
     if $scope.user.coins < $scope.currentFee
       swal {
         title: 'Need more coins !'

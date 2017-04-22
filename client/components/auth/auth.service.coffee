@@ -114,22 +114,36 @@ angular.module 'clublootApp'
   signin: (user, callback) ->
     deferred = undefined
     deferred = $q.defer()
+    console.log user
     console.log window.apiLink
-    $.ajax(
-      method: 'POST'
+
+
+
+    $.ajax
       url: "#{window.apiLink}/v2/auth/sign_in.json"
+      type: 'POST'
+      datatype: 'json'
       data:
         email: user.email
-        password: user.password).done (data) ->
-          console.log data
-          console.log "------------signin--------------"
-          $cookieStore.put 'token', data.token
-          getUser()
-          console.log $cookieStore.get 'token'
-          return window.location.href = "/"
-          deferred.resolve data
-          if typeof callback == 'function' then callback() else undefined
-    return
+        password: user.password
+      success: (data) ->
+        console.log data
+        console.log data.token
+        unless data.token
+          console.log "kkk"
+          swal("No email in system")
+          return
+        $cookieStore.put 'token', data.token
+        getUser()
+        console.log $cookieStore.get 'token'
+        return window.location.href = "/"
+        deferred.resolve data
+        if typeof callback == 'function' then callback() else undefined
+      error: (data) ->
+        swal("Password not correct")
+
+
+
 
 
   ###

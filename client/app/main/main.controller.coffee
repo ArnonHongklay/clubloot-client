@@ -5,7 +5,8 @@ angular.module 'clublootApp'
   $scope.socket = socket.socket
   $scope.userToken = $cookieStore.get 'token'  
   $rootScope.openMessage = "k"
-  console.log $scope.userToken
+  unless $scope.userToken
+    window.location.href = '/login'
 
   if $window.location.host == 'clubloot.com'
     $window.location.replace('http://clubloot.com/landing.html')

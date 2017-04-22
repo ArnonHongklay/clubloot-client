@@ -3,6 +3,10 @@
 angular.module 'clublootApp'
 .controller 'NavbarCtrl', ($scope, $location, Auth, $http, $rootScope, $cookieStore, $timeout, socket, $cable) ->
   $scope.socket = socket.socket
+  $scope.userToken = $cookieStore.get 'token'
+  unless $scope.userToken
+    window.location.href = '/login'
+
   $scope.socket.on 'message', (data) ->
     return
 
@@ -45,11 +49,6 @@ angular.module 'clublootApp'
     $rootScope.showDailyLoot = true
     $scope.$apply()
   
-  $scope.userToken = $cookieStore.get 'token'
-  unless $scope.userToken
-    window.location.href = '/login'
-  
-
 
   $scope.getUserProfile = () ->
     $.ajax

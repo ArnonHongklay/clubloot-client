@@ -33,6 +33,13 @@ angular.module 'clublootApp'
       $scope.question = data.data
       $scope.$apply()
 
+  $scope.checkShowAns = (ans) ->
+    console.log ans
+    if ans.name == "" && ans.attachment.indexOf("no-image") >= 0
+      return false
+    else
+      return true
+
   $scope.unlessEmpty = () ->
     return false unless $scope.question
     if $scope.question.questions.length == $scope.qaSelection.length

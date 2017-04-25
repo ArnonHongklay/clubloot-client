@@ -39,6 +39,13 @@ angular.module 'clublootApp'
 
   if $scope.userToken
     $scope.getUserProfile()
+
+  $scope.checkShowAns = (ans) ->
+    console.log ans
+    if ans.name == "" && ans.attachment.indexOf("no-image") >= 0
+      return false
+    else
+      return true
   
   $scope.unlessEmpty = () ->
     return false unless $scope.question

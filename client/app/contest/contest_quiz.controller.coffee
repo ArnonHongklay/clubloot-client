@@ -31,6 +31,12 @@ angular.module 'clublootApp'
       $scope.question = data.data
       $scope.$apply()
 
+  $scope.checkShowAns = (ans) ->
+    console.log ans
+    if ans.name == "" && ans.attachment.indexOf("no-image") >= 0
+      return false
+    else
+      return true
   $scope.selectInput = (q, a) ->
     e = "#ans_#{q}_#{a}"
     $scope.qaSelection[q] = $(e).val()

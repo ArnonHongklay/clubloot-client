@@ -157,7 +157,7 @@
                ng-repeat="prize in user.prizes"
                ng-click="clickPrize(prize)"
                >
-            <div class="box defaultItem defaultItem-{{ prize.prize.id }}" ng-click="showPrize(prize.prize)">
+            <div class="box defaultItem defaultItem-{{ prize.prize.id }}" ng-click="showMyPrize(prize)">
               <div class="col-xs-12 prize-name">
                 Prize {{ prize.prize.name }}
               </div>
@@ -183,17 +183,24 @@
 
 <script type="text/ng-template" id="ModalUserPrizes.html">
   <div class="modal-header" style="text-align: center">
-    <h3 class="modal-title">{{prize.name}}</h3>
+    <h3 class="modal-title">{{prize.prize.name}}</h3>
   </div>
   <div class="modal-body">
     <div class="row">
       <div class="col-xs-5">
-        <img ng-src="{{prize.attachment}}" width="100%">
+        <img ng-src="{{prize.prize.attachment}}" width="100%">
       </div>
       <div class="col-xs-7">
         <p class="text-center">Item Description</p>
         <span style="display: block">
-        {{prize.description}}
+        {{prize.prize.description}}
+
+        <div class="col-sx-12" ng-if="prize.currentTab=='myPrize'">
+        <hr>
+          <span class="pp-text">Shipping Date Time :</span> {{prize.shipped_at | date:"MM/dd/yyyy 'at' h:mma"}}
+          <br>
+          <span class="pp-text">Tracking # </span>{{prize.tracking_code}}
+        </div>
       </span>
       </div>
       <div class="col-xs-12">

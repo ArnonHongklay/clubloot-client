@@ -109,13 +109,25 @@ angular.module 'clublootApp'
   $scope.goDashboard = () ->
     window.location.href = "/dashboard"
 
-  $scope.showPrize = (prize)->
+  $scope.showMyPrize = (prize) ->
+    console.log $scope.currentTab
+    console.log prize
     $modal.open(
       templateUrl: 'ModalUserPrizes.html'
       controller: 'ModalUserPrizes'
       resolve:
         prize: ($http, $stateParams) ->
-          return prize
+          return {prize: prize.prize, currentTab: $scope.currentTab, tracking_code: prize.tracking_code, shipped_at: prize.shipped_at}
+    )
+  $scope.showPrize = (prize)->
+    console.log prize
+    console.log $scope.currentTab
+    $modal.open(
+      templateUrl: 'ModalUserPrizes.html'
+      controller: 'ModalUserPrizes'
+      resolve:
+        prize: ($http, $stateParams) ->
+          return {prize: prize, currentTab: $scope.currentTab}
     )
 
 .controller 'ModalUserPrizes', ($scope, prize) ->

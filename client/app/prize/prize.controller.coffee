@@ -12,6 +12,8 @@ angular.module 'clublootApp'
       datatype: 'json'
       success: (data) ->
         $scope.user = data.data
+        console.log "-----user-----"
+        console.log $scope.user
         $scope.$apply()
        
       error: (jqXHR, textStatus, errorThrown) ->
@@ -79,7 +81,12 @@ angular.module 'clublootApp'
     sum
 
   $scope.getMyPrize = ->
+
+    unless $scope.agree
+      swal("Please agree to the terms before get prize")
+      return
     for prize in $scope.prize_select.selected
+      console.log prize
       $.ajax
         url: "#{window.apiLink}/v2/user/prize.json"
         type: 'POST'
@@ -93,6 +100,10 @@ angular.module 'clublootApp'
             swal(data.data)
           else
             swal("success")
+            $scope.getUserProfile()
+            $scope.currentTab = 'myPrize'
+            $scope.prize_select.selected = []
+            $scope.$apply()
 
 
   $scope.goDashboard = () ->

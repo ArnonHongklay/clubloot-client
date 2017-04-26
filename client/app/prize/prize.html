@@ -3,32 +3,37 @@
   <div class="container">
     <div class="row">
       <div class="col-xs-12" ng-init="cateFilter = '1'">
-        <h3 style="margin-top: 0px;" class="pp-text">PRIZES</h3>
-        <h5 class="g-text" ng-if="!prize_select.selected.length">Trade in your diamonds for prizes.</h5>
-        <h5 class="g-text" ng-if="prize_select.selected.length > 0">You have selected Prize {{itemSelected}}. Please confirm</h5>
-        <!-- <div class="item-selected-mb">
-          <div class="name" style="display: inline-block" ng-repeat="s in prize_select.selected">{{s.name}}</div>
-        </div> -->
+        <h3 style="margin-top: 0px;" class="pp-text" ng-init="currentTab='prize'">
+          <div class="btn" ng-class="{'btn-success': currentTab == 'prize'}" ng-click="currentTab='prize'">PRIZES</div>
+          <div class="btn" ng-class="{'btn-success': currentTab == 'myPrize'}" ng-click="currentTab='myPrize'">My PRIZES</div>
+        </h3>
+        <div ng-show="currentTab=='prize'">
+          <h5 class="g-text" ng-if="!prize_select.selected.length">Trade in your diamonds for prizes.</h5>
+          <h5 class="g-text" ng-if="prize_select.selected.length > 0">You have selected Prize {{itemSelected}}. Please confirm</h5>
+          <!-- <div class="item-selected-mb">
+            <div class="name" style="display: inline-block" ng-repeat="s in prize_select.selected">{{s.name}}</div>
+          </div> -->
 
-        <div class="catelog" ng-class="{active: cateFilter == '1'}" ng-click="cateFilter = 1">
-          1 - 10 <i class="fa fa-diamond" aria-hidden="true"></i>
-        </div>
-        <div class="catelog" ng-class="{active: cateFilter == '2'}" ng-click="cateFilter = 2">
-          11 - 25 <i class="fa fa-diamond" aria-hidden="true"></i>
-        </div>
-        <div class="catelog" ng-class="{active: cateFilter == '3'}" ng-click="cateFilter = 3">
-          26 - 50 <i class="fa fa-diamond" aria-hidden="true"></i>
-        </div>
-        <div class="catelog" ng-class="{active: cateFilter == '4'}" ng-click="cateFilter = 4">
-          51 - 100 <i class="fa fa-diamond" aria-hidden="true"></i>
-        </div>
-        <div class="catelog" ng-class="{active: cateFilter == 'all'}" ng-click="cateFilter = 'all'">
-          All <i class="fa fa-diamond" aria-hidden="true"></i>
+          <div class="catelog" ng-class="{active: cateFilter == '1'}" ng-click="cateFilter = 1">
+            1 - 10 <i class="fa fa-diamond" aria-hidden="true"></i>
+          </div>
+          <div class="catelog" ng-class="{active: cateFilter == '2'}" ng-click="cateFilter = 2">
+            11 - 25 <i class="fa fa-diamond" aria-hidden="true"></i>
+          </div>
+          <div class="catelog" ng-class="{active: cateFilter == '3'}" ng-click="cateFilter = 3">
+            26 - 50 <i class="fa fa-diamond" aria-hidden="true"></i>
+          </div>
+          <div class="catelog" ng-class="{active: cateFilter == '4'}" ng-click="cateFilter = 4">
+            51 - 100 <i class="fa fa-diamond" aria-hidden="true"></i>
+          </div>
+          <div class="catelog" ng-class="{active: cateFilter == 'all'}" ng-click="cateFilter = 'all'">
+            All <i class="fa fa-diamond" aria-hidden="true"></i>
+          </div>
         </div>
       </div>
     </div>
 
-    <div class="row hmb">
+    <div class="row hmb" ng-show="currentTab=='prize'">
       <div class="col-xs-12">
         <div class="catelog-item-box">
           <div class="catelog-item"
@@ -66,7 +71,7 @@
       </div>
     </div>
 
-    <div class="row smb">
+    <div class="row smb" ng-show="currentTab=='prize'">
       <div class="col-xs-12">
         <div class="catelog-item-box">
           <div class="catelog-item"
@@ -94,7 +99,7 @@
       </div>
     </div>
 
-    <div class="row">
+    <div class="row" ng-show="currentTab=='prize'">
       <div class="col-xs-12">
         <div class="terms" style="margin-top: 20px">
           <div class="term-text"><input type="checkbox" ng-model="agree"> I agree to the
@@ -107,13 +112,13 @@
       </div>
     </div>
 
-    <div class="row" style="margin-top: 10px;">
+    <div class="row" style="margin-top: 10px;" ng-show="currentTab=='prize'">
       <div class="btn get-prize" ng-disabled="!agree" ng-click="getMyPrize()">GET MY PRIZE</div>
     </div>
   </div>
 </section>
 
-<section class="prize-success" ng-show="getPrice">
+<section class="prize-success" ng-show="getPrice" ng-show="currentTab=='prize'">
   <div class="container">
     <div class="row" ng-init="cateFilter = '1'">
       <h3 style="margin-top: 0px;" class="pp-text">PRIZES</h3>
@@ -138,6 +143,42 @@
       <div class="btn get-prize" ng-click="goDashboard()">GO TO DASHBOARD</div>
     </div>
   </div>
+</section>
+
+
+<section class="my-prize-box" ng-show="currentTab=='myPrize'">
+  <div class="container">
+    <h3 class="pp-text">Here is your prizes</h3>
+    <hr>
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="catelog-item-box">
+          <div class="catelog-item"
+               ng-repeat="prize in user.prizes"
+               ng-click="clickPrize(prize)"
+               >
+            <div class="box defaultItem defaultItem-{{ prize.prize.id }}" ng-click="showPrize(prize.prize)">
+              <div class="col-xs-12 prize-name">
+                Prize {{ prize.prize.name }}
+              </div>
+              <div class="col-xs-12 prize-item">
+                <img ng-src="{{ prize.prize.attachment }}" style="max-height: 75px" class="col-xs-12" />
+                <div class="gem">
+                  {{ prize.prize.price }}
+                  <i class="fa fa-diamond" aria-hidden="true"></i>
+                </div>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
 </section>
 
 <script type="text/ng-template" id="ModalUserPrizes.html">

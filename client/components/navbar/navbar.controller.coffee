@@ -80,6 +80,7 @@ angular.module 'clublootApp'
             if $scope.user.free_loot
               $rootScope.showDailyLoot = true
               $scope.$apply()
+              $rootScope.$apply()
               $.ajax
                 url: "#{window.apiLink}/v2/user/daily_loot.json?token=#{$scope.userToken}"
                 type: 'GET'
@@ -101,6 +102,8 @@ angular.module 'clublootApp'
 
         if $scope.user.promo_code
           $rootScope.showPromocode = true
+          $scope.$apply()
+          $rootScope.$apply()
           $.ajax
             url: "#{window.apiLink}/v2/user/promo_code.json?token=#{$scope.userToken}"
             type: 'GET'

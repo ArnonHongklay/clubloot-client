@@ -6,7 +6,7 @@ angular.module 'clublootApp'
 
   $scope.setData = () ->
     $.ajax
-      url: "#{window.apiLink}/v2/user/contest/#{$stateParams.contest_id}.json?token=#{$scope.userToken}"
+      url: "#{window.apiLink}/v2/contests/contest.json?contest_id=#{$stateParams.contest_id}"
       type: 'GET'
       datatype: 'json'
       success: (data) ->

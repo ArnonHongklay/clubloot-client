@@ -70,6 +70,8 @@ angular.module 'clublootApp'
       datatype: 'json'
       success: (data) ->
         $scope.allContests = data.data
+        console.log $scope.allContests
+        console.log "12345"
         $scope.upcomingCount = 0
         $scope.liveCount = 0
         for c in $scope.allContests

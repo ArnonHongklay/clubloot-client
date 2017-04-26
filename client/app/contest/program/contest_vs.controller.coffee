@@ -27,6 +27,27 @@ angular.module 'clublootApp'
         , 2000
         return
 
+  $scope.outHover = () ->
+    $scope.hoverAnswer = null
+
+  $scope.showDetail = (index, who, event) ->
+    console.log index
+    console.log event
+    # y = $(event.currentTarget)[0].offsetTop
+    # x = $(event.currentTarget)[0].offsetLeft
+    x = event.pageX
+    y = event.pageY
+    user_answer = $scope.checkIndex(index, who)
+    ansIndex = $scope.ansList.indexOf(user_answer)
+    $scope.hoverAnswer = $scope.contest.template.questions[index].answers[ansIndex]
+    console.log $scope.hoverAnswer
+    $timeout ->
+      $('.answer-pop-box').css("top", y-20+"px")
+      $('.answer-pop-box').css("left", x+40+"px")
+    , 50
+    
+
+
   $scope.checkIndex = (index, user) ->
     answers = $scope.contest.template.questions[index].answers
     if user == 'me'

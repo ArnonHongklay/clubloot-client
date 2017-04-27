@@ -23,6 +23,8 @@ angular.module 'clublootApp'
       datatype: 'json'
       success: (data) ->
         $scope.programList = data.data
+        console.log $scope.programList
+        console.log "programlist"
         $scope.$apply()
       error: (jqXHR, textStatus, errorThrown) ->
         $timeout ->

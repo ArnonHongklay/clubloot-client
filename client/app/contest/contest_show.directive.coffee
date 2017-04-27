@@ -13,7 +13,13 @@ angular.module 'clublootApp'
          date.getSeconds()
 
     element.countdown cc, (event) ->
-      $(this).text event.strftime('%H:%M:%S')
+      d = parseInt(event.strftime('%D')) * 24
+      h = parseInt(event.strftime('%H')) + d
+      m = parseInt(event.strftime('%M'))
+      s = parseInt(event.strftime('%S'))
+      
+      # $(this).text event.strftime('%d Days %H:%M:%S')
+      $(this).text "#{h}:#{m}:#{s}"
 
       if date > 72.hours().from_now()
         $(this).css('color', 'green')

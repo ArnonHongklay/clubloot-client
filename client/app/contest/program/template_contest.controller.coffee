@@ -69,6 +69,7 @@ angular.module 'clublootApp'
           for contest in templates.contests
             $scope.contests.push(contest)
         console.log $scope.contests
+        console.log "contest----------------"
         $scope.$apply()
         return
       error: (jqXHR, textStatus, errorThrown) ->

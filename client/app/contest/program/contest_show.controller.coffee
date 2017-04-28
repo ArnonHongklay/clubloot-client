@@ -76,7 +76,7 @@ angular.module 'clublootApp'
     return tmp
 
   $scope.joinContest = () ->
-    $scope.template_id = $scope.contest.template._id.$oid
+    $scope.template_id = $scope.contest.template.id.$oid
     if $scope.user.coins < $scope.contest.fee
       swal {
         title: 'Need more coins !'

@@ -27,7 +27,10 @@ angular.module 'clublootApp'
               url: "#{window.apiLink}/v2/user/contest/edit.json?token=#{$scope.userToken}&contest_id=#{$stateParams.contest_id}"
               ).done (data) ->
               answer = data.data
+              console.log answer
+              console.log "answer"
               for a in answer.quizes
+                console.log '#ans_'+a.answer_id
                 $('#ans_'+a.answer_id).click()
                 $('#ans_'+a.answer_id).click()
 

@@ -113,7 +113,7 @@ angular.module 'clublootApp'
       }
       url: "#{window.apiLink}/v2/user/contest/join.json"
       ).done (data) ->
-        $state.go('contestQuizJoin', {contest_id: contest.id.$oid, template_id: contest.template._id.$oid})
+        $state.go('contestQuizJoin', {contest_id: contest.id.$oid, template_id: contest.template.id.$oid})
 
   $scope.gemColor = (gemType) ->
     if gemType == "DIAMOND"

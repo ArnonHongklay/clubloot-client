@@ -28,19 +28,18 @@ angular.module 'clublootApp'
     method: 'GET'
     url: "#{window.apiLink}/v2/contests/template.json?template_id=#{$stateParams.template_id}"
     ).done (data) ->
-      console.log data
-      console.log "=-=-=-=-=-=-=-=-=-=-=99999999"
       $scope.question = data.data
       $scope.$apply()
 
   $scope.checkShowAns = (ans) ->
-    console.log ans
     if ans.name == "" && ans.attachment.indexOf("no-image") >= 0
       return false
     else
       return true
 
   $scope.unlessEmpty = () ->
+    for i in $scope.qaSelection
+      return false if i == undefined
     return false unless $scope.question
     if $scope.question.questions.length == $scope.qaSelection.length
       return true

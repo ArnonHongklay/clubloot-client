@@ -42,6 +42,8 @@ angular.module 'clublootApp'
     $scope.qaSelection[q] = $(e).val()
 
   $scope.unlessEmpty = () ->
+    for i in $scope.qaSelection
+      return false if i == undefined
     return false unless $scope.question
     if $scope.question.questions.length == $scope.qaSelection.length
       return true

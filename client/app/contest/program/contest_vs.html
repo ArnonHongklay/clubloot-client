@@ -1,6 +1,11 @@
 <div class="compair-modal">
   <div class="bg"></div>
+  <div class="answer-pop-box" ng-show="hoverAnswer">
+      <img class="h-attach-image" src="{{hoverAnswer.attachment}}">
+      <div class="h-text-box">{{hoverAnswer.name}}</div>
+    </div>
   <div class="content-box">
+    
     <i class="fa fa-times close-btn" ng-click="cancelVs()"></i>
     <h3>{{playerMe.username}} VS {{playerVs.username}}</h3>
     <div class="row">
@@ -35,8 +40,8 @@
             <td class="text-blue" style="text-align:left;width: 50%;">
               Q <span style="width: 220px;max-width:90%;display:inline-block;line-height: 10px;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;">{{ans.name}}</span>
             </td>
-            <td class="text-blue" style="text-align:left;width: 25%">
-              {{checkIndex($index, 'me')}}
+            <td class="text-blue" style="text-align:left;width: 25%" >
+              <span ng-mouseover="showDetail($index, 'me', $event)" ng-mouseleave="outHover()">{{checkIndex($index, 'me')}}</span>
               <span ng-show="ans.is_correct!='false'">
               <span ng-hide="contest.state=='upcoming'">
                 <i class="check-ans fa" ng-class="{'fa-check': playerMe.quizes[$index].correct==1, 'fa-times': playerMe.quizes[$index].correct==0}"></i>
@@ -46,7 +51,7 @@
             <td class="text-blue" style="text-align:left;width: 25%">
               
               <span ng-show="contest.state=='live' || contest.state=='end'">
-              {{checkIndex($index, 'vs')}}
+              <span ng-mouseover="showDetail($index, 'vs', $event)" ng-mouseleave="outHover()">{{checkIndex($index, 'vs')}}</span>
               <span ng-hide="contest.state=='upcoming'">
               <span ng-show="ans.is_correct!='false'">
               <i class="check-ans fa" ng-class="{'fa-check': playerVs.quizes[$index].correct==1, 'fa-times': playerVs.quizes[$index].correct==0}"></i>

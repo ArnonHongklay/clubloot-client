@@ -2,13 +2,12 @@
 
 angular.module 'clublootApp'
 .controller 'NewContestCtrl', ($scope, $http, socket, $timeout, $cookieStore, Auth, $state) ->
-  # $scope.programList = programs.data.data
-  # console.log programs
+  $scope.currentFee = null
   $scope.templates = []
   $scope.userToken = $cookieStore.get 'token'
   $scope.getUserProfile = () ->
     $.ajax
-      url: "http://api.clubloot.com/v2/user/profile.json?token=#{$scope.userToken}"
+      url: "#{window.apiLink}/v2/user/profile.json?token=#{$scope.userToken}"
       type: 'GET'
       datatype: 'json'
       success: (data) ->
@@ -22,27 +21,13 @@ angular.module 'clublootApp'
 
   if $scope.userToken
     $scope.getUserProfile()
+    
   $.ajax(
     method: 'GET'
-    url: 'http://api.clubloot.com/v2/contests/programs.json'
+    url: "#{window.apiLink}/v2/contests/programs.json"
     ).done (data) ->
-    console.log data
-    $scope.programList = data.data
+      $scope.programList = data.data
 
-  # $http.get("/api/templates/#{$scope.template_id}/questions",
-  #   null
-  # ).success((ques) ->
-  #   $scope.contest.challenge = ques.length
-  #   $scope.contest.ques = ques
-  # ).error((data, status, headers, config) ->
-  #   swal("Not Active")
-  # )
-
-
-  # $scope.questions = questions.data
-  # $scope.contests = {loot:{prize:'',category:''},fee:''}
-  # console.log $scope.programList
-  $scope.gemIndex = null
   $scope.selectQues = null
   $scope.currentPrize = 0
   $scope.qaSelection = []
@@ -94,25 +79,26 @@ angular.module 'clublootApp'
   }
 
   $scope.selectProgram = () ->
-    console.log $scope.contests
-    console.log $scope.contests.program_id
-    console.log "1212121212"
     $.ajax(
       method: 'GET'
-      url: "http://api.clubloot.com/v2/contests/templates.json?program_id=#{$scope.contests.program_id}"
+      url: "#{window.apiLink}/v2/contests/templates.json?program_id=#{$scope.contests.program_id}"
       ).done (data) ->
-
-      console.log data
-      $scope.templates = data.data
-      $scope.$apply()
+        $scope.templates = data.data
+        $scope.$apply()
 
   $scope.createNewContest = () ->
-    console.log "createNewContest"
-    console.log "template_id:"+$scope.contests.template_id
-    console.log "token:"+$scope.userToken
-    console.log "details[name]:"+$scope.contests.name
-    console.log "details[player]:"+parseInt($scope.contests.max_player)+2
-    console.log "details[fee]:"+$scope.contests.fee
+    if $scope.user.coins < $scope.currentFee
+      swal {
+        title: 'Need more coins !'
+        text: "You have #{$scope.user.coins} Coins"
+        type: 'warning'
+        confirmButtonColor: '#DD6B55'
+        confirmButtonText: 'yes'
+        cancelButtonText: 'No'
+        closeOnConfirm: true
+      }
+
+      return
 
     $.ajax(
       method: 'POST'
@@ -123,10 +109,8 @@ angular.module 'clublootApp'
         'details[player]': parseInt($scope.contests.max_player)+2,
         'details[fee]': $scope.contests.fee
       }
-      url: "http://api.clubloot.com/v2/user/contest/new.json"
+      url: "#{window.apiLink}/v2/user/contest/new.json"
       ).done (data) ->
-        console.log data
-        console.log "=============-------"
         id = data.data.id.$oid
         $state.go("contestQuiz", { contest_id: id , template_id: $scope.contests.template_id})
 
@@ -149,7 +133,7 @@ angular.module 'clublootApp'
       ).success((data, status, headers, config) ->
         $scope.template_ids = []
         for template in $scope.templates
-          if template.program == data.program #&& template.active == true
+          if template.program == data.program
             $scope.template_ids.push(template._id)
 
         $scope.template_id = $scope.template_ids[$scope.template_ids.length-1]
@@ -240,12 +224,9 @@ angular.module 'clublootApp'
   $scope.calPrize = (index) ->
 
     v = parseInt($scope.gemMatrix.list[$scope.contests.max_player].fee[index])
-    console.log index
-    console.log v
-    console.log "----------------------------------------------------------"
+    $scope.currentFee = v
     $scope.gemIndex = $scope.gemMatrix.list[$scope.contests.max_player].fee.indexOf(v)
 
-    console.log ""
     gemType = $scope.gemMatrix.gem[$scope.gemIndex].type
 
     if gemType == "DIAMOND"

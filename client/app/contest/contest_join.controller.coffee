@@ -2,7 +2,6 @@
 
 angular.module 'clublootApp'
 .controller 'ContestJoinCtrl', ($scope, $http, socket, $timeout, $cookieStore, Auth, $state, $stateParams) ->
-  console.log $stateParams
   $scope.selectQues = null
   $scope.checkAnswer = false
   $scope.qaSelection = []
@@ -10,7 +9,7 @@ angular.module 'clublootApp'
   $scope.userToken = $cookieStore.get 'token'
   $scope.getUserProfile = () ->
     $.ajax
-      url: "http://api.clubloot.com/v2/user/profile.json?token=#{$scope.userToken}"
+      url: "#{window.apiLink}/v2/user/profile.json?token=#{$scope.userToken}"
       type: 'GET'
       datatype: 'json'
       success: (data) ->
@@ -27,10 +26,19 @@ angular.module 'clublootApp'
 
   $.ajax(
     method: 'GET'
-    url: "http://api.clubloot.com/v2/contests/template.json?template_id=#{$stateParams.template_id}"
+    url: "#{window.apiLink}/v2/contests/template.json?template_id=#{$stateParams.template_id}"
     ).done (data) ->
+      console.log data
+      console.log "=-=-=-=-=-=-=-=-=-=-=99999999"
       $scope.question = data.data
       $scope.$apply()
+
+  $scope.checkShowAns = (ans) ->
+    console.log ans
+    if ans.name == "" && ans.attachment.indexOf("no-image") >= 0
+      return false
+    else
+      return true
 
   $scope.unlessEmpty = () ->
     return false unless $scope.question
@@ -51,16 +59,10 @@ angular.module 'clublootApp'
         'contest_id': $stateParams.contest_id,
         'details': $scope.getAnswer()
       }
-      url: "http://api.clubloot.com/v2/user/contest/quiz.json"
+      url: "#{window.apiLink}/v2/user/contest/quiz.json"
       ).done (data) ->
-        console.log "submitAnswer"
-        console.log data
         $state.go('main')
-        # console.log data
-      # console.log data
-    # console.log data
-    # return
-
+      
   $scope.justSubmit = (next) ->
     $.ajax(
       method: 'POST'
@@ -69,10 +71,8 @@ angular.module 'clublootApp'
         'contest_id': $stateParams.contest_id,
         'details': $scope.getAnswer()
       }
-      url: "http://api.clubloot.com/v2/user/contest/quiz.json"
+      url: "#{window.apiLink}/v2/user/contest/quiz.json"
       ).done (data) ->
-        console.log "submitAnswer"
-        console.log data
         window.location.href = next
 
   $scope.getAnswer = () ->
@@ -91,11 +91,6 @@ angular.module 'clublootApp'
       # $http.post("/api/contest/#{$scope.contest.id}/destroy", {}).success (data, status, headers, config) ->
 
   $scope.$on '$locationChangeStart', (event, next, current) ->
-
-    console.log "location change"
-    console.log current
-    console.log next
-
     return if next.indexOf("join") >=0
     return if current.indexOf("contest/new") >=0
     return if $scope.createNewStep == '1'
@@ -104,7 +99,7 @@ angular.module 'clublootApp'
 
       swal {
         title: 'Are you sure?'
-        text: 'Contest will not be create'
+        text: 'you will not be join this contest'
         type: 'warning'
         showCancelButton: true
         confirmButtonColor: '#DD6B55'

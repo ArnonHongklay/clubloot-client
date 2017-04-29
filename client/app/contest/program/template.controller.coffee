@@ -2,12 +2,10 @@
 
 angular.module 'clublootApp'
 .controller 'ContestTemplateCtrl', ($scope, $http, Auth, $state, $stateParams, $cookieStore, $rootScope, $timeout) ->
-  # $scope.user = Auth.getCurrentUser()
-  console.log "ContestTemplateCtrl"
 
   $scope.setData = () ->
     $.ajax
-      url: "http://api.clubloot.com/v2/contests/templates.json?program_id=#{$stateParams.program_id}"
+      url: "#{window.apiLink}/v2/contests/templates.json?program_id=#{$stateParams.program_id}"
       type: 'GET'
       datatype: 'json'
       success: (data) ->
@@ -20,11 +18,13 @@ angular.module 'clublootApp'
         return
 
     $.ajax
-      url: 'http://api.clubloot.com/v2/contests/programs.json'
+      url: "#{window.apiLink}/v2/contests/programs.json"
       type: 'GET'
       datatype: 'json'
       success: (data) ->
         $scope.programList = data.data
+        console.log $scope.programList
+        console.log "programlist"
         $scope.$apply()
       error: (jqXHR, textStatus, errorThrown) ->
         $timeout ->
@@ -35,17 +35,10 @@ angular.module 'clublootApp'
   $scope.selectTemplate = (program) ->
     $state.go('programTemplate.template', {program_id: program.id.$oid})
 
-
-  $scope.loopGetData = () ->
-    $timeout ->
-      $scope.setData()
-      $scope.loopGetData()
-    , 30000
-
   $scope.userToken = $cookieStore.get 'token'
   $scope.getUserProfile = () ->
     $.ajax
-      url: "http://api.clubloot.com/v2/user/profile.json?token=#{$scope.userToken}"
+      url: "#{window.apiLink}/v2/user/profile.json?token=#{$scope.userToken}"
       type: 'GET'
       datatype: 'json'
       success: (data) ->

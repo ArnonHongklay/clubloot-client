@@ -3,8 +3,15 @@
 angular.module 'clublootApp'
 .controller 'NavbarCtrl', ($scope, $location, Auth, $http, $rootScope, $cookieStore, $timeout, socket, $cable) ->
   $scope.socket = socket.socket
+  $scope.userToken = $cookieStore.get 'token'
+  unless $scope.userToken
+    window.location.href = '/login'
+
   $scope.socket.on 'message', (data) ->
     return
+
+  console.log window.apiLink
+  console.log "link"
 
   $scope.reAfterLoot = () ->
     location.reload()
@@ -42,39 +49,63 @@ angular.module 'clublootApp'
     $rootScope.showDailyLoot = true
     $scope.$apply()
   
-  $scope.userToken = $cookieStore.get 'token'
-  unless $scope.userToken
-    window.location.href = '/login'
 
   $scope.getUserProfile = () ->
     $.ajax
-      url: "http://api.clubloot.com/v2/user/profile.json?token=#{$scope.userToken}"
+      url: "#{window.apiLink}/v2/user/profile.json?token=#{$scope.userToken}"
       type: 'GET'
       datatype: 'json'
       success: (data) ->
+        console.log data
         $scope.user = data.data
+        console.log $scope.user
+        console.log "-0-0-0-0-0-00-"
         unless $scope.user.email
           window.location.href = "/login"
         $rootScope.currentUser = $scope.user
         $scope.$apply()
-        if $scope.user.free_loot
-          $rootScope.showDailyLoot = true
-          $.ajax
-            url: "http://api.clubloot.com/v2/user/daily_loot.json?token=#{$scope.userToken}"
-            type: 'GET'
-            datatype: 'json'
-            success: (data) ->
-              console.log "dailyloot"
+        $.ajax
+          url: "#{window.apiLink}/v2/adverts"
+          type: 'GET'
+          datatype: 'json'
+          success: (data) ->
+            console.log "adword"
+            console.log data
+            if data.data.length > 0
+              $rootScope.ads = data.data[0]
+              console.log "---==="
+              $rootScope.showAds = true
               console.log data
-              return
-            error: (jqXHR, textStatus, errorThrown) ->
-              console.log "error"
-              return
+
+            if $scope.user.free_loot
+              $rootScope.showDailyLoot = true
+              $scope.$apply()
+              $rootScope.$apply()
+              $.ajax
+                url: "#{window.apiLink}/v2/user/daily_loot.json?token=#{$scope.userToken}"
+                type: 'GET'
+                datatype: 'json'
+                success: (data) ->
+                  console.log "dailyloot"
+                  console.log data
+                  return
+                error: (jqXHR, textStatus, errorThrown) ->
+                  console.log "error"
+                  return
+            return
+          error: (jqXHR, textStatus, errorThrown) ->
+            console.log "error"
+            return
+
+
+        
 
         if $scope.user.promo_code
           $rootScope.showPromocode = true
+          $scope.$apply()
+          $rootScope.$apply()
           $.ajax
-            url: "http://api.clubloot.com/v2/user/promo_code.json?token=#{$scope.userToken}"
+            url: "#{window.apiLink}/v2/user/promo_code.json?token=#{$scope.userToken}"
             type: 'GET'
             datatype: 'json'
             success: (data) ->

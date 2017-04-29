@@ -7,13 +7,13 @@ angular.module 'clublootApp'
   $scope.userToken = $cookieStore.get 'token'
   $scope.getUserProfile = () ->
     $.ajax
-      url: "http://api.clubloot.com/v2/user/profile.json?token=#{$scope.userToken}"
+      url: "#{window.apiLink}/v2/user/profile.json?token=#{$scope.userToken}"
       type: 'GET'
       datatype: 'json'
       success: (data) ->
         $scope.user = data.data
         $scope.$apply()
-        $scope.cable = $cable('ws://api.clubloot.com/cable')
+        $scope.cable = $cable(window.socketLink)
 
         $scope.channel = $scope.cable.subscribe('ContestChannel', received: (data) ->
           console.log "SOcket in dashboard"

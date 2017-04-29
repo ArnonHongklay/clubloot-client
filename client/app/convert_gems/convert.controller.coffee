@@ -5,24 +5,22 @@ angular.module 'clublootApp'
   $scope.showModal = false
 
   $.ajax
-    url: "http://api.clubloot.com/v2/user/gems.json"
+    url: "#{window.apiLink}/v2/user/gems.json"
     type: 'GET'
     datatype: 'json'
     success: (data) ->
       $scope.gems = data.data
-      console.log $scope.gems
     error: (jqXHR, textStatus, errorThrown) ->
       return
 
   $scope.userToken = $cookieStore.get 'token'
   $scope.getUserProfile = () ->
     $.ajax
-      url: "http://api.clubloot.com/v2/user/profile.json?token=#{$scope.userToken}"
+      url: "#{window.apiLink}/v2/user/profile.json?token=#{$scope.userToken}"
       type: 'GET'
       datatype: 'json'
       success: (data) ->
         $scope.user = data.data
-        console.log $scope.user
         $scope.$apply()
         $scope.currentGem = {
           diamonds: $scope.user.diamonds, emeralds: $scope.user.emeralds, sapphires: $scope.user.sapphires, rubies: $scope.user.rubies, coins: $scope.user.coins
@@ -117,7 +115,6 @@ angular.module 'clublootApp'
       $scope.currentGem.rubies    = $scope.currentGem.rubies - $scope.gems.sapphire.rate
       $scope.currentGem.coins     = $scope.currentGem.coins - coinFee
       gemMinus = $scope.gems.sapphire.rate
-    console.log coinFee
     $scope.$apply()
     $(".value-box-added."+type+" .num-noti").html("+1")
     $(".value-box-added."+subType+" .num-noti").html("-"+gemMinus)
@@ -140,7 +137,7 @@ angular.module 'clublootApp'
     , 2000
 
     $.ajax
-      url: "http://api.clubloot.com/v2/user/convert_gem.json"
+      url: "#{window.apiLink}/v2/user/convert_gem.json"
       type: 'POST'
       datatype: 'json'
       data: {
@@ -148,8 +145,7 @@ angular.module 'clublootApp'
         type: type
       }
       success: (data) ->
-        console.log data
-        console.log $scope.gems
+        return
       error: (jqXHR, textStatus, errorThrown) ->
         return
 

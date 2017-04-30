@@ -1,7 +1,7 @@
 'use strict'
 
 angular.module 'clublootApp'
-.controller 'ContestJoinCtrl', ($scope, $http, socket, $timeout, $cookieStore, Auth, $state, $stateParams) ->
+.controller 'ContestJoinCtrl', ($scope, $http, socket, $rootScope, $timeout, $cookieStore, Auth, $state, $stateParams) ->
   $scope.selectQues = null
   $scope.checkAnswer = false
   $scope.qaSelection = []
@@ -29,6 +29,9 @@ angular.module 'clublootApp'
     url: "#{window.apiLink}/v2/contests/template.json?template_id=#{$stateParams.template_id}"
     ).done (data) ->
       $scope.question = data.data
+      $timeout ->
+        $('.question-title')[0].click()
+      , 200
       $scope.$apply()
 
   $scope.checkShowAns = (ans) ->
@@ -49,6 +52,15 @@ angular.module 'clublootApp'
   $scope.openAns = (index) ->
     $('html, body').animate { scrollTop: $("#ques_"+index).offset().top }, 'fast'
     return true
+
+
+  $scope.checkedAns = (i) ->
+    return if $scope.question.questions.length-1 == parseInt(i)
+    console.log "checkedAns"
+    index = parseInt(i) + 1
+    $rootScope.selectQues = index
+    $scope.openAns(index)
+
 
   $scope.submitAnswer = () ->
     $.ajax(

@@ -48,11 +48,11 @@ angular.module 'clublootApp', [
     Auth.isLoggedInAsync (loggedIn) ->
       $location.path "/login" if next.authenticate and not loggedIn
 
-# window.apiLink = "http://api.clubloot.com"
-window.apiLink = "http://staging-api.clubloot.com"
+window.apiLink = "http://api.clubloot.com"
+# window.apiLink = "http://staging-api.clubloot.com"
 
-# window.socketLink = "ws://api.clubloot.com/cable"
-window.socketLink = 'ws://staging-api.clubloot.com/cable'
+window.socketLink = "ws://api.clubloot.com/cable"
+# window.socketLink = 'ws://staging-api.clubloot.com/cable'
 
   
  

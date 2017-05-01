@@ -1,7 +1,7 @@
 'use strict'
 
 angular.module 'clublootApp'
-.controller 'ContestQuizCtrl', ($scope, $http, socket, $timeout, $cookieStore, Auth, $state, $stateParams) ->
+.controller 'ContestQuizCtrl', ($scope, $http, $rootScope, socket, $timeout, $cookieStore, Auth, $state, $stateParams) ->
   $scope.selectQues = null
   $scope.checkAnswer = false
   $scope.qaSelection = []
@@ -29,10 +29,12 @@ angular.module 'clublootApp'
     url: "#{window.apiLink}/v2/contests/template.json?template_id=#{$stateParams.template_id}"
     ).done (data) ->
       $scope.question = data.data
+      $timeout ->
+        $('.question-title')[0].click()
+      , 200
       $scope.$apply()
 
   $scope.checkShowAns = (ans) ->
-    console.log ans
     if ans.name == "" && ans.attachment.indexOf("no-image") >= 0
       return false
     else
@@ -42,6 +44,8 @@ angular.module 'clublootApp'
     $scope.qaSelection[q] = $(e).val()
 
   $scope.unlessEmpty = () ->
+    for i in $scope.qaSelection
+      return false if i == undefined
     return false unless $scope.question
     if $scope.question.questions.length == $scope.qaSelection.length
       return true
@@ -51,6 +55,13 @@ angular.module 'clublootApp'
   $scope.openAns = (index) ->
     $('html, body').animate { scrollTop: $("#ques_"+index).offset().top }, 'fast'
     return true
+
+  $scope.checkedAns = (i) ->
+    return if $scope.question.questions.length-1 == parseInt(i)
+    index = parseInt(i) + 1
+    $rootScope.selectQues = index
+    $scope.openAns(index)
+    
 
   $scope.submitAnswer = () ->
     $.ajax(

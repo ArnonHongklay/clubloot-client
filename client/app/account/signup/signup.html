@@ -71,8 +71,9 @@
 
     <div class="form-group" ng-class="{ 'has-success': form.dob.$valid && submitted,
       'has-error': form.dob.$invalid && submitted }">
-      <input type="text" name="dob" required placeholder="Birthday (mm/dd/yyyy)" dob-check class="form-control" ng-model="user.dob">
+      <input type="text" name="dob" required placeholder="Birthday (mm/dd/yyyy)" class="form-control" ng-model="user.dob">
     </div>
+
     <div class="form-group" ng-class="{ 'has-success': form.dob.$valid && submitted,
       'has-error': form.dob.$invalid && submitted }">
       <input type="text" name="promocode" required mongoose-error placeholder="Promo code" class="form-control" ng-model="user.promocode">

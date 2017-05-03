@@ -89,15 +89,17 @@ angular.module 'clublootApp'
       }
 
       return
-    $.ajax(
-      method: 'POST'
-      data: {
-        'token': $scope.userToken,
-        'contest_id': $stateParams.contest_id,
-      }
-      url: "#{window.apiLink}/v2/user/contest/join.json"
-      ).done (data) ->
-        $state.go('contestQuizJoin', {contest_id: $stateParams.contest_id, template_id: $scope.template_id})
+
+    $state.go('contestQuizJoin', { contest_id: contest.id.$oid, template_id: contest.template.id.$oid})
+    # $.ajax(
+    #   method: 'POST'
+    #   data: {
+    #     'token': $scope.userToken,
+    #     'contest_id': $stateParams.contest_id,
+    #   }
+    #   url: "#{window.apiLink}/v2/user/contest/join.json"
+    #   ).done (data) ->
+    #     $state.go('contestQuizJoin', {contest_id: $stateParams.contest_id, template_id: $scope.template_id})
 
   $scope.checkSameScore = (score) ->
     if $scope.oldScore == score
@@ -190,7 +192,7 @@ angular.module 'clublootApp'
           if data.page == "contest_details" || data.page == "all_contest"
             $scope.setData()
             return
-          
+
           return
         )
       error: (jqXHR, textStatus, errorThrown) ->

@@ -105,15 +105,16 @@ angular.module 'clublootApp'
 
       return
 
-    $.ajax(
-      method: 'POST'
-      data: {
-        'token': $scope.userToken,
-        'contest_id': contest.id.$oid,
-      }
-      url: "#{window.apiLink}/v2/user/contest/join.json"
-      ).done (data) ->
-        $state.go('contestQuizJoin', {contest_id: contest.id.$oid, template_id: contest.template.id.$oid})
+    $state.go('contestQuizJoin', { contest_id: contest.id.$oid, template_id: contest.template.id.$oid})
+    # $.ajax(
+    #   method: 'POST'
+    #   data: {
+    #     'token': $scope.userToken,
+    #     'contest_id': contest.id.$oid,
+    #   }
+    #   url: "#{window.apiLink}/v2/user/contest/join.json"
+    #   ).done (data) ->
+    #     $state.go('contestQuizJoin', {contest_id: contest.id.$oid, template_id: contest.template.id.$oid})
 
   $scope.gemColor = (gemType) ->
     if gemType == "DIAMOND"
@@ -156,7 +157,7 @@ angular.module 'clublootApp'
           if data.page == "all_contest" || data.page == "contest_details"
             $scope.setData()
             return
-          
+
           return
         )
       error: (jqXHR, textStatus, errorThrown) ->

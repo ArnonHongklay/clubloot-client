@@ -98,12 +98,24 @@ angular.module 'clublootApp'
       }
       return
     else
-      $state.go("contestQuiz", {
-        template_id: $scope.contests.template_id
-        contest_name: $scope.contests.name,
-        contest_player: parseInt($scope.contests.max_player) + 2,
-        contest_fee: $scope.contests.fee
-      })
+      if $scope.contests.name && $scope.contests.fee && $scope.contests.max_player
+        $state.go("contestQuiz", {
+          template_id: $scope.contests.template_id
+          contest_name: $scope.contests.name,
+          contest_player: parseInt($scope.contests.max_player) + 2,
+          contest_fee: $scope.contests.fee
+        })
+      else
+        swal {
+          title: 'Data is wrong !'
+          text: "Please check again"
+          type: 'warning'
+          confirmButtonColor: '#DD6B55'
+          confirmButtonText: 'yes'
+          cancelButtonText: 'No'
+          closeOnConfirm: true
+        }
+        return
 
     # $.ajax(
     #   method: 'POST'

@@ -116,16 +116,17 @@ angular.module 'clublootApp'
             $state.go('main')
 
   $scope.justSubmit = (next) ->
-    $.ajax(
-      method: 'POST'
-      data: {
-        'token': $scope.userToken,
-        'contest_id': $stateParams.contest_id,
-        'details': $scope.getAnswer()
-      }
-      url: "#{window.apiLink}/v2/user/contest/quiz.json"
-      ).done (data) ->
-        window.location.href = next
+    window.location.href = next
+    # $.ajax(
+    #   method: 'POST'
+    #   data: {
+    #     'token': $scope.userToken,
+    #     'contest_id': $stateParams.contest_id,
+    #     'details': $scope.getAnswer()
+    #   }
+    #   url: "#{window.apiLink}/v2/user/contest/quiz.json"
+    #   ).done (data) ->
+    #     window.location.href = next
 
   $scope.getAnswer = () ->
     answers = "["

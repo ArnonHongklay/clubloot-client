@@ -49,7 +49,7 @@
   <div class="daily-loot-content">
     <h3>Promo code reward</h3>
     <div class="g-text content-text">
-      
+
     </div>
     <div class="g-text" style="text-align: center;margin-bottom: 10px;">You got </div>
     <div class="coins-box">{{user.promo_value}} {{user.promo_currency}}</div>
@@ -75,15 +75,13 @@
       <hr>
       <h3>Win prizes</h3>
       <div class="g-text content-text">
-      Lucky person who signin today will get.
+        {{$root.ads.above_description}}
       </div>
-      
+
       <div class="g-text" style="text-align: center;margin-bottom: 10px;"></div>
       <img src="{{$root.ads.attachment}}" class="ads-img">
-      <div class="g-text">{{$root.ads.description}}</div>
+      <div class="g-text">{{$root.ads.below_description}}</div>
       <div class="btn btn-success comfirm" ng-click="$root.showDailyLoot=false">Confirm</div>
     </div>
-
-    
   </div>
 </div>

@@ -98,7 +98,7 @@
               {{contest.name}}
             </div>
             <div style="width: 20%; display: inline-block; float:left;">{{contest.program.name}}</div>
-            <div style="width: 15%; display: inline-block; float:left;">{{contest.players.length}} / {{contest.max_players}} Player</div>
+            <div style="width: 15%; display: inline-block; float:left;">{{checkPosition(contest)}}</div>
             <div style="width: 5%; display: inline-block; float:left; text-align: center;">
               <div style="color: #fff; background: #26AE58;" ui-sref="programTemplate.template.contest({contest_id: contest.id.$oid, program_id: contest.program._id.$oid, template_id: contest.template.id.$oid})">View</div>
             </div>

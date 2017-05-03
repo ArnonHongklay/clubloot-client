@@ -15,7 +15,7 @@ angular.module 'clublootApp'
       success: (data) ->
         $scope.user = data.data
         $scope.$apply()
-       
+
       error: (jqXHR, textStatus, errorThrown) ->
         $timeout ->
           $scope.getUserProfile()
@@ -63,28 +63,56 @@ angular.module 'clublootApp'
 
 
   $scope.submitAnswer = () ->
+    # $.ajax(
+    #   method: 'POST'
+    #   data: {
+    #     'token': $scope.userToken,
+    #     'contest_id': $stateParams.contest_id,
+    #     'details': $scope.getAnswer()
+    #   }
+    #   url: "#{window.apiLink}/v2/user/contest/quiz.json"
+    #   ).done (data) ->
+    #     $state.go('main')
+    console.log "xxxxxxxxxxxxxxxxxxxxx"
+    console.log $stateParams
+    console.log $stateParams.contest_id
     $.ajax(
       method: 'POST'
       data: {
         'token': $scope.userToken,
         'contest_id': $stateParams.contest_id,
-        'details': $scope.getAnswer()
+        'quizes': $scope.getAnswer()
       }
-      url: "#{window.apiLink}/v2/user/contest/quiz.json"
-      ).done (data) ->
-        $state.go('main')
-      
+      url: "#{window.apiLink}/v3/contest/join.json"
+      ).done (result) ->
+        if result.status = 'success'
+          $state.go('main')
+        else
+          swal {
+            title: 'Are you sure?'
+            text: result.data
+            type: 'warning'
+            showCancelButton: true
+            confirmButtonColor: '#DD6B55'
+            confirmButtonText: 'yes'
+            cancelButtonText: 'No'
+            closeOnConfirm: false
+            closeOnCancel: true
+          }, (isConfirm) ->
+            $state.go('main')
+
   $scope.justSubmit = (next) ->
-    $.ajax(
-      method: 'POST'
-      data: {
-        'token': $scope.userToken,
-        'contest_id': $stateParams.contest_id,
-        'details': $scope.getAnswer()
-      }
-      url: "#{window.apiLink}/v2/user/contest/quiz.json"
-      ).done (data) ->
-        window.location.href = next
+    window.location.href = next
+    # $.ajax(
+    #   method: 'POST'
+    #   data: {
+    #     'token': $scope.userToken,
+    #     'contest_id': $stateParams.contest_id,
+    #     'details': $scope.getAnswer()
+    #   }
+    #   url: "#{window.apiLink}/v2/user/contest/quiz.json"
+    #   ).done (data) ->
+    #     window.location.href = next
 
   $scope.getAnswer = () ->
     answers = "["

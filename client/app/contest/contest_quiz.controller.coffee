@@ -15,7 +15,7 @@ angular.module 'clublootApp'
       success: (data) ->
         $scope.user = data.data
         $scope.$apply()
-       
+
       error: (jqXHR, textStatus, errorThrown) ->
         $timeout ->
           $scope.getUserProfile()
@@ -29,10 +29,21 @@ angular.module 'clublootApp'
     url: "#{window.apiLink}/v2/contests/template.json?template_id=#{$stateParams.template_id}"
     ).done (data) ->
       $scope.question = data.data
+
       $timeout ->
         $('.question-title')[0].click()
       , 200
       $scope.$apply()
+
+  # $.ajax(
+  #   method: 'GET'
+  #   data: {
+  #     'template_id': $stateParams.template_id
+  #   }
+  #   url: "#{window.apiLink}/v3/quiz"
+  # ).done (quizes) ->
+  #   $scope.quizes = quizes.data
+  #   console.log $scope.quizes
 
   $scope.checkShowAns = (ans) ->
     if ans.name == "" && ans.attachment.indexOf("no-image") >= 0
@@ -61,20 +72,49 @@ angular.module 'clublootApp'
     index = parseInt(i) + 1
     $rootScope.selectQues = index
     $scope.openAns(index)
-    
+
 
   $scope.submitAnswer = () ->
+    # $.ajax(
+    #   method: 'POST'
+    #   data: {
+    #     'token': $scope.userToken,
+    #     'contest_id': $stateParams.contest_id,
+    #     'details': $scope.getAnswer()
+    #   }
+    #   url: "#{window.apiLink}/v2/user/contest/quiz.json"
+    #   ).done (data) ->
+    #     $state.go('main')
+
+    console.log $stateParams
     $.ajax(
       method: 'POST'
       data: {
         'token': $scope.userToken,
-        'contest_id': $stateParams.contest_id,
-        'details': $scope.getAnswer()
+        'template_id': $stateParams.template_id,
+        'details[name]': $stateParams.contest_name,
+        'details[player]': $stateParams.contest_player,
+        'details[fee]': $stateParams.contest_fee,
+        'quizes': $scope.getAnswer()
       }
-      url: "#{window.apiLink}/v2/user/contest/quiz.json"
-      ).done (data) ->
-        $state.go('main')
-    
+      url: "#{window.apiLink}/v3/contest/new.json"
+      ).done (result) ->
+        if result.status = 'success'
+          $state.go('main')
+        else
+          swal {
+            title: 'Are you sure?'
+            text: result.data
+            type: 'warning'
+            showCancelButton: true
+            confirmButtonColor: '#DD6B55'
+            confirmButtonText: 'yes'
+            cancelButtonText: 'No'
+            closeOnConfirm: false
+            closeOnCancel: true
+          }, (isConfirm) ->
+            $state.go('main')
+
   $scope.justSubmit = (next) ->
     $.ajax(
       method: 'POST'

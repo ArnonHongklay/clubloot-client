@@ -26,7 +26,7 @@ angular.module 'clublootApp'
           swal "#{data.data}"
           return
         else
-          Auth.signin
+          Auth.signinFirst
             email: $scope.user.email
             password: $scope.user.password
           $location.path '/'

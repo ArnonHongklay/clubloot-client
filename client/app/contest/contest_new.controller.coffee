@@ -13,7 +13,7 @@ angular.module 'clublootApp'
       success: (data) ->
         $scope.user = data.data
         $scope.$apply()
-       
+
       error: (jqXHR, textStatus, errorThrown) ->
         $timeout ->
           $scope.getUserProfile()
@@ -21,7 +21,7 @@ angular.module 'clublootApp'
 
   if $scope.userToken
     $scope.getUserProfile()
-    
+
   $.ajax(
     method: 'GET'
     url: "#{window.apiLink}/v2/contests/programs.json"
@@ -75,7 +75,6 @@ angular.module 'clublootApp'
 
       { type: 'DIAMOND', count: 1 }
     ]
-
   }
 
   $scope.selectProgram = () ->
@@ -97,24 +96,40 @@ angular.module 'clublootApp'
         cancelButtonText: 'No'
         closeOnConfirm: true
       }
-
       return
+    else
+      if $scope.contests.name && $scope.contests.fee && $scope.contests.max_player
+        $state.go("contestQuiz", {
+          template_id: $scope.contests.template_id
+          contest_name: $scope.contests.name,
+          contest_player: parseInt($scope.contests.max_player) + 2,
+          contest_fee: $scope.contests.fee
+        })
+      else
+        swal {
+          title: 'Data is wrong !'
+          text: "Please check again"
+          type: 'warning'
+          confirmButtonColor: '#DD6B55'
+          confirmButtonText: 'yes'
+          cancelButtonText: 'No'
+          closeOnConfirm: true
+        }
+        return
 
-    $.ajax(
-      method: 'POST'
-      data: {
-        'token': $scope.userToken,
-        'template_id': $scope.contests.template_id,
-        'details[name]': $scope.contests.name,
-        'details[player]': parseInt($scope.contests.max_player)+2,
-        'details[fee]': $scope.contests.fee
-      }
-      url: "#{window.apiLink}/v2/user/contest/new.json"
-      ).done (data) ->
-        id = data.data.id.$oid
-        $state.go("contestQuiz", { contest_id: id , template_id: $scope.contests.template_id})
-
-
+    # $.ajax(
+    #   method: 'POST'
+    #   data: {
+    #     'token': $scope.userToken,
+    #     'template_id': $scope.contests.template_id,
+    #     'details[name]': $scope.contests.name,
+    #     'details[player]': parseInt($scope.contests.max_player)+2,
+    #     'details[fee]': $scope.contests.fee
+    #   }
+    #   url: "#{window.apiLink}/v2/user/contest/new.json"
+    #   ).done (data) ->
+    #     id = data.data.id.$oid
+    #     $state.go("contestQuiz", { contest_id: id , template_id: $scope.contests.template_id})
 
   $scope.checkActive = (start) ->
     now = new Date().getTime()

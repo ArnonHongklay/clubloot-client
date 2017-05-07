@@ -64,6 +64,7 @@ angular.module 'clublootApp'
   }
 
   $scope.getAllContest = () ->
+    console.log "dsdsds"
     $.ajax
       url: "#{window.apiLink}/v2/user/contests.json?token=#{$scope.userToken}&state=all"
       type: 'GET'

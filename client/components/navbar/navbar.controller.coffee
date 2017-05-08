@@ -56,10 +56,7 @@ angular.module 'clublootApp'
       type: 'GET'
       datatype: 'json'
       success: (data) ->
-        console.log data
         $scope.user = data.data
-        console.log $scope.user
-        console.log "-0-0-0-0-0-00-"
         unless $scope.user.email
           window.location.href = "/login"
         $rootScope.currentUser = $scope.user
@@ -69,13 +66,9 @@ angular.module 'clublootApp'
           type: 'GET'
           datatype: 'json'
           success: (data) ->
-            console.log "adword"
-            console.log data
             if data.data.length > 0
               $rootScope.ads = data.data[0]
-              console.log "---==="
               $rootScope.showAds = true
-              console.log data
 
             if $scope.user.free_loot
               $rootScope.showDailyLoot = true

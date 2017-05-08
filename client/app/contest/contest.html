@@ -43,7 +43,7 @@
   <div class="row">
     <div class="col-lg-12">
       <div class="row">
-        <div class="col-sm-2" ng-repeat="program in programList" ui-sref="programTemplate({program_id: program.id.$oid})">
+        <div class="col-sm-2" ng-repeat="program in programList" ui-sref="programTemplate.template({program_id: program.id.$oid})">
            <div class="flex-container upcomming show-{{$index}}">
              <div class="item-show">
               <img ng-src="{{program.attachment}}">   

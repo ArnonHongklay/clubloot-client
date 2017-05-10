@@ -5,6 +5,7 @@ angular.module 'clublootApp'
   $scope.selectQues = null
   $scope.checkAnswer = false
   $scope.qaSelection = []
+  $scope.submiting = false
 
   $scope.userToken = $cookieStore.get 'token'
   $scope.getUserProfile = () ->
@@ -75,6 +76,8 @@ angular.module 'clublootApp'
 
 
   $scope.submitAnswer = () ->
+    return if $scope.submiting
+    $scope.submiting = true
     # $.ajax(
     #   method: 'POST'
     #   data: {
@@ -99,6 +102,7 @@ angular.module 'clublootApp'
       }
       url: "#{window.apiLink}/v3/contest/new.json"
       ).done (result) ->
+        $scope.submiting = false
         if result.status = 'success'
           $state.go('main')
         else

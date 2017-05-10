@@ -17,7 +17,7 @@ angular.module 'clublootApp'
         password: $scope.user.password
         confirm_password: $scope.user.confirm_password
         username: $scope.user.username
-        date_of_birth: $scope.user.dob
+        date_of_birth: "1/1/"+$scope.user.dob
         promo:  $scope.user.promocode
       }
       success: (data) ->

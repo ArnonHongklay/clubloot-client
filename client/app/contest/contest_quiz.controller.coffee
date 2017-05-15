@@ -78,18 +78,7 @@ angular.module 'clublootApp'
   $scope.submitAnswer = () ->
     return if $scope.submiting
     $scope.submiting = true
-    # $.ajax(
-    #   method: 'POST'
-    #   data: {
-    #     'token': $scope.userToken,
-    #     'contest_id': $stateParams.contest_id,
-    #     'details': $scope.getAnswer()
-    #   }
-    #   url: "#{window.apiLink}/v2/user/contest/quiz.json"
-    #   ).done (data) ->
-    #     $state.go('main')
 
-    console.log $stateParams
     $.ajax(
       method: 'POST'
       data: {

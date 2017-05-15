@@ -22,7 +22,8 @@
 
         </div>
       </div>
-      <div class="btn get-prize" style="margin-top: 20px;" ng-click="submitAnswer()" ng-show="unlessEmpty()">CONTINUE</div>
+      <div class="btn get-prize" style="margin-top: 20px;" ng-click="submitAnswer()" ng-show="unlessEmpty() && !submiting">CONTINUE</div>
+      <div class="btn  btn-default get-prize" style="margin-top: 20px;" ng-show="unlessEmpty() && submiting">Loading...</div>
   </div>
 </div>
 </section>

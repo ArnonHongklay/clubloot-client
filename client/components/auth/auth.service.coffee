@@ -109,7 +109,7 @@ angular.module 'clublootApp'
   ###
   getCurrentUser: ->
     $rootScope.user
-        
+
 
   signin: (user, callback) ->
     deferred = undefined

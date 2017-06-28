@@ -48,7 +48,7 @@ angular.module 'clublootApp'
   $scope.getFreeLoot = () ->
     $rootScope.showDailyLoot = true
     $scope.$apply()
-  
+
 
   $scope.getUserProfile = () ->
     $.ajax
@@ -91,7 +91,7 @@ angular.module 'clublootApp'
             return
 
 
-        
+
 
         if $scope.user.promo_code
           $rootScope.showPromocode = true
@@ -108,7 +108,7 @@ angular.module 'clublootApp'
             error: (jqXHR, textStatus, errorThrown) ->
               console.log "error"
               return
-       
+
       error: (jqXHR, textStatus, errorThrown) ->
         $timeout ->
           $scope.getUserProfile()
@@ -118,11 +118,11 @@ angular.module 'clublootApp'
     $scope.getUserProfile()
 
 
-  
 
 
 
-        
+
+
   # $timeout ->
   #   if Auth.getCurrentUser()
   #     $http.get("/api/users/#{Auth.getCurrentUser()._id}").success (data) ->

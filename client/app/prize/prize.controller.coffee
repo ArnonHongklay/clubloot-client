@@ -15,7 +15,7 @@ angular.module 'clublootApp'
         console.log "-----user-----"
         console.log $scope.user
         $scope.$apply()
-       
+
       error: (jqXHR, textStatus, errorThrown) ->
         $timeout ->
           $scope.getUserProfile()

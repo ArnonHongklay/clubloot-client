@@ -50,6 +50,24 @@ angular.module 'clublootApp'
     $scope.$apply()
 
 
+  console.log("xxxxxxxxxxx")
+  $scope.confirmAds = () ->
+    console.log('in confirmAds')
+    $rootScope.showDailyLoot=false
+
+    $.ajax
+      url: "#{window.apiLink}/v2/user/daily_loot.json?token=#{$scope.userToken}"
+      type: 'GET'
+      datatype: 'json'
+      success: (data) ->
+        console.log "dailyloot"
+        console.log data
+        $root.showDailyLoot = false
+        return
+      error: (jqXHR, textStatus, errorThrown) ->
+        console.log "error"
+        return
+
   $scope.getUserProfile = () ->
     $.ajax
       url: "#{window.apiLink}/v2/user/profile.json?token=#{$scope.userToken}"
@@ -74,24 +92,11 @@ angular.module 'clublootApp'
               $rootScope.showDailyLoot = true
               $scope.$apply()
               $rootScope.$apply()
-              $.ajax
-                url: "#{window.apiLink}/v2/user/daily_loot.json?token=#{$scope.userToken}"
-                type: 'GET'
-                datatype: 'json'
-                success: (data) ->
-                  console.log "dailyloot"
-                  console.log data
-                  return
-                error: (jqXHR, textStatus, errorThrown) ->
-                  console.log "error"
-                  return
+
             return
           error: (jqXHR, textStatus, errorThrown) ->
             console.log "error"
             return
-
-
-
 
         if $scope.user.promo_code
           $rootScope.showPromocode = true
@@ -116,16 +121,3 @@ angular.module 'clublootApp'
 
   if $scope.userToken
     $scope.getUserProfile()
-
-
-
-
-
-
-
-  # $timeout ->
-  #   if Auth.getCurrentUser()
-  #     $http.get("/api/users/#{Auth.getCurrentUser()._id}").success (data) ->
-  #       # console.log data
-  #       $scope.getFreeLoot() if data.free_loot
-  # , 300

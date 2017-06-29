@@ -44,7 +44,7 @@
 
 
 
-<div class="daily-loot-modal" ng-show="$root.showPromocode">
+<div class="daily-loot-modal" ng-controller="NavbarCtrl" ng-show="$root.showPromocode">
   <div class="daily-loot-bg"></div>
   <div class="daily-loot-content">
     <h3>Promo code reward</h3>
@@ -58,7 +58,7 @@
   </div>
 </div>
 
-<div class="daily-loot-modal" ng-show="$root.showDailyLoot">
+<div class="daily-loot-modal" ng-controller="NavbarCtrl" ng-show="$root.showDailyLoot">
   <div class="daily-loot-bg"></div>
   <div class="daily-loot-content">
     <h3>Daily Loot</h3>
@@ -69,7 +69,7 @@
     <div class="g-text" style="text-align: center;margin-bottom: 10px;">Your daily loot today is</div>
     <div class="coins-box">2000 coins</div>
     <div class="g-text">Sign in tomorrow to get more free loot!</div>
-    <div class="btn btn-success comfirm" ng-click="$root.showDailyLoot=false">Confirm</div>
+    <div class="btn btn-success comfirm" ng-click="confirmAds()">Confirm</div>
 
     <div ng-show="$root.showAds">
       <hr>
@@ -81,7 +81,7 @@
       <div class="g-text" style="text-align: center;margin-bottom: 10px;"></div>
       <img src="{{$root.ads.attachment}}" class="ads-img">
       <div class="g-text">{{$root.ads.below_description}}</div>
-      <div class="btn btn-success comfirm" ng-click="$root.showDailyLoot=false">Confirm</div>
+      <div class="btn btn-success comfirm" ng-click="confirmAds()">Confirm</div>
     </div>
   </div>
 </div>

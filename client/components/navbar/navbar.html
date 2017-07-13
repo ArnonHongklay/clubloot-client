@@ -22,20 +22,20 @@
         <li><a href="/convert_gems" style="color: #fff"><span class="hmb"><img src="assets/images/Conversion Arrows (White).png" height="20">&nbsp;</span>Convert Gems</a></li>
       </ul>
 
-      <ul class="nav navbar-nav" style="margin-left: 20px">
+    <!--   <ul class="nav navbar-nav" style="margin-left: 20px">
         <li>
           <input type="searh" name="name" value="" style="border-radius: 5px; border-radius: 5px; outline: none; border: none; padding: 2px 15px; width: 150px; margin-top: 13px;">
           <i class="fa fa-search" aria-hidden="true" style="margin-left: -150px; color: #50ACC4"></i>
         </li>
 
-      </ul>
+      </ul> -->
 
       <ul class="nav navbar-nav navbar-right">
         <li ng-hide="isLoggedIn()" ng-class="{active: isActive('/signup')}"><a href="/signup" style="color: #fff">Sign up</a></li>
         <li ng-hide="isLoggedIn()" ng-class="{active: isActive('/login')}"><a href="/login" style="color: #fff">Login</a></li>
         <li ng-show="isLoggedIn()"><p class="navbar-text">Hello {{ user.username }}</p> </li>
         <!-- <li ng-show="isLoggedIn()"><a href="/admin" style="color: #fff">Admin</a></li> -->
-        <li ng-show="isLoggedIn()" ng-class="{active: isActive('/settings')}"><a href="/settings"><span class="glyphicon glyphicon-cog"></span></a></li>
+        <li ng-show="isLoggedIn()" ng-class="{active: isActive('/settings')}"><a ><span class="glyphicon glyphicon-cog"></span></a></li>
         <li ng-show="isLoggedIn()" ng-class="{active: isActive('/logout')}"><a href="" ng-click="logout()">Logout</a></li>
       </ul>
     </div>
@@ -44,24 +44,23 @@
 
 
 
-<div class="daily-loot-modal" ng-show="$root.showPromocode">
-  <div class="daily-loot-bg" ng-click="$root.showPromocode=false"></div>
+<div class="daily-loot-modal" ng-controller="NavbarCtrl" ng-show="$root.showPromocode">
+  <div class="daily-loot-bg"></div>
   <div class="daily-loot-content">
-    <div class="close-dl" ng-click="$root.showPromocode=false"><i class="fa fa-times" aria-hidden="true"></i></div>
     <h3>Promo code reward</h3>
     <div class="g-text content-text">
-      
+
     </div>
     <div class="g-text" style="text-align: center;margin-bottom: 10px;">You got </div>
     <div class="coins-box">{{user.promo_value}} {{user.promo_currency}}</div>
     <div class="btm-text p-text">Welcome to clubloot</div>
+    <div class="btn btn-success comfirm" ng-click="$root.showPromocode=false">Confirm</div>
   </div>
 </div>
 
-<div class="daily-loot-modal" ng-show="$root.showDailyLoot">
-  <div class="daily-loot-bg" ng-click="$root.showDailyLoot=false"></div>
+<div class="daily-loot-modal" ng-controller="NavbarCtrl" ng-show="$root.showDailyLoot">
+  <div class="daily-loot-bg"></div>
   <div class="daily-loot-content">
-    <div class="close-dl" ng-click="$root.showDailyLoot=false"><i class="fa fa-times" aria-hidden="true"></i></div>
     <h3>Daily Loot</h3>
     <div class="g-text content-text">
       Sign in everyday to claim your free daily loot. Get even more free loot when you sign five consecutive days and more.
@@ -69,6 +68,20 @@
     <img src="assets/images/pp-bag.png" class="bag-img">
     <div class="g-text" style="text-align: center;margin-bottom: 10px;">Your daily loot today is</div>
     <div class="coins-box">2000 coins</div>
-    <div class="btm-text p-text">Sign in tomorrow to get more free loot!</div>
+    <div class="g-text">Sign in tomorrow to get more free loot!</div>
+    <div class="btn btn-success comfirm" ng-click="confirmAds()">Confirm</div>
+
+    <div ng-show="$root.showAds">
+      <hr>
+      <h3>Win prizes</h3>
+      <div class="g-text content-text">
+        {{$root.ads.above_description}}
+      </div>
+
+      <div class="g-text" style="text-align: center;margin-bottom: 10px;"></div>
+      <img src="{{$root.ads.attachment}}" class="ads-img">
+      <div class="g-text">{{$root.ads.below_description}}</div>
+      <div class="btn btn-success comfirm" ng-click="confirmAds()">Confirm</div>
+    </div>
   </div>
 </div>

@@ -2,10 +2,10 @@
   <img src="assets/images/logo.png">
 </div>
 <div class="login">
-  <a class="btn btn-facebook" href="" ng-click="loginOauth('facebook')">
+  <!-- <a class="btn btn-facebook" href="" ng-click="loginOauth('facebook')">
   <i class="fa fa-facebook"></i> Connect with Facebook
   </a>
-  <hr>
+  <hr> -->
   <form class="form" name="form" ng-submit="register(form)" novalidate>
     <div class="form-group" ng-class="{ 'has-success': form.email.$valid && submitted,
       'has-error': form.email.$invalid && submitted }">
@@ -71,8 +71,9 @@
 
     <div class="form-group" ng-class="{ 'has-success': form.dob.$valid && submitted,
       'has-error': form.dob.$invalid && submitted }">
-      <input type="text" name="dob" required placeholder="Birthday (mm/dd/yyyy)" dob-check class="form-control" ng-model="user.dob">
+      <input type="text" name="dob" required placeholder="Year of birth / Example(1988)" maxlength="4" class="form-control" ng-model="user.dob">
     </div>
+
     <div class="form-group" ng-class="{ 'has-success': form.dob.$valid && submitted,
       'has-error': form.dob.$invalid && submitted }">
       <input type="text" name="promocode" required mongoose-error placeholder="Promo code" class="form-control" ng-model="user.promocode">

@@ -7,7 +7,7 @@ angular.module 'clublootApp'
     token = $cookieStore.get 'token'
     $.ajax(
       method: 'GET'
-      url: "http://api.clubloot.com/v2/user/profile.json?token=#{token}"
+      url: "#{window.apiLink}/v2/user/profile.json?token=#{token}"
       ).done (data) ->
         console.log "---------------Getuser000000000-----------=============="
         currentUser = data.data
@@ -109,26 +109,72 @@ angular.module 'clublootApp'
   ###
   getCurrentUser: ->
     $rootScope.user
-        
+
 
   signin: (user, callback) ->
     deferred = undefined
     deferred = $q.defer()
-    $.ajax(
-      method: 'POST'
-      url: 'http://api.clubloot.com/v2/auth/sign_in.json'
+    console.log user
+    console.log window.apiLink
+
+
+
+    $.ajax
+      url: "#{window.apiLink}/v2/auth/sign_in.json"
+      type: 'POST'
+      datatype: 'json'
       data:
         email: user.email
-        password: user.password).done (data) ->
-          console.log data
-          console.log "------------signin--------------"
-          $cookieStore.put 'token', data.token
-          getUser()
-          console.log $cookieStore.get 'token'
-          return window.location.href = "/"
-          deferred.resolve data
-          if typeof callback == 'function' then callback() else undefined
-    return
+        password: user.password
+      success: (data) ->
+        console.log data
+        console.log data.token
+        unless data.token
+          console.log "kkk"
+          swal("No email in system")
+          return
+        $cookieStore.put 'token', data.token
+        getUser()
+        console.log $cookieStore.get 'token'
+        return window.location.href = "/"
+        deferred.resolve data
+        if typeof callback == 'function' then callback() else undefined
+      error: (data) ->
+        swal("Password not correct")
+
+  signinFirst: (user, callback) ->
+    deferred = undefined
+    deferred = $q.defer()
+    console.log user
+    console.log window.apiLink
+
+
+
+    $.ajax
+      url: "#{window.apiLink}/v2/auth/sign_in.json"
+      type: 'POST'
+      datatype: 'json'
+      data:
+        email: user.email
+        password: user.password
+      success: (data) ->
+        console.log data
+        console.log data.token
+        unless data.token
+          console.log "kkk"
+          swal("No email in system")
+          return
+        $cookieStore.put 'token', data.token
+        getUser()
+        console.log $cookieStore.get 'token'
+        return window.location.href = "/contest"
+        deferred.resolve data
+        if typeof callback == 'function' then callback() else undefined
+      error: (data) ->
+        swal("Password not correct")
+
+
+
 
 
   ###

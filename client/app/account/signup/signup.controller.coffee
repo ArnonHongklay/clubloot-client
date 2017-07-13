@@ -6,10 +6,10 @@ angular.module 'clublootApp'
   $scope.user = {}
   $scope.errors = {}
   $scope.register = (form) ->
-
+    console.log "#{window.apiLink}/v2/auth/sign_up.json"
 
     $.ajax
-      url: "http://api.clubloot.com/v2/auth/sign_up.json"
+      url: "#{window.apiLink}/v2/auth/sign_up.json"
       type: 'POST'
       datatype: 'json'
       data: {
@@ -17,7 +17,7 @@ angular.module 'clublootApp'
         password: $scope.user.password
         confirm_password: $scope.user.confirm_password
         username: $scope.user.username
-        date_of_birth: $scope.user.dob
+        date_of_birth: "1/1/"+$scope.user.dob
         promo:  $scope.user.promocode
       }
       success: (data) ->
@@ -26,7 +26,7 @@ angular.module 'clublootApp'
           swal "#{data.data}"
           return
         else
-          Auth.signin
+          Auth.signinFirst
             email: $scope.user.email
             password: $scope.user.password
           $location.path '/'
@@ -42,7 +42,7 @@ angular.module 'clublootApp'
     # console.log $scope.user
     # $.ajax(
     #   method: 'POST'
-    #   url: "http://api.clubloot.com/v2/auth/sign_up.json"
+    #   url: "#{window.apiLink}/v2/auth/sign_up.json"
     #   data: {
     #     email: $scope.user.email
     #     password: $scope.user.password

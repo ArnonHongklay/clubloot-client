@@ -14,4 +14,3 @@ angular.module 'clublootApp'
       method: 'GET'
       params:
         id: 'me'
-

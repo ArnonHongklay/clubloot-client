@@ -7,13 +7,15 @@ angular.module 'clublootApp'
   $scope.userToken = $cookieStore.get 'token'
   $scope.getUserProfile = () ->
     $.ajax
-      url: "http://api.clubloot.com/v2/user/profile.json?token=#{$scope.userToken}"
+      url: "#{window.apiLink}/v2/user/profile.json?token=#{$scope.userToken}"
       type: 'GET'
       datatype: 'json'
       success: (data) ->
         $scope.user = data.data
+        console.log "-----user-----"
+        console.log $scope.user
         $scope.$apply()
-       
+
       error: (jqXHR, textStatus, errorThrown) ->
         $timeout ->
           $scope.getUserProfile()
@@ -22,10 +24,7 @@ angular.module 'clublootApp'
   if $scope.userToken
     $scope.getUserProfile()
 
-
   $scope.alphabets = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
-
-  
 
   $scope.$watch 'prize_select.selected.length', ->
     $('[class*="defaultItem"]').removeClass('hide-display')
@@ -36,11 +35,10 @@ angular.module 'clublootApp'
 
   $scope.setData = () ->
     $.ajax
-      url: "http://api.clubloot.com/v2/prizes.json"
+      url: "#{window.apiLink}/v2/prizes.json"
       type: 'GET'
       datatype: 'json'
       success: (data) ->
-        console.log data
         $scope.prizes = data.data
         $scope.$apply()
         for prize in $scope.prizes
@@ -83,9 +81,14 @@ angular.module 'clublootApp'
     sum
 
   $scope.getMyPrize = ->
+
+    unless $scope.agree
+      swal("Please agree to the terms before get prize")
+      return
     for prize in $scope.prize_select.selected
+      console.log prize
       $.ajax
-        url: "http://api.clubloot.com/v2/user/prize.json"
+        url: "#{window.apiLink}/v2/user/prize.json"
         type: 'POST'
         data: {
           token: $scope.userToken
@@ -93,23 +96,38 @@ angular.module 'clublootApp'
         }
         datatype: 'json'
         success: (data) ->
-          console.log data
           if data.status == "failure"
             swal(data.data)
           else
             swal("success")
+            $scope.getUserProfile()
+            $scope.currentTab = 'myPrize'
+            $scope.prize_select.selected = []
+            $scope.$apply()
 
 
   $scope.goDashboard = () ->
     window.location.href = "/dashboard"
 
-  $scope.showPrize = (prize)->
+  $scope.showMyPrize = (prize) ->
+    console.log $scope.currentTab
+    console.log prize
     $modal.open(
       templateUrl: 'ModalUserPrizes.html'
       controller: 'ModalUserPrizes'
       resolve:
         prize: ($http, $stateParams) ->
-          return prize
+          return {prize: prize.prize, currentTab: $scope.currentTab, tracking_code: prize.tracking_code, shipped_at: prize.shipped_at}
+    )
+  $scope.showPrize = (prize)->
+    console.log prize
+    console.log $scope.currentTab
+    $modal.open(
+      templateUrl: 'ModalUserPrizes.html'
+      controller: 'ModalUserPrizes'
+      resolve:
+        prize: ($http, $stateParams) ->
+          return {prize: prize, currentTab: $scope.currentTab}
     )
 
 .controller 'ModalUserPrizes', ($scope, prize) ->

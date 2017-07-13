@@ -17,7 +17,7 @@ angular.module 'clublootApp'
     controller: 'NewContestCtrl'
 
   .state 'contestQuiz',
-    url: '/contest/:contest_id/:template_id/quiz'
+    url: '/contest/:template_id/quiz?contest_name&contest_player&contest_fee'
     templateUrl: 'app/contest/contest_quiz.html'
     controller: 'ContestQuizCtrl'
 

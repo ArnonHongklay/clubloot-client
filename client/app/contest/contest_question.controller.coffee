@@ -122,10 +122,10 @@ angular.module 'clublootApp'
     return false if $scope.contest.ques == undefined
 
     if $scope.contest.ques.length == $scope.qaSelection.length
+      console.log "Window"
+      window.scrollTo 0, document.body.scrollHeight
       return true
 
   $scope.qaShowAns = []
   $scope.openAns = (index) ->
     $scope.qaShowAns[index] = true
-
-

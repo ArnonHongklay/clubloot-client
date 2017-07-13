@@ -60,6 +60,8 @@ angular.module 'clublootApp'
       return false if i == undefined
     return false unless $scope.question
     if $scope.question.questions.length == $scope.qaSelection.length
+      console.log "Window"
+      window.scrollTo 0, document.body.scrollHeight
       return true
     else
       return false

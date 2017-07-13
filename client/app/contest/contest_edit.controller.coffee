@@ -49,10 +49,12 @@ angular.module 'clublootApp'
       return false
     else
       return true
-  
+
   $scope.unlessEmpty = () ->
     return false unless $scope.question
     if $scope.question.questions.length == $scope.qaSelection.length
+      console.log "Window"
+      window.scrollTo 0, document.body.scrollHeight
       return true
     else
       return false
@@ -71,7 +73,7 @@ angular.module 'clublootApp'
       }
       url: "#{window.apiLink}/v2/user/contest/edit_quiz.json"
       ).done (data) ->
-      
+
         $state.go('main')
 
   $scope.justSubmit = (next) ->

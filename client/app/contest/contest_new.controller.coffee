@@ -1,7 +1,7 @@
 'use strict'
 
 angular.module 'clublootApp'
-.controller 'NewContestCtrl', ($scope, $http, socket, $timeout, $cookieStore, Auth, $state) ->
+.controller 'NewContestCtrl', ($scope, $http, socket, $window, $timeout, $cookieStore, Auth, $state) ->
   $scope.currentFee = null
   $scope.templates = []
   $scope.userToken = $cookieStore.get 'token'
@@ -309,6 +309,8 @@ angular.module 'clublootApp'
     return false if $scope.contest.ques == undefined
 
     if $scope.contest.ques.length == $scope.qaSelection.length
+      console.log "Window"
+      window.scrollTo 0, document.body.scrollHeight
       return true
 
 
@@ -342,4 +344,3 @@ angular.module 'clublootApp'
   $scope.qaShowAns = []
   $scope.openAns = (index) ->
     $('html, body').animate { scrollTop: $("#ques_"+index).offset().top }, 'fast'
-
